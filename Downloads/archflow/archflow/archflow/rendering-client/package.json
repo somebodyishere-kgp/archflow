@@ -1,0 +1,10 @@
+{
+  "name": "archflow-rendering-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TwinGraph-first rendering client shell.",
+  "scripts": {
+    "test": "echo \"BLOCKED: client test suite not initialized\" && exit 1",
+    "build": "echo \"BLOCKED: client build pipeline not initialized\" && exit 1"
+  }
+}

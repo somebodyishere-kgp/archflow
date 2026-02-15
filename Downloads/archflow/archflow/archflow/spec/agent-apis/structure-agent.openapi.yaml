@@ -1,0 +1,24 @@
+openapi: 3.1.0
+info:
+  title: Structure Agent API
+  version: 0.1.0
+servers:
+  - url: http://structure-agent:8000
+paths:
+  /health:
+    get:
+      responses:
+        "200":
+          description: Service status
+  /v1/structure/size:
+    post:
+      summary: Deterministic structural sizing request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "501":
+          description: BLOCKED - deterministic solver integration pending
