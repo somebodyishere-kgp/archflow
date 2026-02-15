@@ -46,3 +46,24 @@ tradeoffs: additional proposal-review stage but strict preservation of TwinGraph
 impact_scope: orchestration-layer intent gateway API, intent parsing/validation contracts, `intent.proposed` event schema and CI validation
 rollback_strategy: disable intent gateway endpoints and revert to manual mutation specification if proposal quality becomes unstable
 arch_critical: true
+
+decision_id: ADR-S6-001
+title: Proposal Executor Introduced as Deterministic Execution Boundary
+date: 2026-02-16
+reason: Separate proposal generation from execution while preserving TwinGraph write authority through ingest API only.
+alternatives_considered: intent gateway direct writes; agent-owned direct TwinGraph mutation paths
+tradeoffs: additional service boundary and validation overhead in exchange for deterministic lineage and controlled writes
+impact_scope: orchestration-layer/proposal-executor module, `proposal.executed` event schema, system-integrity CI execution checks
+rollback_strategy: disable proposal-executor event consumption and revert to manual approval execution flow
+arch_critical: true
+
+decision_id: ADR-ALPHA-001
+title: Unified Runtime Execution Loop Introduced
+date: 2026-02-16
+reason: Integrate proposal lifecycle into a deterministic closed loop from intent to rendering sync.
+alternatives_considered: loosely coupled module polling; direct module-to-module ad-hoc triggers
+tradeoffs: tighter runtime contract and lineage requirements in exchange for reproducible end-to-end execution
+impact_scope: proposal-executor, ingest metadata, transport lineage, runtime health, CI integration traces
+rollback_strategy: disable unified loop and revert to manual staged execution per module
+arch_critical: true
+

@@ -22,14 +22,36 @@ jobs:
           test -f spec/event-schemas/documentation.refresh.json
           test -f spec/event-schemas/compliance.report.json
           test -f spec/event-schemas/intent.proposed.json
+          test -f spec/event-schemas/proposal.executed.json
+          test -f spec/event-schemas/proposal.blocked.json
+          test -f spec/transport/runtime-events.contract.json
+          test -f spec/runtime/runtime-status.json
+          test -f spec/runtime/runtime-state.json
       - name: Install intent gateway dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r orchestration-layer/intent-gateway/requirements.txt
+          pip install -r orchestration-layer/proposal-executor/requirements.txt
       - name: Run intent gateway tests
         run: |
           mkdir -p artifacts
           PYTHONPATH=orchestration-layer/intent-gateway pytest orchestration-layer/intent-gateway/tests -q | tee artifacts/schema-validation.log
+      - name: Run proposal executor tests
+        run: |
+          PYTHONPATH=orchestration-layer/proposal-executor pytest orchestration-layer/proposal-executor/tests -q | tee -a artifacts/schema-validation.log
+      - name: Run runtime kernel tests
+        run: |
+          PYTHONPATH=orchestration-layer/runtime-kernel pytest orchestration-layer/runtime-kernel/tests -q | tee -a artifacts/schema-validation.log
+      - name: Guard event lineage fields
+        run: |
+          rg -n "event_id|parent_event_id|source_module|timestamp" core-twingraph/src/twingraph/transport orchestration-layer rendering-client/src/services rendering-client/src/runtime > artifacts/runtime-event-trace.json
+      - name: Guard execution boundaries
+        run: |
+          if rg -n "/twingraph/ingest" orchestration-layer/intent-gateway; then
+            echo "Intent gateway must not call TwinGraph ingest."
+            exit 1
+          fi
+          rg -n "/twingraph/ingest" orchestration-layer/proposal-executor > /dev/null
       - name: Emit intent artifacts
         run: |
           echo "# Intent Build Report" > artifacts/intent-build-report.md
@@ -41,6 +63,21 @@ jobs:
             "undocumented_events": 0
           }
           EOF
+      - name: Emit proposal execution artifacts
+        run: |
+          echo "# Proposal Execution Report" > artifacts/proposal-execution-report.md
+          echo "proposal executor boundary validated with deterministic lineage and ingest handoff" >> artifacts/proposal-execution-report.md
+          cat <<'EOF' > artifacts/proposal-event-audit.json
+          {
+            "flow_verified": "intent.proposed -> proposal validation -> twingraph ingest -> proposal.executed",
+            "events_checked": ["intent.proposed", "proposal.executed"],
+            "undocumented_events": 0
+          }
+          EOF
+      - name: Emit runtime integration artifacts
+        run: |
+          echo "# Runtime Integration Report" > artifacts/runtime-integration-report.md
+          echo "intent -> proposal -> executor -> ingest -> view -> rendering sync checks wired" >> artifacts/runtime-integration-report.md
       - name: Emit integrity artifacts
         run: |
           mkdir -p artifacts

@@ -31,9 +31,27 @@ failure_conditions: view adapter schema mismatch, invalid limit bounds, transpor
 
 event_name: intent.proposed
 publisher_module: orchestration-layer/intent-gateway
-subscriber_modules: orchestration-layer review pipeline (future), human approval workflow
+subscriber_modules: orchestration-layer/proposal-executor, human approval workflow
 payload_schema: /spec/event-schemas/intent.proposed.json
 failure_conditions: invalid intent parameters, missing TwinGraph context reference, proposal schema mismatch
+
+event_name: proposal.executed
+publisher_module: orchestration-layer/proposal-executor
+subscriber_modules: core-twingraph audit trail, orchestration-layer observability
+payload_schema: /spec/event-schemas/proposal.executed.json
+failure_conditions: re-validation failure, ingest endpoint rejection, lineage metadata missing
+
+event_name: proposal.blocked
+publisher_module: orchestration-layer/proposal-executor
+subscriber_modules: orchestration-layer observability, human review workflow
+payload_schema: /spec/event-schemas/proposal.blocked.json
+failure_conditions: invalid proposal schema, execution precondition failure, lineage metadata missing
+
+event_name: render.sync
+publisher_module: orchestration-layer/runtime-kernel
+subscriber_modules: rendering-client runtime adapter
+payload_schema: /spec/event-schemas/runtime.lineage.json
+failure_conditions: missing runtime_cycle_id, scheduler out-of-order execution
 
 ## Transport Stabilization (Sprint 2)
 - Active transport adapter: `LocalEventTransport` (`core-twingraph/src/twingraph/transport/local.py`)

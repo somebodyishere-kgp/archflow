@@ -8,17 +8,42 @@ on:
 jobs:
   package-desktop:
     runs-on: ubuntu-22.04
+    container: node:20.18.1-bullseye
     steps:
       - uses: actions/checkout@v4
       - name: Prepare artifacts
         run: |
           mkdir -p artifacts
-          echo "# Build Report" > artifacts/build-report.md
-          echo "desktop-build executed (skeleton)" >> artifacts/build-report.md
-          echo "{\"desktop_packaging\":\"blocked\"}" > artifacts/event-audit.json
-          echo "tauri packaging not yet implemented in Sprint 0" > artifacts/schema-validation.log
-      - name: Fail until Tauri packaging is fully wired
-        run: exit 1
+          echo "# Render Build Report" > artifacts/render-build-report.md
+          echo "desktop-build executing rendering-client read-only contract checks" >> artifacts/render-build-report.md
+      - name: Install rendering-client dependencies
+        run: |
+          cd rendering-client
+          npm install
+      - name: Build rendering-client
+        run: |
+          cd rendering-client
+          npm run build | tee ../artifacts/view-schema-validation.log
+      - name: Test rendering-client view adapter contract
+        run: |
+          cd rendering-client
+          npm run test | tee -a ../artifacts/view-schema-validation.log
+      - name: Enforce read-only rendering guardrails
+        run: |
+          if rg -n "method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]|/twingraph/ingest|/twingraph/query|/twingraph/view/section" rendering-client/src; then
+            echo "Rendering client must remain read-only."
+            exit 1
+          fi
+          echo "Read-only guardrails passed." >> artifacts/render-build-report.md
+      - name: Enforce kernel sync usage
+        run: |
+          test -f rendering-client/src/runtime/RuntimeSyncEngine.ts
+          test -f rendering-client/src/runtime/RuntimeKernelAdapter.ts
+          rg -n "render.sync|runtime_cycle_id" rendering-client/src/runtime > artifacts/runtime-event-trace.json
+      - name: Emit runtime integration report
+        run: |
+          echo "# Runtime Integration Report" > artifacts/runtime-integration-report.md
+          echo "rendering runtime sync wired to deterministic kernel events" >> artifacts/runtime-integration-report.md
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -83,6 +83,21 @@
       "items": {
         "type": "object"
       }
+    },
+    "execution_metadata": {
+      "type": "object",
+      "properties": {
+        "proposal_id": {
+          "type": ["string", "null"]
+        },
+        "execution_id": {
+          "type": ["string", "null"]
+        },
+        "intent_source": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": false
     }
   },
   "required": [
