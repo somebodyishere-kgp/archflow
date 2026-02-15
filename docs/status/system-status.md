@@ -1,16 +1,25 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Sprint 0 (Initialization)
+Phase: Sprint 5 (Intent Layer Activation - Deterministic Gateway)
 Stability Rating: Experimental
 
 ## Active Modules
-- Repository governance and documentation scaffolding
-- Schema baseline (`spec/twingraph-schema.json`, event schemas)
-- CI workflow skeletons under `.github/workflows/`
+- TwinGraph deterministic schema validation pipeline
+- PostgreSQL + PostGIS TwinGraph adapter (`core-twingraph/src/twingraph/db.py`)
+- TwinGraph ingest service with mutation and geometry event emission
+- TwinGraph deterministic query API (`GET /twingraph/node/{id}`, `POST /twingraph/query`)
+- Event transport abstraction with active local adapter
+- TwinGraph read-only view adapter boundary (`core-twingraph/src/twingraph/views/`)
+- Deterministic view endpoints (`GET /twingraph/view/geometry`, `POST /twingraph/view/section`)
+- Sprint 4: Rendering Client Read Layer Active
+- Rendering client data adapter and view subscription (`rendering-client/src/services/`)
+- Deterministic viewport pipeline (`rendering-client/src/viewport/`)
+- Intent Gateway deterministic proposal service (`orchestration-layer/intent-gateway/`)
+- CI-backed deterministic TwinGraph tests under `.github/workflows/test-twingraph.yml`
 
 ## In-Progress Modules
-- Core TwinGraph deterministic ingestion pipeline
+- TwinGraph relational and graph dual-backend strategy (Neo4j overlay pending)
 - Agent service implementations and deterministic solver integrations
 - Documentation generation pipeline from TwinGraph query execution
 
@@ -19,6 +28,9 @@ Stability Rating: Experimental
 - Dual backend adapter strategy (PostGIS and Neo4j overlay)
 
 ## Blocked Systems
+- NATS event transport adapter: BLOCKED pending deterministic transport integration and contract tests
+- Intent proposal execution pipeline: BLOCKED until approved mutation executor layer is introduced
+- Neo4j adapter parity for TwinGraph backend abstraction: BLOCKED pending Sprint 1b implementation
 - Regulation deterministic rule execution for NBC + local municipal packs: BLOCKED pending clause dataset packaging and parser integration
 - Structure deterministic sizing solver integration: BLOCKED pending solver container wiring and verified load-case corpus
 - Acoustic deterministic simulation pipeline: BLOCKED pending ray-tracing container baseline
@@ -26,6 +38,34 @@ Stability Rating: Experimental
 - Documentation engine plan-view PDF generation from production TwinGraph query: BLOCKED pending query runtime and style rule compiler
 
 ## Blockers
+- issue_id: ISSUE-0010
+  module: orchestration-layer/intent-gateway
+  symptoms: intent proposals cannot be executed by design
+  root_cause: sprint scope enforces proposal-only gateway with no TwinGraph write authority
+  affected_events: intent.proposed
+  severity_level: medium
+  blocking: true
+- issue_id: ISSUE-0008
+  module: core-twingraph
+  symptoms: NATS event transport cannot be used; local adapter only
+  root_cause: transport abstraction introduced before deterministic NATS integration and CI contract validation
+  affected_events: twingraph.mutation, geometry.updated
+  severity_level: medium
+  blocking: true
+- issue_id: ISSUE-0009
+  module: core-twingraph
+  symptoms: rendering contract depends on view adapter endpoint stability and schema lock
+  root_cause: read-layer introduced before downstream rendering-client integration cycle
+  affected_events: view.refresh
+  severity_level: medium
+  blocking: true
+- issue_id: ISSUE-0007
+  module: core-twingraph
+  symptoms: Neo4j backend adapter missing while PostGIS adapter is active
+  root_cause: Sprint 1 scope constrained to PostgreSQL + PostGIS deterministic path
+  affected_events: twingraph.mutation, geometry.updated
+  severity_level: medium
+  blocking: true
 - issue_id: ISSUE-0002
   module: regulation-agent
   symptoms: cannot produce deterministic compliance outputs without source clause pack + parser

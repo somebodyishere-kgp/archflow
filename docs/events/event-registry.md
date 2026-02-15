@@ -12,16 +12,33 @@ This registry is authoritative for ArchFlow event contracts.
 ## Registered Events
 
 event_name: geometry.updated  
-publisher_module: geometry-kernel  
-subscriber_modules: structure-agent, acoustic-agent, mep-agent, documentation-agent  
+publisher_module: core-twingraph, geometry-kernel  
+subscriber_modules: structure-agent, acoustic-agent, mep-agent, documentation-agent, rendering-client  
 payload_schema: /spec/event-schemas/geometry.updated.json  
-failure_conditions: invalid geometry WKB, schema mismatch, missing node id
+failure_conditions: invalid geometry WKB hex, schema mismatch, missing node id, transport emit failure
 
 event_name: twingraph.mutation  
 publisher_module: core-twingraph  
-subscriber_modules: massing-generator, regulation-agent, documentation-agent  
+subscriber_modules: massing-generator, regulation-agent, documentation-agent, rendering-client  
 payload_schema: /spec/event-schemas/twingraph.mutation.json  
-failure_conditions: invalid node payload, version conflict, missing relation target
+failure_conditions: invalid node payload, schema validation failure, version conflict, missing relation target, transport emit failure
+
+event_name: view.refresh
+publisher_module: core-twingraph
+subscriber_modules: rendering-client (primary consumer), documentation-agent
+payload_schema: /spec/event-schemas/view.refresh.json
+failure_conditions: view adapter schema mismatch, invalid limit bounds, transport emit failure
+
+event_name: intent.proposed
+publisher_module: orchestration-layer/intent-gateway
+subscriber_modules: orchestration-layer review pipeline (future), human approval workflow
+payload_schema: /spec/event-schemas/intent.proposed.json
+failure_conditions: invalid intent parameters, missing TwinGraph context reference, proposal schema mismatch
+
+## Transport Stabilization (Sprint 2)
+- Active transport adapter: `LocalEventTransport` (`core-twingraph/src/twingraph/transport/local.py`)
+- Planned transport adapter: `NatsEventTransport` (`core-twingraph/src/twingraph/transport/nats.py`)
+- NATS status: BLOCKED (`ISSUE-0008`) until deterministic transport wiring and contract tests are implemented
 
 event_name: structure.updated  
 publisher_module: structure-agent  

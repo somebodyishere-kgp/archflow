@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "archflow.event.intent.proposed",
+  "title": "IntentProposedPayload",
+  "type": "object",
+  "properties": {
+    "proposal_id": { "type": "string" },
+    "intent_type": {
+      "type": "string",
+      "enum": ["create_space", "update_metadata", "tag_zone"]
+    },
+    "proposed_mutations": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "validation_status": {
+      "type": "string",
+      "enum": ["VALID", "BLOCKED"]
+    },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "proposal_id",
+    "intent_type",
+    "proposed_mutations",
+    "validation_status",
+    "timestamp"
+  ],
+  "additionalProperties": false
+}
