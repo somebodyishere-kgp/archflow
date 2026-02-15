@@ -1,7 +1,7 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Sprint 5 (Intent Layer Activation - Deterministic Gateway)
+Phase: Phase Beta (Runtime Kernel Integration)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -16,6 +16,10 @@ Stability Rating: Experimental
 - Rendering client data adapter and view subscription (`rendering-client/src/services/`)
 - Deterministic viewport pipeline (`rendering-client/src/viewport/`)
 - Intent Gateway deterministic proposal service (`orchestration-layer/intent-gateway/`)
+- Proposal Executor deterministic execution boundary (`orchestration-layer/proposal-executor/`)
+- Unified runtime health service (`orchestration-layer/runtime-health/`)
+- Runtime kernel orchestration module (`orchestration-layer/runtime-kernel/`)
+- Intelligence scaffold (no LLM execution) (`orchestration-layer/intelligence-scaffold/`)
 - CI-backed deterministic TwinGraph tests under `.github/workflows/test-twingraph.yml`
 
 ## In-Progress Modules
@@ -30,6 +34,8 @@ Stability Rating: Experimental
 ## Blocked Systems
 - NATS event transport adapter: BLOCKED pending deterministic transport integration and contract tests
 - Intent proposal execution pipeline: BLOCKED until approved mutation executor layer is introduced
+- NATS-backed proposal subscription transport: BLOCKED pending deterministic NATS rollout
+- Runtime kernel to NATS transport bridge: BLOCKED by governance (local transport only)
 - Neo4j adapter parity for TwinGraph backend abstraction: BLOCKED pending Sprint 1b implementation
 - Regulation deterministic rule execution for NBC + local municipal packs: BLOCKED pending clause dataset packaging and parser integration
 - Structure deterministic sizing solver integration: BLOCKED pending solver container wiring and verified load-case corpus
@@ -43,6 +49,13 @@ Stability Rating: Experimental
   symptoms: intent proposals cannot be executed by design
   root_cause: sprint scope enforces proposal-only gateway with no TwinGraph write authority
   affected_events: intent.proposed
+  severity_level: medium
+  blocking: true
+- issue_id: ISSUE-0011
+  module: orchestration-layer/proposal-executor
+  symptoms: executor transport limited to local event audit adapter
+  root_cause: NATS transport remains blocked by architecture governance
+  affected_events: intent.proposed, proposal.executed
   severity_level: medium
   blocking: true
 - issue_id: ISSUE-0008

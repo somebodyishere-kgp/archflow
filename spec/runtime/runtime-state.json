@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "archflow.runtime.state",
+  "title": "RuntimeState",
+  "type": "object",
+  "properties": {
+    "runtime_cycle_id": { "type": "string" },
+    "last_execution_id": { "type": "string" },
+    "last_view_revision": { "type": "string" },
+    "active_modules": { "type": "array", "items": { "type": "string" } },
+    "event_queue_depth": { "type": "integer", "minimum": 0 }
+  },
+  "required": [
+    "runtime_cycle_id",
+    "last_execution_id",
+    "last_view_revision",
+    "active_modules",
+    "event_queue_depth"
+  ],
+  "additionalProperties": false
+}

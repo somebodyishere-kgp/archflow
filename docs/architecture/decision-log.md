@@ -67,3 +67,13 @@ impact_scope: proposal-executor, ingest metadata, transport lineage, runtime hea
 rollback_strategy: disable unified loop and revert to manual staged execution per module
 arch_critical: true
 
+decision_id: ADR-BETA-001
+title: Runtime Kernel Introduced for Deterministic Orchestration
+date: 2026-02-16
+reason: Centralize event scheduling and state propagation with strict runtime cycle boundaries.
+alternatives_considered: decentralized schedulers per module
+tradeoffs: additional orchestration module complexity versus guaranteed phase ordering and lineage replay
+impact_scope: runtime-kernel scheduler/state engine/router, rendering kernel adapter, runtime-state schemas
+rollback_strategy: pause kernel dispatch and fallback to proposal-executor direct loop while preserving event logs
+arch_critical: true
+
