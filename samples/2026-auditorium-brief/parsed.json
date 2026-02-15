@@ -1,0 +1,21 @@
+{
+  "brief_id": "brief-2026-auditorium",
+  "project_name": "2026 Auditorium",
+  "requirements": {
+    "occupancy": 1200,
+    "site_area_sqm": 8200,
+    "max_height_m": 24,
+    "min_exits": 4,
+    "accessibility_required": true,
+    "rt60_target_seconds": 1.6
+  },
+  "compliance_scope": [
+    "NBC",
+    "LocalMunicipalRules-WestBengal"
+  ],
+  "source": {
+    "type": "normalized-markdown",
+    "path": "samples/2026-auditorium-brief/brief.md",
+    "captured_at": "2026-02-16T00:00:00Z"
+  }
+}

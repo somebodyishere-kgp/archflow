@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TwinGraph Node",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "geometry": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "solid",
+            "surface",
+            "void"
+          ]
+        },
+        "wkb": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "wkb"
+      ]
+    },
+    "properties": {
+      "type": "object",
+      "properties": {
+        "material_layers": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "thermal_r": {
+          "type": "number"
+        },
+        "fire_rating": {
+          "type": "string"
+        },
+        "acoustic_rating": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": true
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "target_id": {
+            "type": "string"
+          },
+          "relation_type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "target_id",
+          "relation_type"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "version": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "compliance_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "version_history": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "geometry"
+  ],
+  "additionalProperties": false
+}
