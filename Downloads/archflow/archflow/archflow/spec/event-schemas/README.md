@@ -18,3 +18,5 @@
 - `world.context.insight.json`
 - `world.solar.analysis.json`
 - `world.urban.flow.json`
+- `building.systems.graph.updated.json`
+- `building.material.analysis.json`

@@ -118,3 +118,15 @@ publisher_module: orchestration-layer/world-model/urban
 subscriber_modules: rendering-client/src/xvi, design-synthesis entry strategy
 payload_schema: /spec/event-schemas/world.urban.flow.json
 failure_conditions: invalid flow graph, missing accessibility topology
+
+event_name: building.systems.graph.updated
+publisher_module: orchestration-layer/building-systems
+subscriber_modules: reflective systems alignment, rendering-client/src/xv, desktop building systems panel
+payload_schema: /spec/event-schemas/building.systems.graph.updated.json
+failure_conditions: missing assembly relationships, invalid systems graph payload
+
+event_name: building.material.analysis
+publisher_module: orchestration-layer/building-systems/materials
+subscriber_modules: generative building-systems bridge, rendering-client/src/xv
+payload_schema: /spec/event-schemas/building.material.analysis.json
+failure_conditions: incomplete material layer metadata, invalid analysis payload

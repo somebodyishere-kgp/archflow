@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "building.systems.graph.updated",
+  "type": "object",
+  "required": ["event_name", "context_id", "systems_graph", "timestamp"],
+  "properties": {
+    "event_name": { "type": "string", "const": "building.systems.graph.updated" },
+    "context_id": { "type": "string" },
+    "systems_graph": { "type": "object" },
+    "timestamp": { "type": "string" }
+  },
+  "additionalProperties": true
+}

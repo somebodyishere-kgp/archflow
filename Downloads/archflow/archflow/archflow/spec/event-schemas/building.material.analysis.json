@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "building.material.analysis",
+  "type": "object",
+  "required": ["event_name", "context_id", "material_metrics", "timestamp"],
+  "properties": {
+    "event_name": { "type": "string", "const": "building.material.analysis" },
+    "context_id": { "type": "string" },
+    "material_metrics": { "type": "object" },
+    "timestamp": { "type": "string" }
+  },
+  "additionalProperties": true
+}

@@ -43,6 +43,10 @@ jobs:
           test -f desktop-runtime/app-shell/WorldContextPanel.tsx
           test -f desktop-runtime/app-shell/SolarCompassView.tsx
           test -f desktop-runtime/app-shell/UrbanFlowGraph.ts
+          test -f desktop-runtime/app-shell/BuildingSystemsPanel.tsx
+          test -f desktop-runtime/app-shell/AssemblyGraphView.ts
+          test -f desktop-runtime/app-shell/MaterialStackInspector.tsx
+          test -f desktop-runtime/app-shell/LoadPathDiagram.tsx
       - name: Validate MU rendering overlays
         run: |
           test -f rendering-client/src/mu/HumanIntentOverlay.tsx
@@ -78,9 +82,14 @@ jobs:
           test -f rendering-client/src/xvi/SolarOrientationOverlay.tsx
           test -f rendering-client/src/xvi/UrbanDensityOverlay.ts
           test -f rendering-client/src/xvi/ClimateVectorRenderer.ts
+      - name: Validate XV rendering overlays
+        run: |
+          test -f rendering-client/src/xv/LoadPathOverlay.tsx
+          test -f rendering-client/src/xv/MaterialLayerOverlay.ts
+          test -f rendering-client/src/xv/SystemHierarchyRenderer.ts
       - name: Enforce read-only desktop and rendering boundaries
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv; then
             echo "Desktop runtime and MU overlays must remain read-only."
             exit 1
           fi
@@ -117,6 +126,11 @@ jobs:
           echo "{\"solar\":{}}" > artifacts/solar-analysis.json
           echo "{\"urban_flow\":{}}" > artifacts/urban-flow-map.json
           echo "{\"climate\":{}}" > artifacts/climate-metrics.json
+          echo "# XV Building Systems Report" > artifacts/xv-building-systems-report.md
+          echo "{\"assemblies\":[],\"relations\":[]}" > artifacts/assembly-graph.json
+          echo "{\"load_paths\":[]}" > artifacts/load-path-map.json
+          echo "{\"materials\":{}}" > artifacts/material-metrics.json
+          echo "{\"passive_indicators\":{}}" > artifacts/passive-system-indicators.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -19,3 +19,6 @@ export * from "./xiv/VisualFocusMap";
 export * from "./xvi/SolarOrientationOverlay";
 export * from "./xvi/UrbanDensityOverlay";
 export * from "./xvi/ClimateVectorRenderer";
+export * from "./xv/LoadPathOverlay";
+export * from "./xv/MaterialLayerOverlay";
+export * from "./xv/SystemHierarchyRenderer";

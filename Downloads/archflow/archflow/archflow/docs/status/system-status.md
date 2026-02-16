@@ -1,7 +1,7 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Program XVI (Adaptive Architectural World Model)
+Phase: Program XV (Living Building Systems Engine)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -43,6 +43,11 @@ Stability Rating: Experimental
 - World alignment reflection (`orchestration-layer/reflective-core/analysis/reflection_world_alignment.py`)
 - XVI overlays (`rendering-client/src/xvi/`)
 - World desktop panels (`desktop-runtime/app-shell/WorldContextPanel.tsx`, `SolarCompassView.tsx`, `UrbanFlowGraph.ts`)
+- Building systems engine (`orchestration-layer/building-systems/`)
+- Building systems bridge (`orchestration-layer/generative-intelligence/building-systems-bridge.py`)
+- Systems reflection alignment (`orchestration-layer/reflective-core/analysis/reflection_systems_alignment.py`)
+- XV overlays (`rendering-client/src/xv/`)
+- Building systems desktop panels (`desktop-runtime/app-shell/BuildingSystemsPanel.tsx`, `AssemblyGraphView.ts`, `MaterialStackInspector.tsx`, `LoadPathDiagram.tsx`)
 
 ## In-Progress Modules
 - Core TwinGraph deterministic ingestion pipeline
@@ -66,6 +71,7 @@ Stability Rating: Experimental
 - Realtime co-design direct TwinGraph writes: BLOCKED by governance (observation/suggestion only)
 - Spatial cognition direct TwinGraph writes: BLOCKED by governance (analysis only)
 - World model direct TwinGraph writes: BLOCKED by governance (analysis only)
+- Building systems direct TwinGraph writes: BLOCKED by governance (analysis only)
 
 ## Blockers
 - issue_id: ISSUE-0002

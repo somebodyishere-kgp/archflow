@@ -86,3 +86,13 @@ tradeoffs: additional world-analysis modules in exchange for context-aware desig
 impact_scope: world-model engines, world context bridge, runtime world context phase, synthesis world-aware adjustments, xvi overlays
 rollback_strategy: disable world.context.analysis and fallback to intent-only generation path
 arch_critical: true
+
+decision_id: ADR-XV-001
+title: Living Building Systems Engine Introduced
+date: 2026-02-16
+reason: Add deterministic systems intelligence for structural hierarchy, material layering, and passive behavior indicators.
+alternatives_considered: defer systems reasoning to reflection only; simulation-heavy structural/energy engines
+tradeoffs: broader analysis graph complexity in exchange for early systems feasibility signals without simulation overhead
+impact_scope: building-systems engines, runtime building.systems.analysis phase, generative systems bridge, xv overlays and desktop inspectors
+rollback_strategy: disable building.systems.analysis and fallback to geometry/world/spatial-only decision loop
+arch_critical: true

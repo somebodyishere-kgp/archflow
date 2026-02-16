@@ -6,6 +6,7 @@ PHASE_ORDER = [
     "design.intent.generation",
     "design.synthesis",
     "geometry.execution",
+    "building.systems.analysis",
     "pipeline.execution",
     "spatial.cognition.analysis",
     "reflection.analysis",

@@ -32,6 +32,8 @@ jobs:
           test -f spec/event-schemas/world.context.insight.json
           test -f spec/event-schemas/world.solar.analysis.json
           test -f spec/event-schemas/world.urban.flow.json
+          test -f spec/event-schemas/building.systems.graph.updated.json
+          test -f spec/event-schemas/building.material.analysis.json
       - name: Validate MU module structure
         run: |
           test -f orchestration-layer/human-interface/intent-interpreter/intent_context_builder.py
@@ -44,6 +46,7 @@ jobs:
           test -f orchestration-layer/runtime-kernel/kernel_codesign_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_spatial_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_world_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_building_systems_adapter.py
           test -f orchestration-layer/self-assembly-runtime/blueprint_feedback_adapter.py
           test -f orchestration-layer/autonomous-intelligence/explainability/api.py
           test -f orchestration-layer/human-interface/nlp-intent-entry.py
@@ -102,9 +105,19 @@ jobs:
           test -f orchestration-layer/world-model/urban/movement_ecology_builder.py
           test -f orchestration-layer/generative-intelligence/world-context-bridge.py
           test -f orchestration-layer/reflective-core/analysis/reflection_world_alignment.py
+      - name: Validate XV building systems structure
+        run: |
+          test -f orchestration-layer/building-systems/assembly_graph_builder.py
+          test -f orchestration-layer/building-systems/material_hierarchy_engine.py
+          test -f orchestration-layer/building-systems/load_path_estimator.py
+          test -f orchestration-layer/building-systems/structure/span_classifier.py
+          test -f orchestration-layer/building-systems/materials/thermal_behavior_estimator.py
+          test -f orchestration-layer/building-systems/environment/passive_shading_estimator.py
+          test -f orchestration-layer/generative-intelligence/building-systems-bridge.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_systems_alignment.py
       - name: Guard forbidden mutation paths
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence orchestration-layer/spatial-cognition orchestration-layer/world-model geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence orchestration-layer/spatial-cognition orchestration-layer/world-model orchestration-layer/building-systems geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv; then
             echo "Human interface, desktop runtime, and MU overlays must not mutate TwinGraph."
             exit 1
           fi
@@ -112,6 +125,12 @@ jobs:
         run: |
           if rg -n "http://|https://|requests\\.|urllib|fetch\\(" orchestration-layer/world-model orchestration-layer/generative-intelligence/world-context-bridge.py; then
             echo "World model must remain deterministic without external API calls."
+            exit 1
+          fi
+      - name: Guard systems bridge metric bypass
+        run: |
+          if rg -n "calculate systems metrics directly|derive thermal_inertia_score in llm" orchestration-layer/generative-intelligence; then
+            echo "LLM bypassing systems metrics detected."
             exit 1
           fi
       - name: Guard spatial engine llm autonomy
@@ -177,6 +196,11 @@ jobs:
           echo "{\"solar\":{}}" > artifacts/solar-analysis.json
           echo "{\"urban_flow\":{}}" > artifacts/urban-flow-map.json
           echo "{\"climate\":{}}" > artifacts/climate-metrics.json
+          echo "# XV Building Systems Report" > artifacts/xv-building-systems-report.md
+          echo "{\"assemblies\":[],\"relations\":[]}" > artifacts/assembly-graph.json
+          echo "{\"load_paths\":[]}" > artifacts/load-path-map.json
+          echo "{\"materials\":{}}" > artifacts/material-metrics.json
+          echo "{\"passive_indicators\":{}}" > artifacts/passive-system-indicators.json
       - uses: actions/upload-artifact@v4
         with:
           name: system-integrity-artifacts
