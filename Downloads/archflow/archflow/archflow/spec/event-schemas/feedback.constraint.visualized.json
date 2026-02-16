@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "feedback.constraint.visualized",
+  "type": "object",
+  "required": ["event_name", "workspace_id", "line_count", "bar_count", "timestamp"],
+  "properties": {
+    "event_name": { "const": "feedback.constraint.visualized" },
+    "workspace_id": { "type": "string", "minLength": 1 },
+    "line_count": { "type": "integer", "minimum": 0 },
+    "bar_count": { "type": "integer", "minimum": 0 },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

@@ -69,6 +69,13 @@ jobs:
           test -f desktop-runtime/app-shell/DesignFlowBar.tsx
           test -f desktop-runtime/app-shell/FlowStageIndicator.tsx
           test -f desktop-runtime/app-shell/FlowTransitionPanel.tsx
+          test -f desktop-runtime/app-shell/CADInteractionEngine.ts
+          test -f desktop-runtime/feedback/LiveFeedbackController.ts
+          test -f desktop-runtime/feedback/PredictiveSnapFeedback.ts
+          test -f desktop-runtime/feedback/ConstraintVisualizer.ts
+          test -f desktop-runtime/feedback/GhostPreviewManager.ts
+          test -f desktop-runtime/feedback/InteractionMicroAnimator.ts
+          test -f desktop-runtime/feedback/feedback_models.ts
       - name: Validate MU rendering overlays
         run: |
           test -f rendering-client/src/mu/HumanIntentOverlay.tsx
@@ -119,6 +126,14 @@ jobs:
           test -f rendering-client/src/interactions/SnapManager.ts
           test -f rendering-client/src/interactions/SnapVisualOverlay.tsx
           test -f rendering-client/src/xipp/PreviewMeshRenderer.ts
+      - name: Validate E5 feedback overlays
+        run: |
+          test -f rendering-client/src/e5/GhostMeshRenderer.tsx
+          test -f rendering-client/src/e5/ConstraintOverlay.ts
+          test -f rendering-client/src/e5/ConstraintLineRenderer.tsx
+          test -f rendering-client/src/e5/MicroInteractionAnimator.ts
+          test -f rendering-client/src/e5/AIGenerationPulse.tsx
+          test -f rendering-client/src/e5/IntentZoneGlow.ts
       - name: Validate rendering performance runtime
         run: |
           test -f rendering-client/src/performance/DTOStreamBuffer.ts
@@ -131,6 +146,11 @@ jobs:
       - name: Validate E4 design flow contracts
         run: |
           test -f spec/event-schemas/design.flow.stage.changed.json
+      - name: Validate E5 feedback contracts
+        run: |
+          test -f spec/event-schemas/feedback.snap.predicted.json
+          test -f spec/event-schemas/feedback.preview.updated.json
+          test -f spec/event-schemas/feedback.constraint.visualized.json
       - name: Enforce read-only desktop and rendering boundaries
         run: |
           if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv rendering-client/src/xvii rendering-client/src/performance rendering-client/src/interactions; then
@@ -193,6 +213,11 @@ jobs:
           echo "{\"overlay_profiles\":{}}" > artifacts/overlay-profile-map.json
           echo "{\"interaction_trace\":[]}" > artifacts/interaction-runtime-trace.json
           echo "{\"geometry_execution\":\"guarded\"}" > artifacts/geometry-execution-report.md
+          echo "# E5 Live Feedback Report" > artifacts/e5-live-feedback-report.md
+          echo "{\"ghost_previews\":[]}" > artifacts/ghost-preview-trace.json
+          echo "{\"constraints\":[]}" > artifacts/constraint-visualization-log.json
+          echo "{\"occt_status\":\"checked\"}" > artifacts/occt-adapter-validation.json
+          echo "{\"interaction_feedback\":[]}" > artifacts/interaction-feedback-trace.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

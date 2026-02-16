@@ -60,6 +60,22 @@ export class ViewportStateIsolator {
   getOverlayVisibilityMatrix(viewportId: string): Record<string, boolean> {
     return { ...(this.overlayVisibilityMatrix.get(viewportId) || {}) };
   }
+
+  applyFlowStageProfile(
+    viewportId: string,
+    stage: "concept" | "layout" | "systems" | "spatial" | "presentation",
+  ): void {
+    const profiles: Record<string, { profile: ViewportState["flowStageOverlayProfile"]; visibility: Record<string, boolean> }> = {
+      concept: { profile: "minimal", visibility: { guides: false, systems: false, cognition: false } },
+      layout: { profile: "assembly-guides", visibility: { guides: true, systems: false, cognition: false } },
+      systems: { profile: "systems-insight", visibility: { guides: true, systems: true, cognition: false } },
+      spatial: { profile: "spatial-cognition", visibility: { guides: true, systems: false, cognition: true } },
+      presentation: { profile: "clean-render", visibility: { guides: false, systems: false, cognition: false } },
+    };
+    const selected = profiles[stage];
+    this.setFlowStageOverlayProfile(viewportId, selected.profile || "minimal");
+    this.setOverlayVisibilityMatrix(viewportId, selected.visibility);
+  }
 }
 
 export function isolatePreviewState(

@@ -1,7 +1,7 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Execution Era E4 (Design Flow Engine)
+Phase: Execution Era E5 (Live Design Feedback Engine)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -66,6 +66,13 @@ Stability Rating: Experimental
 - Design flow profiles (`desktop-runtime/workspace/design_flow_models.ts`)
 - Design flow UI surfaces (`desktop-runtime/app-shell/DesignFlowBar.tsx`, `FlowStageIndicator.tsx`, `FlowTransitionPanel.tsx`)
 - Design flow runtime adapter (`orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py`)
+- Live feedback controller stack (`desktop-runtime/feedback/`)
+- CAD interaction engine (`desktop-runtime/app-shell/CADInteractionEngine.ts`)
+- Ghost preview runtime pipeline (`geometry-kernel/execution/ghost_preview_pipeline.py`)
+- Parametric constraint solver (`geometry-kernel/interactions/parametric_constraint_solver.py`)
+- OCCT adapter (`geometry-kernel/adapters/occt_adapter.py`)
+- E5 rendering overlays (`rendering-client/src/e5/`)
+- Feedback runtime adapter (`orchestration-layer/runtime-kernel/kernel_feedback_adapter.py`)
 
 ## In-Progress Modules
 - Core TwinGraph deterministic ingestion pipeline
@@ -94,6 +101,8 @@ Stability Rating: Experimental
 - Interaction layer direct TwinGraph writes: BLOCKED by governance (interaction intents + rebuild only)
 - Workspace engine direct TwinGraph writes: BLOCKED by governance (local runtime state only)
 - Design flow engine direct TwinGraph writes: BLOCKED by governance (orchestration-only local runtime layer)
+- Feedback layer direct TwinGraph writes: BLOCKED by governance (visual/runtime orchestration only)
+- OCCT runtime package availability on CI images: BLOCKED pending OCP/OCCT dependency provisioning for full boolean execution
 
 ## Blockers
 - issue_id: ISSUE-0002

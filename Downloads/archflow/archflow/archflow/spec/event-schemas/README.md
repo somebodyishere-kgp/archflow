@@ -27,3 +27,6 @@
 - `workspace.layout.changed.json`
 - `workspace.focus.mode.json`
 - `design.flow.stage.changed.json`
+- `feedback.snap.predicted.json`
+- `feedback.preview.updated.json`
+- `feedback.constraint.visualized.json`

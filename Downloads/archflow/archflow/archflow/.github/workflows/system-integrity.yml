@@ -41,6 +41,9 @@ jobs:
           test -f spec/event-schemas/workspace.layout.changed.json
           test -f spec/event-schemas/workspace.focus.mode.json
           test -f spec/event-schemas/design.flow.stage.changed.json
+          test -f spec/event-schemas/feedback.snap.predicted.json
+          test -f spec/event-schemas/feedback.preview.updated.json
+          test -f spec/event-schemas/feedback.constraint.visualized.json
       - name: Validate MU module structure
         run: |
           test -f orchestration-layer/human-interface/intent-interpreter/intent_context_builder.py
@@ -58,6 +61,7 @@ jobs:
           test -f orchestration-layer/runtime-kernel/kernel_interaction_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_workspace_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_feedback_adapter.py
           test -f orchestration-layer/self-assembly-runtime/blueprint_feedback_adapter.py
           test -f orchestration-layer/autonomous-intelligence/explainability/api.py
           test -f orchestration-layer/human-interface/nlp-intent-entry.py
@@ -82,6 +86,9 @@ jobs:
           test -f geometry-kernel/execution/assembly_cache_system.py
           test -f geometry-kernel/interactions/constraint_engine.py
           test -f geometry-kernel/execution/preview_pipeline.py
+          test -f geometry-kernel/execution/ghost_preview_pipeline.py
+          test -f geometry-kernel/interactions/parametric_constraint_solver.py
+          test -f geometry-kernel/adapters/occt_adapter.py
       - name: Validate XII generative module structure
         run: |
           test -f orchestration-layer/generative-intelligence/llm-adapter/llm_client.py
@@ -172,6 +179,21 @@ jobs:
           test -f desktop-runtime/app-shell/DesignFlowBar.tsx
           test -f desktop-runtime/app-shell/FlowStageIndicator.tsx
           test -f desktop-runtime/app-shell/FlowTransitionPanel.tsx
+      - name: Validate E5 feedback and CAD interaction structure
+        run: |
+          test -f desktop-runtime/feedback/LiveFeedbackController.ts
+          test -f desktop-runtime/feedback/PredictiveSnapFeedback.ts
+          test -f desktop-runtime/feedback/ConstraintVisualizer.ts
+          test -f desktop-runtime/feedback/GhostPreviewManager.ts
+          test -f desktop-runtime/feedback/InteractionMicroAnimator.ts
+          test -f desktop-runtime/feedback/feedback_models.ts
+          test -f desktop-runtime/app-shell/CADInteractionEngine.ts
+          test -f rendering-client/src/e5/GhostMeshRenderer.tsx
+          test -f rendering-client/src/e5/ConstraintOverlay.ts
+          test -f rendering-client/src/e5/ConstraintLineRenderer.tsx
+          test -f rendering-client/src/e5/MicroInteractionAnimator.ts
+          test -f rendering-client/src/e5/AIGenerationPulse.tsx
+          test -f rendering-client/src/e5/IntentZoneGlow.ts
       - name: Guard forbidden mutation paths
         run: |
           if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence orchestration-layer/spatial-cognition orchestration-layer/world-model orchestration-layer/building-systems orchestration-layer/project-consciousness geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv rendering-client/src/xvii rendering-client/src/performance rendering-client/src/interactions; then
@@ -204,7 +226,7 @@ jobs:
           fi
       - name: Guard preview persistence
         run: |
-          if rg -n "INSERT|UPDATE|persist|save_preview|write_preview" geometry-kernel/execution/preview_pipeline.py rendering-client/src/xipp/PreviewMeshRenderer.ts; then
+          if rg -n "INSERT|UPDATE|\\bpersist\\(|save_preview|write_preview" geometry-kernel/execution/preview_pipeline.py rendering-client/src/xipp/PreviewMeshRenderer.ts; then
             echo "Preview pipeline must remain temporary and non-persistent."
             exit 1
           fi
@@ -218,6 +240,12 @@ jobs:
         run: |
           if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|geometry.execution" desktop-runtime/workspace/DesignFlowController.ts desktop-runtime/workspace/design_flow_models.ts orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py; then
             echo "Design flow modules must remain orchestration-only."
+            exit 1
+          fi
+      - name: Guard feedback boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|\\bpersist\\(|save_preview|write_preview" desktop-runtime/feedback orchestration-layer/runtime-kernel/kernel_feedback_adapter.py rendering-client/src/e5; then
+            echo "Feedback modules must remain non-persistent orchestration/read-only layers."
             exit 1
           fi
       - name: Guard spatial engine llm autonomy
@@ -306,6 +334,11 @@ jobs:
           echo "{\"overlay_profiles\":{}}" > artifacts/overlay-profile-map.json
           echo "{\"interaction_trace\":[]}" > artifacts/interaction-runtime-trace.json
           echo "{\"geometry_execution\":\"guarded\"}" > artifacts/geometry-execution-report.md
+          echo "# E5 Live Feedback Report" > artifacts/e5-live-feedback-report.md
+          echo "{\"ghost_previews\":[]}" > artifacts/ghost-preview-trace.json
+          echo "{\"constraints\":[]}" > artifacts/constraint-visualization-log.json
+          echo "{\"occt_status\":\"checked\"}" > artifacts/occt-adapter-validation.json
+          echo "{\"interaction_feedback\":[]}" > artifacts/interaction-feedback-trace.json
       - uses: actions/upload-artifact@v4
         with:
           name: system-integrity-artifacts

@@ -136,3 +136,13 @@ tradeoffs: additional local orchestration state and UI wiring in exchange for gu
 impact_scope: desktop-runtime design flow controller/models/components, workspace state extensions, runtime design.flow.update phase, viewport overlay profile mapping, design flow event contracts
 rollback_strategy: disable design.flow.update and fallback to E3 workspace-only controls
 arch_critical: true
+
+decision_id: ADR-E5-001
+title: Live Design Feedback Engine + CAD Foundation Introduced
+date: 2026-02-16
+reason: Add continuous interaction feedback and production CAD foundation adapters to make single-user authoring responsive while preserving deterministic execution boundaries.
+alternatives_considered: static feedback overlays; custom geometry kernel implementation from scratch
+tradeoffs: increased runtime orchestration and adapter complexity in exchange for predictive snap UX, temporary ghost previews, and open-source-backed CAD operations
+impact_scope: desktop feedback modules, CAD interaction engine, ghost preview pipeline, OCCT adapter, parametric constraint solver, runtime feedback.update phase, E5 overlays and event contracts
+rollback_strategy: disable feedback.update and revert to E4 flow/runtime behavior with basic interaction previews only
+arch_critical: true

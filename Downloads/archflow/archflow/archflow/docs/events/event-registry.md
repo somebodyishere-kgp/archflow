@@ -172,3 +172,21 @@ publisher_module: desktop-runtime/workspace/design-flow
 subscriber_modules: workspace toolbar, viewport overlay isolator, runtime design flow adapter
 payload_schema: /spec/event-schemas/design.flow.stage.changed.json
 failure_conditions: invalid stage transition, flow update triggering geometry rebuild, workspace mutation boundary violation
+
+event_name: feedback.snap.predicted
+publisher_module: desktop-runtime/feedback
+subscriber_modules: rendering-client/src/e5, CAD interaction engine, workspace toolbar
+payload_schema: /spec/event-schemas/feedback.snap.predicted.json
+failure_conditions: invalid anchor prediction payload, preview pipeline bypass, feedback write boundary violation
+
+event_name: feedback.preview.updated
+publisher_module: geometry-kernel/execution/ghost_preview_pipeline
+subscriber_modules: rendering-client/src/e5/GhostMeshRenderer, desktop-runtime feedback panel
+payload_schema: /spec/event-schemas/feedback.preview.updated.json
+failure_conditions: preview flagged persistent, direct TwinGraph mutation attempt, invalid ghost mesh payload
+
+event_name: feedback.constraint.visualized
+publisher_module: desktop-runtime/feedback/ConstraintVisualizer
+subscriber_modules: rendering-client/src/e5/ConstraintOverlay, ConstraintLineRenderer
+payload_schema: /spec/event-schemas/feedback.constraint.visualized.json
+failure_conditions: malformed constraint visual data, geometry mutation path in feedback layer
