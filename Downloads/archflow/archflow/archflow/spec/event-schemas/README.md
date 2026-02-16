@@ -15,3 +15,6 @@
 - `design.suggestion.generated.json`
 - `spatial.cognition.insight.json`
 - `spatial.flow.analysis.json`
+- `world.context.insight.json`
+- `world.solar.analysis.json`
+- `world.urban.flow.json`

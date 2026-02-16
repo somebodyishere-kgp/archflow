@@ -76,3 +76,13 @@ tradeoffs: added analysis modules in exchange for measurable spatial-experience 
 impact_scope: spatial-cognition core and sub-engines, runtime spatial phase, generative bridge, reflection spatial alignment, xiv overlays
 rollback_strategy: disable spatial.cognition.analysis phase and fallback to geometry/system-only analysis stack
 arch_critical: true
+
+decision_id: ADR-XVI-001
+title: Adaptive Architectural World Model Introduced
+date: 2026-02-16
+reason: Provide deterministic environmental and urban context intelligence to guide generative and synthesis decisions.
+alternatives_considered: static orientation heuristics; external API-driven context services
+tradeoffs: additional world-analysis modules in exchange for context-aware design proposals without simulation overhead
+impact_scope: world-model engines, world context bridge, runtime world context phase, synthesis world-aware adjustments, xvi overlays
+rollback_strategy: disable world.context.analysis and fallback to intent-only generation path
+arch_critical: true

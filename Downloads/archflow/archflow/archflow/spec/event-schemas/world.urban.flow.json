@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "world.urban.flow",
+  "type": "object",
+  "required": ["event_name", "context_id", "urban_flow", "timestamp"],
+  "properties": {
+    "event_name": { "type": "string", "const": "world.urban.flow" },
+    "context_id": { "type": "string" },
+    "urban_flow": { "type": "object" },
+    "timestamp": { "type": "string" }
+  },
+  "additionalProperties": true
+}

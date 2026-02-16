@@ -100,3 +100,21 @@ publisher_module: orchestration-layer/spatial-cognition/flow
 subscriber_modules: codesign-runtime, rendering-client/src/xiv
 payload_schema: /spec/event-schemas/spatial.flow.analysis.json
 failure_conditions: invalid topology graph, missing flow metrics
+
+event_name: world.context.insight
+publisher_module: orchestration-layer/world-model
+subscriber_modules: generative-intelligence world-context bridge, design-synthesis world-aware layout solver
+payload_schema: /spec/event-schemas/world.context.insight.json
+failure_conditions: missing world metrics, deterministic analysis contract violation
+
+event_name: world.solar.analysis
+publisher_module: orchestration-layer/world-model/solar
+subscriber_modules: desktop world context panel, rendering-client/src/xvi
+payload_schema: /spec/event-schemas/world.solar.analysis.json
+failure_conditions: invalid orientation output, missing solar metrics
+
+event_name: world.urban.flow
+publisher_module: orchestration-layer/world-model/urban
+subscriber_modules: rendering-client/src/xvi, design-synthesis entry strategy
+payload_schema: /spec/event-schemas/world.urban.flow.json
+failure_conditions: invalid flow graph, missing accessibility topology

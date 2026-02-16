@@ -16,3 +16,6 @@ export * from "./xiii/DesignDeltaRenderer";
 export * from "./xiv/SpatialPerceptionOverlay";
 export * from "./xiv/FlowVisualization";
 export * from "./xiv/VisualFocusMap";
+export * from "./xvi/SolarOrientationOverlay";
+export * from "./xvi/UrbanDensityOverlay";
+export * from "./xvi/ClimateVectorRenderer";

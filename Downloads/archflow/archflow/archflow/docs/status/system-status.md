@@ -1,7 +1,7 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Program XIV (Spatial Cognition Engine)
+Phase: Program XVI (Adaptive Architectural World Model)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -38,6 +38,11 @@ Stability Rating: Experimental
 - Spatial reflection alignment (`orchestration-layer/reflective-core/analysis/reflection_spatial_alignment.py`)
 - XIV overlays (`rendering-client/src/xiv/`)
 - Spatial desktop panels (`desktop-runtime/app-shell/SpatialCognitionPanel.tsx`, `ExperienceHeatmap.tsx`, `MovementGraphView.ts`)
+- World model engines (`orchestration-layer/world-model/`)
+- World context bridge (`orchestration-layer/generative-intelligence/world-context-bridge.py`)
+- World alignment reflection (`orchestration-layer/reflective-core/analysis/reflection_world_alignment.py`)
+- XVI overlays (`rendering-client/src/xvi/`)
+- World desktop panels (`desktop-runtime/app-shell/WorldContextPanel.tsx`, `SolarCompassView.tsx`, `UrbanFlowGraph.ts`)
 
 ## In-Progress Modules
 - Core TwinGraph deterministic ingestion pipeline
@@ -60,6 +65,7 @@ Stability Rating: Experimental
 - Geometry kernel direct TwinGraph writes: BLOCKED by governance (executor-only write boundary)
 - Realtime co-design direct TwinGraph writes: BLOCKED by governance (observation/suggestion only)
 - Spatial cognition direct TwinGraph writes: BLOCKED by governance (analysis only)
+- World model direct TwinGraph writes: BLOCKED by governance (analysis only)
 
 ## Blockers
 - issue_id: ISSUE-0002

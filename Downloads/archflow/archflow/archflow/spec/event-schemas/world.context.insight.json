@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "world.context.insight",
+  "type": "object",
+  "required": ["event_name", "context_id", "metrics", "timestamp"],
+  "properties": {
+    "event_name": { "type": "string", "const": "world.context.insight" },
+    "context_id": { "type": "string" },
+    "metrics": { "type": "object" },
+    "timestamp": { "type": "string" }
+  },
+  "additionalProperties": true
+}

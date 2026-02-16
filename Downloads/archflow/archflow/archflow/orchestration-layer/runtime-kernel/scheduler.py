@@ -2,6 +2,7 @@ from __future__ import annotations
 
 PHASE_ORDER = [
     "human.intent.interpretation",
+    "world.context.analysis",
     "design.intent.generation",
     "design.synthesis",
     "geometry.execution",

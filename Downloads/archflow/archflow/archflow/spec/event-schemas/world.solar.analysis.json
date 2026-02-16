@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "world.solar.analysis",
+  "type": "object",
+  "required": ["event_name", "context_id", "solar", "timestamp"],
+  "properties": {
+    "event_name": { "type": "string", "const": "world.solar.analysis" },
+    "context_id": { "type": "string" },
+    "solar": { "type": "object" },
+    "timestamp": { "type": "string" }
+  },
+  "additionalProperties": true
+}

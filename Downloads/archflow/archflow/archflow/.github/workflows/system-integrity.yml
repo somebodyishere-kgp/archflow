@@ -29,6 +29,9 @@ jobs:
           test -f spec/event-schemas/design.suggestion.generated.json
           test -f spec/event-schemas/spatial.cognition.insight.json
           test -f spec/event-schemas/spatial.flow.analysis.json
+          test -f spec/event-schemas/world.context.insight.json
+          test -f spec/event-schemas/world.solar.analysis.json
+          test -f spec/event-schemas/world.urban.flow.json
       - name: Validate MU module structure
         run: |
           test -f orchestration-layer/human-interface/intent-interpreter/intent_context_builder.py
@@ -40,6 +43,7 @@ jobs:
           test -f orchestration-layer/runtime-kernel/kernel_llm_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_codesign_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_spatial_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_world_adapter.py
           test -f orchestration-layer/self-assembly-runtime/blueprint_feedback_adapter.py
           test -f orchestration-layer/autonomous-intelligence/explainability/api.py
           test -f orchestration-layer/human-interface/nlp-intent-entry.py
@@ -87,10 +91,27 @@ jobs:
           test -f orchestration-layer/spatial-cognition/experience/atmosphere_estimator.py
           test -f orchestration-layer/generative-intelligence/spatial_reasoning_bridge.py
           test -f orchestration-layer/reflective-core/analysis/reflection_spatial_alignment.py
+      - name: Validate XVI world model structure
+        run: |
+          test -f orchestration-layer/world-model/site_context_builder.py
+          test -f orchestration-layer/world-model/climate_profile_engine.py
+          test -f orchestration-layer/world-model/urban_density_analyzer.py
+          test -f orchestration-layer/world-model/cultural_zoning_mapper.py
+          test -f orchestration-layer/world-model/solar/sun_path_engine.py
+          test -f orchestration-layer/world-model/climate/wind_channel_estimator.py
+          test -f orchestration-layer/world-model/urban/movement_ecology_builder.py
+          test -f orchestration-layer/generative-intelligence/world-context-bridge.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_world_alignment.py
       - name: Guard forbidden mutation paths
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence orchestration-layer/spatial-cognition geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence orchestration-layer/spatial-cognition orchestration-layer/world-model geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi; then
             echo "Human interface, desktop runtime, and MU overlays must not mutate TwinGraph."
+            exit 1
+          fi
+      - name: Guard world model external API bypass
+        run: |
+          if rg -n "http://|https://|requests\\.|urllib|fetch\\(" orchestration-layer/world-model orchestration-layer/generative-intelligence/world-context-bridge.py; then
+            echo "World model must remain deterministic without external API calls."
             exit 1
           fi
       - name: Guard spatial engine llm autonomy
@@ -152,6 +173,10 @@ jobs:
           echo "{\"nodes\":[],\"edges\":[]}" > artifacts/movement-graph.json
           echo "{\"cones\":[],\"occlusions\":[]}" > artifacts/visual-field-map.json
           echo "{\"atmosphere\":0,\"tension\":0}" > artifacts/experience-metrics.json
+          echo "# XVI World Model Report" > artifacts/xvi-world-model-report.md
+          echo "{\"solar\":{}}" > artifacts/solar-analysis.json
+          echo "{\"urban_flow\":{}}" > artifacts/urban-flow-map.json
+          echo "{\"climate\":{}}" > artifacts/climate-metrics.json
       - uses: actions/upload-artifact@v4
         with:
           name: system-integrity-artifacts

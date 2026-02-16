@@ -40,6 +40,9 @@ jobs:
           test -f desktop-runtime/app-shell/SpatialCognitionPanel.tsx
           test -f desktop-runtime/app-shell/ExperienceHeatmap.tsx
           test -f desktop-runtime/app-shell/MovementGraphView.ts
+          test -f desktop-runtime/app-shell/WorldContextPanel.tsx
+          test -f desktop-runtime/app-shell/SolarCompassView.tsx
+          test -f desktop-runtime/app-shell/UrbanFlowGraph.ts
       - name: Validate MU rendering overlays
         run: |
           test -f rendering-client/src/mu/HumanIntentOverlay.tsx
@@ -70,9 +73,14 @@ jobs:
           test -f rendering-client/src/xiv/SpatialPerceptionOverlay.tsx
           test -f rendering-client/src/xiv/FlowVisualization.ts
           test -f rendering-client/src/xiv/VisualFocusMap.ts
+      - name: Validate XVI rendering overlays
+        run: |
+          test -f rendering-client/src/xvi/SolarOrientationOverlay.tsx
+          test -f rendering-client/src/xvi/UrbanDensityOverlay.ts
+          test -f rendering-client/src/xvi/ClimateVectorRenderer.ts
       - name: Enforce read-only desktop and rendering boundaries
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi; then
             echo "Desktop runtime and MU overlays must remain read-only."
             exit 1
           fi
@@ -105,6 +113,10 @@ jobs:
           echo "{\"nodes\":[],\"edges\":[]}" > artifacts/movement-graph.json
           echo "{\"cones\":[]}" > artifacts/visual-field-map.json
           echo "{\"atmosphere\":0}" > artifacts/experience-metrics.json
+          echo "# XVI World Model Report" > artifacts/xvi-world-model-report.md
+          echo "{\"solar\":{}}" > artifacts/solar-analysis.json
+          echo "{\"urban_flow\":{}}" > artifacts/urban-flow-map.json
+          echo "{\"climate\":{}}" > artifacts/climate-metrics.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
