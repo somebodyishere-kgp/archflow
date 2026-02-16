@@ -12,3 +12,4 @@
 - `design.intent.generated.json`
 - `geometry.execution.proposed.json`
 - `assembly.generated.json`
+- `design.suggestion.generated.json`

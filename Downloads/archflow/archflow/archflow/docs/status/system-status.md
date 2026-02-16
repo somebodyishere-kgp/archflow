@@ -1,7 +1,7 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Program XI++ (Deep Geometry Execution)
+Phase: Program XIII (Real-Time Co-Design Intelligence)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -28,6 +28,11 @@ Stability Rating: Experimental
 - BIM-like assembly builder (`geometry-kernel/assembly/`)
 - XI++ rendering overlays (`rendering-client/src/xipp/`)
 - Desktop assembly inspection surfaces (`desktop-runtime/app-shell/ParametricEditor.tsx`, `AssemblyInspector.tsx`, `PlanView.tsx`, `SectionView.tsx`)
+- Co-design runtime stream engine (`orchestration-layer/codesign-runtime/`)
+- Realtime generative suggestion modules (`orchestration-layer/generative-intelligence/realtime/`)
+- Realtime intent stream (`orchestration-layer/human-interface/realtime-intent-stream.py`)
+- XIII rendering overlays (`rendering-client/src/xiii/`)
+- Co-design desktop surfaces (`desktop-runtime/app-shell/CoDesignPanel.tsx`, `SuggestionTimeline.tsx`, `RealtimeIntentBar.tsx`)
 
 ## In-Progress Modules
 - Core TwinGraph deterministic ingestion pipeline
@@ -48,6 +53,7 @@ Stability Rating: Experimental
 - Design synthesis direct TwinGraph writes: BLOCKED by governance (proposal executor boundary only)
 - LLM direct TwinGraph writes or execution authority: BLOCKED by governance (reasoning-only contract)
 - Geometry kernel direct TwinGraph writes: BLOCKED by governance (executor-only write boundary)
+- Realtime co-design direct TwinGraph writes: BLOCKED by governance (observation/suggestion only)
 
 ## Blockers
 - issue_id: ISSUE-0002

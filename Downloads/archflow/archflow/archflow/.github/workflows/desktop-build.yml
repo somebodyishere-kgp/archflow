@@ -34,6 +34,9 @@ jobs:
           test -f desktop-runtime/app-shell/AssemblyInspector.tsx
           test -f desktop-runtime/app-shell/PlanView.tsx
           test -f desktop-runtime/app-shell/SectionView.tsx
+          test -f desktop-runtime/app-shell/CoDesignPanel.tsx
+          test -f desktop-runtime/app-shell/SuggestionTimeline.tsx
+          test -f desktop-runtime/app-shell/RealtimeIntentBar.tsx
       - name: Validate MU rendering overlays
         run: |
           test -f rendering-client/src/mu/HumanIntentOverlay.tsx
@@ -54,9 +57,14 @@ jobs:
           test -f rendering-client/src/xipp/AssemblyRenderer.ts
           test -f rendering-client/src/xipp/GridOverlay.tsx
           test -f rendering-client/src/xipp/ParametricHighlight.ts
+      - name: Validate XIII rendering overlays
+        run: |
+          test -f rendering-client/src/xiii/RealtimeSuggestionOverlay.tsx
+          test -f rendering-client/src/xiii/AdaptiveIntentVisualizer.ts
+          test -f rendering-client/src/xiii/DesignDeltaRenderer.ts
       - name: Enforce read-only desktop and rendering boundaries
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii; then
             echo "Desktop runtime and MU overlays must remain read-only."
             exit 1
           fi
@@ -81,6 +89,10 @@ jobs:
           echo "{\"assemblies\":[]}" > artifacts/assembly-output.json
           echo "{\"plan_metrics\":{\"units\":\"mm\"}}" > artifacts/plan-metrics.json
           echo "{\"grid\":{\"status\":\"ready\"}}" > artifacts/structural-grid.json
+          echo "# XIII CoDesign Report" > artifacts/xiii-codesign-report.md
+          echo "{\"suggestions\":[]}" > artifacts/realtime-suggestion-trace.json
+          echo "{\"revision\":0}" > artifacts/codesign-runtime-state.json
+          echo "{\"history\":[]}" > artifacts/delta-context-history.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

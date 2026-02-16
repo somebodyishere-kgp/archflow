@@ -56,3 +56,13 @@ tradeoffs: additional geometry and assembly rule modules in exchange for reprodu
 impact_scope: geometry-kernel generators/structure/assembly, synthesis execution logic, runtime geometry.execution phase, xipp overlays and desktop inspection surfaces
 rollback_strategy: disable geometry.execution phase and keep XI synthesis outputs at intent-only granularity
 arch_critical: true
+
+decision_id: ADR-XIII-001
+title: Real-Time Co-Design Intelligence Introduced
+date: 2026-02-16
+reason: Enable deterministic continuous suggestion loops combining human deltas, LLM reasoning, and reflection checks.
+alternatives_considered: one-shot request-response loop only; autonomous uncontrolled suggestion streams
+tradeoffs: increased runtime phase complexity in exchange for adaptive collaboration and safer live guidance
+impact_scope: codesign-runtime, realtime generative modules, runtime codesign phases, realtime desktop/render overlays, reflective safety validator
+rollback_strategy: disable codesign phases and fallback to discrete XII/XI cycle execution
+arch_critical: true

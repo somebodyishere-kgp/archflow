@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "design.suggestion.generated",
+  "type": "object",
+  "required": ["event_name", "context_id", "reasoning", "schedule"],
+  "properties": {
+    "event_name": { "type": "string", "const": "design.suggestion.generated" },
+    "context_id": { "type": "string" },
+    "reasoning": { "type": "object" },
+    "schedule": { "type": "object" }
+  },
+  "additionalProperties": true
+}

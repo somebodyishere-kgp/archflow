@@ -7,6 +7,8 @@ PHASE_ORDER = [
     "geometry.execution",
     "pipeline.execution",
     "reflection.analysis",
+    "codesign.observe",
+    "codesign.suggest",
     "human.feedback",
 ]
 

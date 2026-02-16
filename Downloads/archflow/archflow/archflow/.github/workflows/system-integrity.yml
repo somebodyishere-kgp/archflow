@@ -26,6 +26,7 @@ jobs:
           test -f spec/event-schemas/design.intent.generated.json
           test -f spec/event-schemas/geometry.execution.proposed.json
           test -f spec/event-schemas/assembly.generated.json
+          test -f spec/event-schemas/design.suggestion.generated.json
       - name: Validate MU module structure
         run: |
           test -f orchestration-layer/human-interface/intent-interpreter/intent_context_builder.py
@@ -35,9 +36,11 @@ jobs:
           test -f orchestration-layer/runtime-kernel/scheduler.py
           test -f orchestration-layer/runtime-kernel/kernel_synthesis_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_llm_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_codesign_adapter.py
           test -f orchestration-layer/self-assembly-runtime/blueprint_feedback_adapter.py
           test -f orchestration-layer/autonomous-intelligence/explainability/api.py
           test -f orchestration-layer/human-interface/nlp-intent-entry.py
+          test -f orchestration-layer/human-interface/realtime-intent-stream.py
       - name: Validate XI synthesis and geometry structure
         run: |
           test -f orchestration-layer/design-synthesis/program_interpreter.py
@@ -62,9 +65,17 @@ jobs:
           test -f orchestration-layer/generative-intelligence/reasoning-engine/design_reasoner.py
           test -f orchestration-layer/generative-intelligence/safety/hallucination_guard.py
           test -f orchestration-layer/reflective-core/analysis/reflection_llm_alignment.py
+      - name: Validate XIII realtime structure
+        run: |
+          test -f orchestration-layer/codesign-runtime/codesign_stream_engine.py
+          test -f orchestration-layer/codesign-runtime/interaction_listener.py
+          test -f orchestration-layer/codesign-runtime/delta_context_builder.py
+          test -f orchestration-layer/generative-intelligence/realtime/realtime_reasoner.py
+          test -f orchestration-layer/generative-intelligence/realtime/safety/loop_guard.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_codesign_validator.py
       - name: Guard forbidden mutation paths
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii; then
             echo "Human interface, desktop runtime, and MU overlays must not mutate TwinGraph."
             exit 1
           fi
@@ -72,6 +83,12 @@ jobs:
         run: |
           if rg -n "execute proposal|bypass intent gateway|runtime kernel patch|direct geometry mutation" orchestration-layer/generative-intelligence; then
             echo "Unsafe LLM bypass directive detected."
+            exit 1
+          fi
+      - name: Guard deterministic codesign loop
+        run: |
+          if rg -n "while True|threading|asyncio.create_task" orchestration-layer/codesign-runtime orchestration-layer/generative-intelligence/realtime; then
+            echo "Potential non-deterministic continuous loop pattern detected."
             exit 1
           fi
       - name: Guard domain-neutral interpretation
@@ -107,6 +124,10 @@ jobs:
           echo "{\"assemblies\":[]}" > artifacts/assembly-output.json
           echo "{\"plan_metrics\":{\"units\":\"mm\"}}" > artifacts/plan-metrics.json
           echo "{\"grid\":{\"status\":\"generated\"}}" > artifacts/structural-grid.json
+          echo "# XIII CoDesign Report" > artifacts/xiii-codesign-report.md
+          echo "{\"suggestions\":[]}" > artifacts/realtime-suggestion-trace.json
+          echo "{\"revision\":0,\"status\":\"deterministic\"}" > artifacts/codesign-runtime-state.json
+          echo "{\"history\":[]}" > artifacts/delta-context-history.json
       - uses: actions/upload-artifact@v4
         with:
           name: system-integrity-artifacts

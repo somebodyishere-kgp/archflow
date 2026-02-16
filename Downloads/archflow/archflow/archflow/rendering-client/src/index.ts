@@ -10,3 +10,6 @@ export * from "./xii/IntentEvolutionView";
 export * from "./xipp/AssemblyRenderer";
 export * from "./xipp/GridOverlay";
 export * from "./xipp/ParametricHighlight";
+export * from "./xiii/RealtimeSuggestionOverlay";
+export * from "./xiii/AdaptiveIntentVisualizer";
+export * from "./xiii/DesignDeltaRenderer";

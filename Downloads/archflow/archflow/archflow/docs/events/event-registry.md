@@ -82,3 +82,9 @@ publisher_module: geometry-kernel/assembly
 subscriber_modules: rendering-client/src/xipp, desktop-runtime assembly inspector
 payload_schema: /spec/event-schemas/assembly.generated.json
 failure_conditions: missing material_layers/thickness/metadata_version fields
+
+event_name: design.suggestion.generated
+publisher_module: orchestration-layer/generative-intelligence/realtime
+subscriber_modules: orchestration-layer/codesign-runtime, rendering-client/src/xiii, desktop-runtime codesign panel
+payload_schema: /spec/event-schemas/design.suggestion.generated.json
+failure_conditions: realtime loop non-deterministic ordering, schema validation bypass, unsafe proposal detected by reflection
