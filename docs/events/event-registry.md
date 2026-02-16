@@ -53,6 +53,30 @@ subscriber_modules: rendering-client runtime adapter
 payload_schema: /spec/event-schemas/runtime.lineage.json
 failure_conditions: missing runtime_cycle_id, scheduler out-of-order execution
 
+event_name: design.insight.generated
+publisher_module: orchestration-layer/autonomous-intelligence/agents
+subscriber_modules: orchestration-layer/autonomous-intelligence/explainability, rendering-client intelligence overlay
+payload_schema: /spec/event-schemas/design.insight.generated.json
+failure_conditions: semantic graph missing context, invalid insight payload
+
+event_name: design.evolution.updated
+publisher_module: orchestration-layer/design-evolution
+subscriber_modules: autonomous-intelligence proposal-generator, explainability
+payload_schema: /spec/event-schemas/design.evolution.updated.json
+failure_conditions: evolution lineage missing, context mismatch
+
+event_name: design.evolution.insight
+publisher_module: orchestration-layer/design-evolution
+subscriber_modules: rendering-client evolution overlay, explainability
+payload_schema: /spec/event-schemas/design.evolution.insight.json
+failure_conditions: evolution insight payload invalid
+
+event_name: design.proposal.generated
+publisher_module: orchestration-layer/autonomous-intelligence/proposal-generator
+subscriber_modules: intent-gateway intake bridge (future), explainability
+payload_schema: /spec/event-schemas/intent.proposed.json
+failure_conditions: adaptive strategy invalid, schema mismatch with intent contract
+
 ## Transport Stabilization (Sprint 2)
 - Active transport adapter: `LocalEventTransport` (`core-twingraph/src/twingraph/transport/local.py`)
 - Planned transport adapter: `NatsEventTransport` (`core-twingraph/src/twingraph/transport/nats.py`)

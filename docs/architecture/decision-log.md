@@ -77,3 +77,43 @@ impact_scope: runtime-kernel scheduler/state engine/router, rendering kernel ada
 rollback_strategy: pause kernel dispatch and fallback to proposal-executor direct loop while preserving event logs
 arch_critical: true
 
+decision_id: ADR-SIGMA-001
+title: Autonomous Design Intelligence Engine Introduced
+date: 2026-02-16
+reason: Introduce deterministic semantic context and proposal generation without violating TwinGraph write authority.
+alternatives_considered: direct intent generation by runtime kernel; LLM-driven proposal generation
+tradeoffs: higher scaffolding complexity in exchange for explainable deterministic intelligence cycles
+impact_scope: autonomous-intelligence semantic graph, proposal-generator, agents, explainability, render overlays
+rollback_strategy: disable autonomous cycle triggers and fallback to manual intent proposals
+arch_critical: true
+
+decision_id: ADR-DELTA-001
+title: Urban Intelligence Fabric Introduced
+date: 2026-02-16
+reason: Scale ArchFlow runtime from project-level intelligence to district/city-level deterministic reasoning.
+alternatives_considered: keep single-building scope; external urban analytics service
+tradeoffs: larger schema/runtime complexity in exchange for multi-scale deterministic planning capabilities
+impact_scope: urban TwinGraph schema fields, infrastructure fabric engines, multi-scale scheduler, urban observability, urban rendering overlays
+rollback_strategy: disable urban modules and fallback to project-level runtime cycles
+arch_critical: true
+
+decision_id: ADR-EPSILON-001
+title: Deterministic Design Evolution Engine Introduced
+date: 2026-02-16
+reason: Enable adaptive, explainable proposal behavior without probabilistic learning systems.
+alternatives_considered: static proposal heuristics only; ML-based model training
+tradeoffs: added memory/index complexity in exchange for deterministic self-improving proposal scoring
+impact_scope: design-evolution engine, adaptive proposal bias, kernel evolution adapter, evolution overlays, evolution schemas
+rollback_strategy: disable adaptive bias and run proposal generator in baseline scoring mode
+arch_critical: true
+
+decision_id: ADR-OMEGA-CORE-001
+title: Universal Systems Intelligence Engine Introduced
+date: 2026-02-16
+reason: Replace domain-specific semantic assumptions with a domain-agnostic systems graph runtime model.
+alternatives_considered: incremental per-domain adapters; static architecture-only semantic layer
+tradeoffs: higher abstraction complexity in exchange for broad system adaptability without module rewrites
+impact_scope: universal-systems engine, adaptive-engine, dynamic runtime phases, generic systems renderer, CI systems validation
+rollback_strategy: freeze adaptive domain inference and fallback to prior architecture-specific semantic graph
+arch_critical: true
+

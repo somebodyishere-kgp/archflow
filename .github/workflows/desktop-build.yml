@@ -40,6 +40,11 @@ jobs:
           test -f rendering-client/src/runtime/RuntimeSyncEngine.ts
           test -f rendering-client/src/runtime/RuntimeKernelAdapter.ts
           rg -n "render.sync|runtime_cycle_id" rendering-client/src/runtime > artifacts/runtime-event-trace.json
+          test -f rendering-client/src/intelligence/IntelligenceOverlay.tsx
+          test -f rendering-client/src/evolution/EvolutionOverlay.tsx
+          test -f rendering-client/src/urban/UrbanOverlayEngine.ts
+          test -f rendering-client/src/systems/SystemsViewportManager.ts
+          test -f rendering-client/src/systems/GenericTopologyRenderer.ts
       - name: Emit runtime integration report
         run: |
           echo "# Runtime Integration Report" > artifacts/runtime-integration-report.md

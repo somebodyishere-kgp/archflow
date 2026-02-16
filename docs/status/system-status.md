@@ -1,7 +1,7 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Phase Beta (Runtime Kernel Integration)
+Phase: Program Omega-Core (System-Agnostic Intelligence Refactor)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -20,6 +20,17 @@ Stability Rating: Experimental
 - Unified runtime health service (`orchestration-layer/runtime-health/`)
 - Runtime kernel orchestration module (`orchestration-layer/runtime-kernel/`)
 - Intelligence scaffold (no LLM execution) (`orchestration-layer/intelligence-scaffold/`)
+- Autonomous intelligence engine (`orchestration-layer/autonomous-intelligence/`)
+- Rendering intelligence overlays (`rendering-client/src/intelligence/`)
+- Urban intelligence fabric (`orchestration-layer/autonomous-intelligence/infrastructure-fabric/`)
+- Urban observability layer (`orchestration-layer/urban-observability/`)
+- Urban rendering overlays (`rendering-client/src/urban/`)
+- Design evolution engine (`orchestration-layer/design-evolution/`)
+- Rendering evolution overlays (`rendering-client/src/evolution/`)
+- Universal systems graph engine (`orchestration-layer/autonomous-intelligence/universal-systems/`)
+- Adaptive intelligence engine (`orchestration-layer/autonomous-intelligence/adaptive-engine/`)
+- Domain-neutral runtime kernel expansion (`runtime-kernel/dynamic_phase_engine.py`, `runtime-kernel/domain_context_manager.py`)
+- Universal systems rendering (`rendering-client/src/systems/`)
 - CI-backed deterministic TwinGraph tests under `.github/workflows/test-twingraph.yml`
 
 ## In-Progress Modules

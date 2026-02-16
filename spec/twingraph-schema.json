@@ -9,6 +9,42 @@
     "type": {
       "type": "string"
     },
+    "project_id": {
+      "type": "string"
+    },
+    "context_id": {
+      "type": "string"
+    },
+    "runtime_cycle_id": {
+      "type": ["string", "null"]
+    },
+    "entity_type": {
+      "type": "string"
+    },
+    "entity_properties": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "system_domain": {
+      "type": "string"
+    },
+    "semantic_tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "urban_context_id": {
+      "type": ["string", "null"]
+    },
+    "zoning_classification": {
+      "type": ["string", "null"]
+    },
+    "mobility_graph_links": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "public_realm_score": {
+      "type": ["number", "null"]
+    },
     "geometry": {
       "type": "object",
       "properties": {
@@ -98,10 +134,25 @@
         }
       },
       "additionalProperties": false
+    },
+    "hierarchy": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["city", "district", "block", "parcel", "building", "space"]
+        }
+      },
+      "required": ["level"],
+      "additionalProperties": false
     }
   },
   "required": [
     "id",
+    "project_id",
+    "context_id",
+    "entity_type",
+    "system_domain",
     "type",
     "geometry"
   ],
