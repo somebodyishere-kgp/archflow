@@ -1,7 +1,7 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Program XV (Living Building Systems Engine)
+Phase: Execution Era E4 (Design Flow Engine)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -48,6 +48,24 @@ Stability Rating: Experimental
 - Systems reflection alignment (`orchestration-layer/reflective-core/analysis/reflection_systems_alignment.py`)
 - XV overlays (`rendering-client/src/xv/`)
 - Building systems desktop panels (`desktop-runtime/app-shell/BuildingSystemsPanel.tsx`, `AssemblyGraphView.ts`, `MaterialStackInspector.tsx`, `LoadPathDiagram.tsx`)
+- Project consciousness engine (`orchestration-layer/project-consciousness/`)
+- Consciousness bridge (`orchestration-layer/generative-intelligence/consciousness-bridge.py`)
+- Temporal reflection alignment (`orchestration-layer/reflective-core/analysis/reflection_temporal_alignment.py`)
+- XVII overlays (`rendering-client/src/xvii/`)
+- Consciousness desktop panels (`desktop-runtime/app-shell/ProjectMemoryPanel.tsx`, `DesignTimelineView.tsx`, `IntentEvolutionGraph.ts`)
+- Geometry interaction constraint engine (`geometry-kernel/interactions/constraint_engine.py`)
+- Incremental preview pipeline (`geometry-kernel/execution/preview_pipeline.py`)
+- Desktop interaction state machine (`desktop-runtime/app-shell/InteractionStateMachine.ts`)
+- Snap bridge and overlay (`rendering-client/src/interactions/`)
+- Interaction runtime adapter (`orchestration-layer/runtime-kernel/kernel_interaction_adapter.py`)
+- Workspace state engine (`desktop-runtime/workspace/WorkspaceStateEngine.ts`)
+- Workspace focus and preset managers (`desktop-runtime/workspace/AIFocusModeManager.ts`, `desktop-runtime/workspace/WorkspacePresetManager.ts`)
+- Viewport layout manager and workspace UI controls (`desktop-runtime/app-shell/ViewportLayoutManager.tsx`, `WorkspaceToolbar.tsx`, `LayoutSwitcher.tsx`, `FocusModeIndicator.tsx`, `ViewportTabs.tsx`)
+- Workspace runtime adapter (`orchestration-layer/runtime-kernel/kernel_workspace_adapter.py`)
+- Design flow controller (`desktop-runtime/workspace/DesignFlowController.ts`)
+- Design flow profiles (`desktop-runtime/workspace/design_flow_models.ts`)
+- Design flow UI surfaces (`desktop-runtime/app-shell/DesignFlowBar.tsx`, `FlowStageIndicator.tsx`, `FlowTransitionPanel.tsx`)
+- Design flow runtime adapter (`orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py`)
 
 ## In-Progress Modules
 - Core TwinGraph deterministic ingestion pipeline
@@ -72,6 +90,10 @@ Stability Rating: Experimental
 - Spatial cognition direct TwinGraph writes: BLOCKED by governance (analysis only)
 - World model direct TwinGraph writes: BLOCKED by governance (analysis only)
 - Building systems direct TwinGraph writes: BLOCKED by governance (analysis only)
+- Project consciousness direct TwinGraph writes: BLOCKED by governance (runtime memory only)
+- Interaction layer direct TwinGraph writes: BLOCKED by governance (interaction intents + rebuild only)
+- Workspace engine direct TwinGraph writes: BLOCKED by governance (local runtime state only)
+- Design flow engine direct TwinGraph writes: BLOCKED by governance (orchestration-only local runtime layer)
 
 ## Blockers
 - issue_id: ISSUE-0002

@@ -34,6 +34,13 @@ jobs:
           test -f spec/event-schemas/world.urban.flow.json
           test -f spec/event-schemas/building.systems.graph.updated.json
           test -f spec/event-schemas/building.material.analysis.json
+          test -f spec/event-schemas/design.awareness.signal.json
+          test -f spec/event-schemas/project.memory.updated.json
+          test -f spec/event-schemas/constraint.graph.updated.json
+          test -f spec/event-schemas/interaction.mode.changed.json
+          test -f spec/event-schemas/workspace.layout.changed.json
+          test -f spec/event-schemas/workspace.focus.mode.json
+          test -f spec/event-schemas/design.flow.stage.changed.json
       - name: Validate MU module structure
         run: |
           test -f orchestration-layer/human-interface/intent-interpreter/intent_context_builder.py
@@ -47,6 +54,10 @@ jobs:
           test -f orchestration-layer/runtime-kernel/kernel_spatial_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_world_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_building_systems_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_consciousness_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_interaction_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_workspace_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py
           test -f orchestration-layer/self-assembly-runtime/blueprint_feedback_adapter.py
           test -f orchestration-layer/autonomous-intelligence/explainability/api.py
           test -f orchestration-layer/human-interface/nlp-intent-entry.py
@@ -66,6 +77,11 @@ jobs:
           test -f geometry-kernel/generators/auditorium_generator.py
           test -f geometry-kernel/structure/grid_generator.py
           test -f geometry-kernel/assembly/wall_system_builder.py
+          test -f geometry-kernel/execution/incremental_rebuild_pipeline.py
+          test -f geometry-kernel/execution/parametric_dependency_graph.py
+          test -f geometry-kernel/execution/assembly_cache_system.py
+          test -f geometry-kernel/interactions/constraint_engine.py
+          test -f geometry-kernel/execution/preview_pipeline.py
       - name: Validate XII generative module structure
         run: |
           test -f orchestration-layer/generative-intelligence/llm-adapter/llm_client.py
@@ -115,10 +131,57 @@ jobs:
           test -f orchestration-layer/building-systems/environment/passive_shading_estimator.py
           test -f orchestration-layer/generative-intelligence/building-systems-bridge.py
           test -f orchestration-layer/reflective-core/analysis/reflection_systems_alignment.py
+      - name: Validate XVII consciousness structure
+        run: |
+          test -f orchestration-layer/project-consciousness/project_memory_graph.py
+          test -f orchestration-layer/project-consciousness/decision_history_tracker.py
+          test -f orchestration-layer/project-consciousness/design_intent_timeline.py
+          test -f orchestration-layer/project-consciousness/context/continuous_context_builder.py
+          test -f orchestration-layer/project-consciousness/context/design_state_snapshotter.py
+          test -f orchestration-layer/project-consciousness/context/temporal_context_index.py
+          test -f orchestration-layer/project-consciousness/awareness/awareness_scheduler.py
+          test -f orchestration-layer/project-consciousness/awareness/context_delta_detector.py
+          test -f orchestration-layer/project-consciousness/awareness/priority_signal_engine.py
+          test -f orchestration-layer/generative-intelligence/consciousness-bridge.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_temporal_alignment.py
+      - name: Validate E2 interaction structure
+        run: |
+          test -f desktop-runtime/app-shell/InteractionStateMachine.ts
+          test -f desktop-runtime/app-shell/ConstraintTogglePanel.tsx
+          test -f desktop-runtime/app-shell/SnapSettingsPanel.tsx
+          test -f desktop-runtime/app-shell/InteractionModeIndicator.tsx
+          test -f rendering-client/src/interactions/SnapManager.ts
+          test -f rendering-client/src/interactions/SnapVisualOverlay.tsx
+          test -f rendering-client/src/xipp/PreviewMeshRenderer.ts
+      - name: Validate E3 workspace structure
+        run: |
+          test -f desktop-runtime/workspace/workspace_models.ts
+          test -f desktop-runtime/workspace/WorkspaceStateEngine.ts
+          test -f desktop-runtime/workspace/AIFocusModeManager.ts
+          test -f desktop-runtime/workspace/WorkspacePresetManager.ts
+          test -f desktop-runtime/app-shell/LayoutPresets.ts
+          test -f desktop-runtime/app-shell/ViewportLayoutManager.tsx
+          test -f desktop-runtime/app-shell/WorkspaceToolbar.tsx
+          test -f desktop-runtime/app-shell/LayoutSwitcher.tsx
+          test -f desktop-runtime/app-shell/FocusModeIndicator.tsx
+          test -f desktop-runtime/app-shell/ViewportTabs.tsx
+      - name: Validate E4 design flow structure
+        run: |
+          test -f desktop-runtime/workspace/DesignFlowController.ts
+          test -f desktop-runtime/workspace/design_flow_models.ts
+          test -f desktop-runtime/app-shell/DesignFlowBar.tsx
+          test -f desktop-runtime/app-shell/FlowStageIndicator.tsx
+          test -f desktop-runtime/app-shell/FlowTransitionPanel.tsx
       - name: Guard forbidden mutation paths
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence orchestration-layer/spatial-cognition orchestration-layer/world-model orchestration-layer/building-systems geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence orchestration-layer/spatial-cognition orchestration-layer/world-model orchestration-layer/building-systems orchestration-layer/project-consciousness geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv rendering-client/src/xvii rendering-client/src/performance rendering-client/src/interactions; then
             echo "Human interface, desktop runtime, and MU overlays must not mutate TwinGraph."
+            exit 1
+          fi
+      - name: Guard react geometry mutation anti-patterns
+        run: |
+          if rg -n "setGeometry\\(|geometry\\s*=\\s*\\{|mutateGeometry|applyGeometryEdit" desktop-runtime/app-shell rendering-client/src; then
+            echo "React layers must not mutate geometry directly."
             exit 1
           fi
       - name: Guard world model external API bypass
@@ -131,6 +194,30 @@ jobs:
         run: |
           if rg -n "calculate systems metrics directly|derive thermal_inertia_score in llm" orchestration-layer/generative-intelligence; then
             echo "LLM bypassing systems metrics detected."
+            exit 1
+          fi
+      - name: Guard temporal determinism
+        run: |
+          if rg -n "while True|threading|asyncio.create_task|time.sleep\\(" orchestration-layer/project-consciousness; then
+            echo "Non-deterministic temporal loop pattern detected."
+            exit 1
+          fi
+      - name: Guard preview persistence
+        run: |
+          if rg -n "INSERT|UPDATE|persist|save_preview|write_preview" geometry-kernel/execution/preview_pipeline.py rendering-client/src/xipp/PreviewMeshRenderer.ts; then
+            echo "Preview pipeline must remain temporary and non-persistent."
+            exit 1
+          fi
+      - name: Guard workspace mutation boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|geometry.execution" desktop-runtime/workspace orchestration-layer/runtime-kernel/kernel_workspace_adapter.py; then
+            echo "Workspace modules must not mutate TwinGraph or trigger geometry rebuild."
+            exit 1
+          fi
+      - name: Guard design flow boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|geometry.execution" desktop-runtime/workspace/DesignFlowController.ts desktop-runtime/workspace/design_flow_models.ts orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py; then
+            echo "Design flow modules must remain orchestration-only."
             exit 1
           fi
       - name: Guard spatial engine llm autonomy
@@ -201,6 +288,24 @@ jobs:
           echo "{\"load_paths\":[]}" > artifacts/load-path-map.json
           echo "{\"materials\":{}}" > artifacts/material-metrics.json
           echo "{\"passive_indicators\":{}}" > artifacts/passive-system-indicators.json
+          echo "# XVII Consciousness Report" > artifacts/xvii-consciousness-report.md
+          echo "{\"timeline\":[]}" > artifacts/design-timeline.json
+          echo "{\"nodes\":[],\"edges\":[]}" > artifacts/memory-graph.json
+          echo "{\"signals\":[]}" > artifacts/awareness-signals.json
+          echo "# E2 Interaction Runtime Report" > artifacts/e2-interaction-runtime-report.md
+          echo "{\"constraints\":[]}" > artifacts/constraint-graph.json
+          echo "{\"snap_events\":[]}" > artifacts/snap-events.json
+          echo "{\"preview_meshes\":[]}" > artifacts/preview-mesh-trace.json
+          echo "# E3 Workspace Runtime Report" > artifacts/e3-workspace-runtime-report.md
+          echo "{\"layouts\":[]}" > artifacts/viewport-layout-state.json
+          echo "{\"focus_modes\":[]}" > artifacts/focus-mode-trace.json
+          echo "{\"presets\":[]}" > artifacts/workspace-presets.json
+          echo "# E4 Design Flow Report" > artifacts/e4-design-flow-report.md
+          echo "{\"stage_trace\":[]}" > artifacts/flow-stage-trace.json
+          echo "{\"workspace_state\":{}}" > artifacts/workspace-runtime-state.json
+          echo "{\"overlay_profiles\":{}}" > artifacts/overlay-profile-map.json
+          echo "{\"interaction_trace\":[]}" > artifacts/interaction-runtime-trace.json
+          echo "{\"geometry_execution\":\"guarded\"}" > artifacts/geometry-execution-report.md
       - uses: actions/upload-artifact@v4
         with:
           name: system-integrity-artifacts

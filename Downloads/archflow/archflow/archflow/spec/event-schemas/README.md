@@ -20,3 +20,10 @@
 - `world.urban.flow.json`
 - `building.systems.graph.updated.json`
 - `building.material.analysis.json`
+- `design.awareness.signal.json`
+- `project.memory.updated.json`
+- `constraint.graph.updated.json`
+- `interaction.mode.changed.json`
+- `workspace.layout.changed.json`
+- `workspace.focus.mode.json`
+- `design.flow.stage.changed.json`

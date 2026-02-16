@@ -130,3 +130,45 @@ publisher_module: orchestration-layer/building-systems/materials
 subscriber_modules: generative building-systems bridge, rendering-client/src/xv
 payload_schema: /spec/event-schemas/building.material.analysis.json
 failure_conditions: incomplete material layer metadata, invalid analysis payload
+
+event_name: project.memory.updated
+publisher_module: orchestration-layer/project-consciousness
+subscriber_modules: desktop project memory panel, rendering-client/src/xvii, reflective temporal alignment
+payload_schema: /spec/event-schemas/project.memory.updated.json
+failure_conditions: invalid memory graph linkage, revision continuity break
+
+event_name: design.awareness.signal
+publisher_module: orchestration-layer/project-consciousness/awareness
+subscriber_modules: human feedback formatter, desktop timeline, rendering-client/src/xvii
+payload_schema: /spec/event-schemas/design.awareness.signal.json
+failure_conditions: non-deterministic awareness schedule, invalid priority signal payload
+
+event_name: constraint.graph.updated
+publisher_module: geometry-kernel/interactions
+subscriber_modules: geometry execution runtime, preview mesh renderer, desktop constraint panel
+payload_schema: /spec/event-schemas/constraint.graph.updated.json
+failure_conditions: invalid constraint inheritance graph, dependency mismatch, direct TwinGraph write attempt
+
+event_name: interaction.mode.changed
+publisher_module: desktop-runtime interaction state machine
+subscriber_modules: rendering-client interactions overlay, runtime interaction adapter
+payload_schema: /spec/event-schemas/interaction.mode.changed.json
+failure_conditions: illegal state transition, conflicting active tool modes
+
+event_name: workspace.layout.changed
+publisher_module: desktop-runtime/workspace
+subscriber_modules: desktop-runtime viewport layout manager, rendering-client viewport isolator
+payload_schema: /spec/event-schemas/workspace.layout.changed.json
+failure_conditions: invalid preset mapping, missing viewport id set, workspace state routed into geometry execution
+
+event_name: workspace.focus.mode
+publisher_module: desktop-runtime/workspace
+subscriber_modules: desktop runtime focus indicator, rendering-client overlay selection
+payload_schema: /spec/event-schemas/workspace.focus.mode.json
+failure_conditions: unsupported focus mode, workspace attempting TwinGraph mutation
+
+event_name: design.flow.stage.changed
+publisher_module: desktop-runtime/workspace/design-flow
+subscriber_modules: workspace toolbar, viewport overlay isolator, runtime design flow adapter
+payload_schema: /spec/event-schemas/design.flow.stage.changed.json
+failure_conditions: invalid stage transition, flow update triggering geometry rebuild, workspace mutation boundary violation

@@ -96,3 +96,43 @@ tradeoffs: broader analysis graph complexity in exchange for early systems feasi
 impact_scope: building-systems engines, runtime building.systems.analysis phase, generative systems bridge, xv overlays and desktop inspectors
 rollback_strategy: disable building.systems.analysis and fallback to geometry/world/spatial-only decision loop
 arch_critical: true
+
+decision_id: ADR-XVII-001
+title: Continuous Architectural Consciousness Introduced
+date: 2026-02-16
+reason: Add persistent temporal project intelligence so ArchFlow can track design evolution and emit awareness signals across revisions.
+alternatives_considered: stateless runtime cycles only; uncontrolled background autonomous adaptation
+tradeoffs: additional temporal memory and scheduling modules in exchange for continuity-aware guidance and decision lineage
+impact_scope: project-consciousness memory/context/awareness modules, runtime project.consciousness.update phase, consciousness bridge, xvii overlays and desktop memory views
+rollback_strategy: disable project.consciousness.update and revert to stateless per-cycle runtime behavior
+arch_critical: true
+
+decision_id: ADR-E2-001
+title: Interaction & Constraint Engine Introduced
+date: 2026-02-16
+reason: Upgrade XI++ execution authoring depth with deterministic selection/snap/transform/preview and constraint-driven incremental rebuild.
+alternatives_considered: direct geometry mutation in React; full imperative CAD editing bypassing runtime execution
+tradeoffs: added interaction orchestration complexity in exchange for safe parametric editing and low-latency non-destructive preview
+impact_scope: geometry-kernel interaction/preview modules, runtime interaction.update phase, desktop interaction state machine, snap/preview overlays, performance throttling
+rollback_strategy: disable interaction.update phase and revert desktop to selection-only inspection mode
+arch_critical: true
+
+decision_id: ADR-E3-001
+title: Single User Workspace Intelligence Introduced
+date: 2026-02-16
+reason: Add deterministic single-user workspace orchestration for layout/focus/preset switching without altering TwinGraph or geometry execution.
+alternatives_considered: multi-user collaboration state; embedding workspace state in project consciousness memory
+tradeoffs: extra desktop/runtime state coordination in exchange for stable studio-like workspace continuity and viewport isolation
+impact_scope: desktop-runtime workspace engine/preset/focus modules, viewport layout manager, runtime workspace.update phase, viewport state isolator extensions, workspace event contracts
+rollback_strategy: disable workspace.update and revert to fixed single viewport shell with static panels
+arch_critical: true
+
+decision_id: ADR-E4-001
+title: Design Flow Engine Introduced
+date: 2026-02-16
+reason: Introduce deterministic stage-based flow orchestration so single-user workspace behavior adapts by design phase without adding new intelligence layers.
+alternatives_considered: static workspace controls only; direct geometry-triggered stage switching
+tradeoffs: additional local orchestration state and UI wiring in exchange for guided continuity across concept/layout/systems/spatial/presentation workflows
+impact_scope: desktop-runtime design flow controller/models/components, workspace state extensions, runtime design.flow.update phase, viewport overlay profile mapping, design flow event contracts
+rollback_strategy: disable design.flow.update and fallback to E3 workspace-only controls
+arch_critical: true

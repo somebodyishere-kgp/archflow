@@ -47,6 +47,28 @@ jobs:
           test -f desktop-runtime/app-shell/AssemblyGraphView.ts
           test -f desktop-runtime/app-shell/MaterialStackInspector.tsx
           test -f desktop-runtime/app-shell/LoadPathDiagram.tsx
+          test -f desktop-runtime/app-shell/ProjectMemoryPanel.tsx
+          test -f desktop-runtime/app-shell/DesignTimelineView.tsx
+          test -f desktop-runtime/app-shell/IntentEvolutionGraph.ts
+          test -f desktop-runtime/app-shell/InteractionStateMachine.ts
+          test -f desktop-runtime/app-shell/ConstraintTogglePanel.tsx
+          test -f desktop-runtime/app-shell/SnapSettingsPanel.tsx
+          test -f desktop-runtime/app-shell/InteractionModeIndicator.tsx
+          test -f desktop-runtime/workspace/workspace_models.ts
+          test -f desktop-runtime/workspace/WorkspaceStateEngine.ts
+          test -f desktop-runtime/workspace/AIFocusModeManager.ts
+          test -f desktop-runtime/workspace/WorkspacePresetManager.ts
+          test -f desktop-runtime/app-shell/LayoutPresets.ts
+          test -f desktop-runtime/app-shell/ViewportLayoutManager.tsx
+          test -f desktop-runtime/app-shell/WorkspaceToolbar.tsx
+          test -f desktop-runtime/app-shell/LayoutSwitcher.tsx
+          test -f desktop-runtime/app-shell/FocusModeIndicator.tsx
+          test -f desktop-runtime/app-shell/ViewportTabs.tsx
+          test -f desktop-runtime/workspace/DesignFlowController.ts
+          test -f desktop-runtime/workspace/design_flow_models.ts
+          test -f desktop-runtime/app-shell/DesignFlowBar.tsx
+          test -f desktop-runtime/app-shell/FlowStageIndicator.tsx
+          test -f desktop-runtime/app-shell/FlowTransitionPanel.tsx
       - name: Validate MU rendering overlays
         run: |
           test -f rendering-client/src/mu/HumanIntentOverlay.tsx
@@ -87,9 +109,31 @@ jobs:
           test -f rendering-client/src/xv/LoadPathOverlay.tsx
           test -f rendering-client/src/xv/MaterialLayerOverlay.ts
           test -f rendering-client/src/xv/SystemHierarchyRenderer.ts
+      - name: Validate XVII rendering overlays
+        run: |
+          test -f rendering-client/src/xvii/TimelineOverlay.tsx
+          test -f rendering-client/src/xvii/DesignEvolutionRenderer.ts
+          test -f rendering-client/src/xvii/AwarenessSignalOverlay.ts
+      - name: Validate E2 interaction overlays
+        run: |
+          test -f rendering-client/src/interactions/SnapManager.ts
+          test -f rendering-client/src/interactions/SnapVisualOverlay.tsx
+          test -f rendering-client/src/xipp/PreviewMeshRenderer.ts
+      - name: Validate rendering performance runtime
+        run: |
+          test -f rendering-client/src/performance/DTOStreamBuffer.ts
+          test -f rendering-client/src/performance/LODMeshGenerator.ts
+          test -f rendering-client/src/performance/ViewportStateIsolator.ts
+      - name: Validate E3 workspace contracts
+        run: |
+          test -f spec/event-schemas/workspace.layout.changed.json
+          test -f spec/event-schemas/workspace.focus.mode.json
+      - name: Validate E4 design flow contracts
+        run: |
+          test -f spec/event-schemas/design.flow.stage.changed.json
       - name: Enforce read-only desktop and rendering boundaries
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv rendering-client/src/xvii rendering-client/src/performance rendering-client/src/interactions; then
             echo "Desktop runtime and MU overlays must remain read-only."
             exit 1
           fi
@@ -131,6 +175,24 @@ jobs:
           echo "{\"load_paths\":[]}" > artifacts/load-path-map.json
           echo "{\"materials\":{}}" > artifacts/material-metrics.json
           echo "{\"passive_indicators\":{}}" > artifacts/passive-system-indicators.json
+          echo "# XVII Consciousness Report" > artifacts/xvii-consciousness-report.md
+          echo "{\"timeline\":[]}" > artifacts/design-timeline.json
+          echo "{\"nodes\":[],\"edges\":[]}" > artifacts/memory-graph.json
+          echo "{\"signals\":[]}" > artifacts/awareness-signals.json
+          echo "# E2 Interaction Runtime Report" > artifacts/e2-interaction-runtime-report.md
+          echo "{\"constraints\":[]}" > artifacts/constraint-graph.json
+          echo "{\"snap_events\":[]}" > artifacts/snap-events.json
+          echo "{\"preview_meshes\":[]}" > artifacts/preview-mesh-trace.json
+          echo "# E3 Workspace Runtime Report" > artifacts/e3-workspace-runtime-report.md
+          echo "{\"layouts\":[]}" > artifacts/viewport-layout-state.json
+          echo "{\"focus_modes\":[]}" > artifacts/focus-mode-trace.json
+          echo "{\"presets\":[]}" > artifacts/workspace-presets.json
+          echo "# E4 Design Flow Report" > artifacts/e4-design-flow-report.md
+          echo "{\"stage_trace\":[]}" > artifacts/flow-stage-trace.json
+          echo "{\"workspace_state\":{}}" > artifacts/workspace-runtime-state.json
+          echo "{\"overlay_profiles\":{}}" > artifacts/overlay-profile-map.json
+          echo "{\"interaction_trace\":[]}" > artifacts/interaction-runtime-trace.json
+          echo "{\"geometry_execution\":\"guarded\"}" > artifacts/geometry-execution-report.md
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -6,12 +6,13 @@ PHASE_ORDER = [
     "design.intent.generation",
     "design.synthesis",
     "geometry.execution",
+    "interaction.update",
+    "workspace.update",
+    "design.flow.update",
     "building.systems.analysis",
-    "pipeline.execution",
     "spatial.cognition.analysis",
+    "project.consciousness.update",
     "reflection.analysis",
-    "codesign.observe",
-    "codesign.suggest",
     "human.feedback",
 ]
 
