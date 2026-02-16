@@ -45,6 +45,9 @@ jobs:
           test -f rendering-client/src/urban/UrbanOverlayEngine.ts
           test -f rendering-client/src/systems/SystemsViewportManager.ts
           test -f rendering-client/src/systems/GenericTopologyRenderer.ts
+          test -f rendering-client/src/kappa/CapabilityEvolutionOverlay.tsx
+          test -f rendering-client/src/kappa/PipelineReflectionView.ts
+          test -f rendering-client/src/kappa/ReflectionGraphRenderer.ts
       - name: Emit runtime integration report
         run: |
           echo "# Runtime Integration Report" > artifacts/runtime-integration-report.md

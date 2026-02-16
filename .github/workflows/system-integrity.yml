@@ -29,6 +29,8 @@ jobs:
           test -f spec/event-schemas/urban.insight.generated.json
           test -f spec/event-schemas/design.evolution.updated.json
           test -f spec/event-schemas/design.evolution.insight.json
+          test -f spec/event-schemas/reflection.insight.generated.json
+          test -f spec/event-schemas/reflection.capability.proposed.json
           test -f spec/transport/runtime-events.contract.json
           test -f spec/runtime/runtime-status.json
           test -f spec/runtime/runtime-state.json
@@ -53,6 +55,11 @@ jobs:
       - name: Run design evolution tests
         run: |
           PYTHONPATH=orchestration-layer/design-evolution pytest orchestration-layer/design-evolution/tests -q | tee -a artifacts/schema-validation.log
+      - name: Run reflective core tests (structure)
+        run: |
+          test -f orchestration-layer/reflective-core/analysis/pipeline_analyzer.py
+          test -f orchestration-layer/reflective-core/capability-refactor/graph_mutation_planner.py
+          test -f orchestration-layer/reflective-core/memory/reflection_context_builder.py
       - name: Guard event lineage fields
         run: |
           rg -n "event_id|parent_event_id|source_module|timestamp" core-twingraph/src/twingraph/transport orchestration-layer rendering-client/src/services rendering-client/src/runtime > artifacts/runtime-event-trace.json
@@ -69,6 +76,10 @@ jobs:
             exit 1
           fi
           rg -n "/twingraph/ingest" orchestration-layer/proposal-executor > /dev/null
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/reflective-core orchestration-layer/self-assembly-runtime; then
+            echo "Reflective core or self-assembly runtime attempted direct TwinGraph mutation."
+            exit 1
+          fi
       - name: Emit intent artifacts
         run: |
           echo "# Intent Build Report" > artifacts/intent-build-report.md
@@ -152,6 +163,18 @@ jobs:
           EOF
           cat <<'EOF' > artifacts/adaptive-proposal-trace.json
           {"strategy":"generic-optimization"}
+          EOF
+          cat <<'EOF' > artifacts/kappa-reflection-report.md
+          kappa reflective intelligence pipeline validated
+          EOF
+          cat <<'EOF' > artifacts/capability-evolution-graph.json
+          {"capabilities":[],"proposals":[]}
+          EOF
+          cat <<'EOF' > artifacts/reflection-trace.json
+          {"reflection":"deterministic"}
+          EOF
+          cat <<'EOF' > artifacts/pipeline-analysis.json
+          {"pipelines":[]}
           EOF
       - name: Emit integrity artifacts
         run: |

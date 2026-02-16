@@ -1,7 +1,7 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Program Omega-Core (System-Agnostic Intelligence Refactor)
+Phase: Program Kappa (Reflective Intelligence Core)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -31,6 +31,9 @@ Stability Rating: Experimental
 - Adaptive intelligence engine (`orchestration-layer/autonomous-intelligence/adaptive-engine/`)
 - Domain-neutral runtime kernel expansion (`runtime-kernel/dynamic_phase_engine.py`, `runtime-kernel/domain_context_manager.py`)
 - Universal systems rendering (`rendering-client/src/systems/`)
+- Reflective intelligence core (`orchestration-layer/reflective-core/`)
+- Self-assembly blueprint feedback adapter (`orchestration-layer/self-assembly-runtime/`)
+- Kappa visualization overlays (`rendering-client/src/kappa/`)
 - CI-backed deterministic TwinGraph tests under `.github/workflows/test-twingraph.yml`
 
 ## In-Progress Modules

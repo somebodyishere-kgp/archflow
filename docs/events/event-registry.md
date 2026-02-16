@@ -77,6 +77,18 @@ subscriber_modules: intent-gateway intake bridge (future), explainability
 payload_schema: /spec/event-schemas/intent.proposed.json
 failure_conditions: adaptive strategy invalid, schema mismatch with intent contract
 
+event_name: reflection.insight.generated
+publisher_module: orchestration-layer/reflective-core/analysis
+subscriber_modules: reflective-core/memory, explainability, runtime-kernel reflection adapter
+payload_schema: /spec/event-schemas/reflection.insight.generated.json
+failure_conditions: pipeline analysis payload incomplete, deterministic ordering violation
+
+event_name: reflection.capability.proposed
+publisher_module: orchestration-layer/reflective-core/capability-refactor
+subscriber_modules: self-assembly-runtime blueprint feedback adapter
+payload_schema: /spec/event-schemas/reflection.capability.proposed.json
+failure_conditions: proposal missing capability list, direct mutation attempt bypassing blueprint adapter
+
 ## Transport Stabilization (Sprint 2)
 - Active transport adapter: `LocalEventTransport` (`core-twingraph/src/twingraph/transport/local.py`)
 - Planned transport adapter: `NatsEventTransport` (`core-twingraph/src/twingraph/transport/nats.py`)

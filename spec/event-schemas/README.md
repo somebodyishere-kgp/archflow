@@ -9,6 +9,14 @@ Typed JSON schema models for ArchFlow event payloads.
 
 ## Additional Registered Event Payloads
 - `intent.proposed.json`
+- `proposal.executed.json`
+- `proposal.blocked.json`
+- `runtime.lineage.json`
+- `design.insight.generated.json`
+- `design.evolution.updated.json`
+- `design.evolution.insight.json`
+- `reflection.insight.generated.json`
+- `reflection.capability.proposed.json`
 - `structure.updated.json`
 - `acoustic.updated.json`
 - `mep.updated.json`

@@ -7,6 +7,8 @@ PHASE_ORDER = [
     "geometry.updated",
     "view.refresh",
     "render.sync",
+    "reflection.analysis",
+    "capability.refactor.proposal",
 ]
 
 

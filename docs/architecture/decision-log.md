@@ -117,3 +117,13 @@ impact_scope: universal-systems engine, adaptive-engine, dynamic runtime phases,
 rollback_strategy: freeze adaptive domain inference and fallback to prior architecture-specific semantic graph
 arch_critical: true
 
+decision_id: ADR-KAPPA-001
+title: Reflective Intelligence Core Introduced
+date: 2026-02-16
+reason: Add deterministic meta-reasoning over intelligence pipeline structures to support self-improving assembly rules.
+alternatives_considered: static assembly blueprints; direct capability graph mutation runtime
+tradeoffs: added reflection/memory complexity in exchange for auditable capability evolution proposals
+impact_scope: reflective-core analysis/refactor/memory, kernel reflection phases, blueprint feedback adapter, kappa rendering overlays
+rollback_strategy: disable reflection phases and fallback to fixed assembly blueprint rules
+arch_critical: true
+
