@@ -1,13 +1,33 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Sprint 0 (Initialization)
+Phase: Program XI++ (Deep Geometry Execution)
 Stability Rating: Experimental
 
 ## Active Modules
 - Repository governance and documentation scaffolding
 - Schema baseline (`spec/twingraph-schema.json`, event schemas)
 - CI workflow skeletons under `.github/workflows/`
+- Human interface deterministic interpretation modules (`orchestration-layer/human-interface/`)
+- Runtime kernel human phase adapter (`orchestration-layer/runtime-kernel/kernel_human_adapter.py`)
+- Desktop runtime shell (`desktop-runtime/`)
+- MU rendering overlays (`rendering-client/src/mu/`)
+- Design synthesis engine (`orchestration-layer/design-synthesis/`)
+- Geometry kernel deterministic modeling (`geometry-kernel/core/`, `geometry-kernel/modeling/`, `geometry-kernel/converters/`)
+- Geometry drawing engine (`geometry-kernel/drawing-engine/`)
+- Desktop CAD shell layer (`desktop-runtime/app-shell/CADViewport.tsx`, `ToolPalette.tsx`, `LayerManager.tsx`, `ParametricInspector.tsx`)
+- XI rendering overlays (`rendering-client/src/xi/`)
+- Generative intelligence LLM adapter (`orchestration-layer/generative-intelligence/llm-adapter/`)
+- Generative reasoning engine (`orchestration-layer/generative-intelligence/reasoning-engine/`)
+- Generative safety layer (`orchestration-layer/generative-intelligence/safety/`)
+- Reflective LLM alignment checks (`orchestration-layer/reflective-core/analysis/reflection_llm_alignment.py`)
+- Natural language intent entry (`orchestration-layer/human-interface/nlp-intent-entry.py`, `desktop-runtime/app-shell/NaturalLanguageInput.tsx`)
+- XII rendering overlays (`rendering-client/src/xii/`)
+- Geometry execution generators (`geometry-kernel/generators/`)
+- Structural grid engine (`geometry-kernel/structure/`)
+- BIM-like assembly builder (`geometry-kernel/assembly/`)
+- XI++ rendering overlays (`rendering-client/src/xipp/`)
+- Desktop assembly inspection surfaces (`desktop-runtime/app-shell/ParametricEditor.tsx`, `AssemblyInspector.tsx`, `PlanView.tsx`, `SectionView.tsx`)
 
 ## In-Progress Modules
 - Core TwinGraph deterministic ingestion pipeline
@@ -24,6 +44,10 @@ Stability Rating: Experimental
 - Acoustic deterministic simulation pipeline: BLOCKED pending ray-tracing container baseline
 - MEP deterministic route/clash engine: BLOCKED pending clearance-rule pack and route solver
 - Documentation engine plan-view PDF generation from production TwinGraph query: BLOCKED pending query runtime and style rule compiler
+- Human interface direct TwinGraph writes: BLOCKED by governance (proposal-only)
+- Design synthesis direct TwinGraph writes: BLOCKED by governance (proposal executor boundary only)
+- LLM direct TwinGraph writes or execution authority: BLOCKED by governance (reasoning-only contract)
+- Geometry kernel direct TwinGraph writes: BLOCKED by governance (executor-only write boundary)
 
 ## Blockers
 - issue_id: ISSUE-0002

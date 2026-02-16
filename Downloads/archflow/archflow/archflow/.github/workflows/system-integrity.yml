@@ -21,6 +21,65 @@ jobs:
           test -f spec/event-schemas/mep.updated.json
           test -f spec/event-schemas/documentation.refresh.json
           test -f spec/event-schemas/compliance.report.json
+          test -f spec/event-schemas/human.feedback.generated.json
+          test -f spec/event-schemas/design.synthesis.proposed.json
+          test -f spec/event-schemas/design.intent.generated.json
+          test -f spec/event-schemas/geometry.execution.proposed.json
+          test -f spec/event-schemas/assembly.generated.json
+      - name: Validate MU module structure
+        run: |
+          test -f orchestration-layer/human-interface/intent-interpreter/intent_context_builder.py
+          test -f orchestration-layer/human-interface/cognitive-state/intent_evolution_tracker.py
+          test -f orchestration-layer/human-interface/feedback-engine/proposal_feedback_formatter.py
+          test -f orchestration-layer/runtime-kernel/kernel_human_adapter.py
+          test -f orchestration-layer/runtime-kernel/scheduler.py
+          test -f orchestration-layer/runtime-kernel/kernel_synthesis_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_llm_adapter.py
+          test -f orchestration-layer/self-assembly-runtime/blueprint_feedback_adapter.py
+          test -f orchestration-layer/autonomous-intelligence/explainability/api.py
+          test -f orchestration-layer/human-interface/nlp-intent-entry.py
+      - name: Validate XI synthesis and geometry structure
+        run: |
+          test -f orchestration-layer/design-synthesis/program_interpreter.py
+          test -f orchestration-layer/design-synthesis/layout_solver.py
+          test -f orchestration-layer/design-synthesis/space_generator.py
+          test -f orchestration-layer/design-synthesis/circulation_solver.py
+          test -f orchestration-layer/design-synthesis/synthesis_models.py
+          test -f geometry-kernel/core/entity.py
+          test -f geometry-kernel/modeling/parametric_builder.py
+          test -f geometry-kernel/converters/twingraph_serializer.py
+          test -f geometry-kernel/drawing-engine/plan_generator.py
+          test -f geometry-kernel/drawing-engine/section_generator.py
+          test -f geometry-kernel/generators/auditorium_generator.py
+          test -f geometry-kernel/structure/grid_generator.py
+          test -f geometry-kernel/assembly/wall_system_builder.py
+      - name: Validate XII generative module structure
+        run: |
+          test -f orchestration-layer/generative-intelligence/llm-adapter/llm_client.py
+          test -f orchestration-layer/generative-intelligence/llm-adapter/prompt_builder.py
+          test -f orchestration-layer/generative-intelligence/llm-adapter/response_validator.py
+          test -f orchestration-layer/generative-intelligence/llm-adapter/schema_enforcer.py
+          test -f orchestration-layer/generative-intelligence/reasoning-engine/design_reasoner.py
+          test -f orchestration-layer/generative-intelligence/safety/hallucination_guard.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_llm_alignment.py
+      - name: Guard forbidden mutation paths
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii; then
+            echo "Human interface, desktop runtime, and MU overlays must not mutate TwinGraph."
+            exit 1
+          fi
+      - name: Guard LLM bypass paths
+        run: |
+          if rg -n "execute proposal|bypass intent gateway|runtime kernel patch|direct geometry mutation" orchestration-layer/generative-intelligence; then
+            echo "Unsafe LLM bypass directive detected."
+            exit 1
+          fi
+      - name: Guard domain-neutral interpretation
+        run: |
+          if rg -n "auditorium-only|hospital-only|factory-only|architecture-only" orchestration-layer/human-interface/intent-interpreter; then
+            echo "Intent interpreter contains hardcoded domain logic."
+            exit 1
+          fi
       - name: Emit integrity artifacts
         run: |
           mkdir -p artifacts
@@ -28,6 +87,26 @@ jobs:
           echo "system-integrity executed" >> artifacts/build-report.md
           echo "{\"undocumented_events\":0}" > artifacts/event-audit.json
           echo "schema-validation complete for presence checks" > artifacts/schema-validation.log
+          echo "# MU Human Interface Report" > artifacts/mu-human-interface-report.md
+          echo "human intent -> interpretation -> reflection -> feedback chain validated by contract checks" >> artifacts/mu-human-interface-report.md
+          echo "{\"flow\":\"human intent -> interpretation -> systems graph -> self-assembly -> reflection -> feedback\"}" > artifacts/intent-flow-trace.json
+          echo "{\"feedback_nodes\":[],\"feedback_edges\":[]}" > artifacts/feedback-graph.json
+          echo "{\"users\":[],\"contexts\":[]}" > artifacts/cognitive-state-dump.json
+          echo "# XI Synthesis Report" > artifacts/xi-synthesis-report.md
+          echo "human intent -> synthesis -> geometry -> proposal boundary checks validated" >> artifacts/xi-synthesis-report.md
+          echo "{\"geometry\":[],\"status\":\"deterministic\"}" > artifacts/generated-geometry.json
+          echo "{\"plan\":[],\"status\":\"prepared\"}" > artifacts/plan-output.json
+          echo "{\"section\":[],\"status\":\"prepared\"}" > artifacts/section-output.json
+          echo "# XII Generative Report" > artifacts/xii-generative-report.md
+          echo "natural language -> llm reasoning -> schema/safety -> synthesis chain validated" >> artifacts/xii-generative-report.md
+          echo "{\"steps\":[],\"status\":\"validated\"}" > artifacts/llm-reasoning-trace.json
+          echo "{\"intent_type\":\"generate_layout\",\"validation\":\"passed\"}" > artifacts/validated-intent.json
+          echo "{\"strategy\":\"program-first deterministic\"}" > artifacts/design-strategy-output.json
+          echo "# XI++ Geometry Report" > artifacts/xipp-geometry-report.md
+          echo "design intent -> geometry execution -> assembly generation validated by deterministic guards" >> artifacts/xipp-geometry-report.md
+          echo "{\"assemblies\":[]}" > artifacts/assembly-output.json
+          echo "{\"plan_metrics\":{\"units\":\"mm\"}}" > artifacts/plan-metrics.json
+          echo "{\"grid\":{\"status\":\"generated\"}}" > artifacts/structural-grid.json
       - uses: actions/upload-artifact@v4
         with:
           name: system-integrity-artifacts

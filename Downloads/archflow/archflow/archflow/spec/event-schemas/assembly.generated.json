@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "assembly.generated",
+  "type": "object",
+  "required": ["event_name", "context_id", "assembly_id", "metadata_version", "timestamp"],
+  "properties": {
+    "event_name": { "type": "string", "const": "assembly.generated" },
+    "context_id": { "type": "string" },
+    "assembly_id": { "type": "string" },
+    "metadata_version": { "type": "string" },
+    "timestamp": { "type": "string" }
+  },
+  "additionalProperties": true
+}

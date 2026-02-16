@@ -52,3 +52,33 @@ publisher_module: regulation-agent
 subscriber_modules: documentation-agent, rendering-client, orchestration-layer  
 payload_schema: /spec/event-schemas/compliance.report.json  
 failure_conditions: rule pack missing, clause reference unresolved, schema mismatch
+
+event_name: human.feedback.generated
+publisher_module: orchestration-layer/human-interface/feedback-engine
+subscriber_modules: desktop-runtime, rendering-client, explainability
+payload_schema: /spec/event-schemas/human.feedback.generated.json
+failure_conditions: missing reflection translation input, feedback block schema mismatch, forbidden TwinGraph write in human-interface
+
+event_name: design.synthesis.proposed
+publisher_module: orchestration-layer/design-synthesis
+subscriber_modules: proposal-executor boundary, geometry-kernel converters, rendering-client/src/xi
+payload_schema: /spec/event-schemas/design.synthesis.proposed.json
+failure_conditions: invalid synthesis payload, missing context id, direct TwinGraph mutation attempt in synthesis modules
+
+event_name: design.intent.generated
+publisher_module: orchestration-layer/generative-intelligence/reasoning-engine
+subscriber_modules: orchestration-layer/design-synthesis, intent-gateway validation path, reflective-core alignment checks
+payload_schema: /spec/event-schemas/design.intent.generated.json
+failure_conditions: schema enforcement failure, hallucination safety rejection, TwinGraph mutation directive found in LLM output
+
+event_name: geometry.execution.proposed
+publisher_module: geometry-kernel
+subscriber_modules: orchestration-layer/proposal-executor, rendering-client/src/xipp
+payload_schema: /spec/event-schemas/geometry.execution.proposed.json
+failure_conditions: non-deterministic geometry step ordering, direct TwinGraph write attempt
+
+event_name: assembly.generated
+publisher_module: geometry-kernel/assembly
+subscriber_modules: rendering-client/src/xipp, desktop-runtime assembly inspector
+payload_schema: /spec/event-schemas/assembly.generated.json
+failure_conditions: missing material_layers/thickness/metadata_version fields

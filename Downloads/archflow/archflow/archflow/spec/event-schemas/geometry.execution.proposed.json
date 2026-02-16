@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "geometry.execution.proposed",
+  "type": "object",
+  "required": ["event_name", "context_id", "geometry_steps", "timestamp"],
+  "properties": {
+    "event_name": { "type": "string", "const": "geometry.execution.proposed" },
+    "context_id": { "type": "string" },
+    "geometry_steps": { "type": "array", "items": { "type": "string" } },
+    "timestamp": { "type": "string" }
+  },
+  "additionalProperties": true
+}
