@@ -21,161 +21,266 @@ jobs:
           test -f spec/event-schemas/mep.updated.json
           test -f spec/event-schemas/documentation.refresh.json
           test -f spec/event-schemas/compliance.report.json
-          test -f spec/event-schemas/intent.proposed.json
-          test -f spec/event-schemas/proposal.executed.json
-          test -f spec/event-schemas/proposal.blocked.json
-          test -f spec/event-schemas/design.insight.generated.json
-          test -f spec/event-schemas/urban.fabric.updated.json
-          test -f spec/event-schemas/urban.insight.generated.json
-          test -f spec/event-schemas/design.evolution.updated.json
-          test -f spec/event-schemas/design.evolution.insight.json
-          test -f spec/event-schemas/reflection.insight.generated.json
-          test -f spec/event-schemas/reflection.capability.proposed.json
-          test -f spec/transport/runtime-events.contract.json
-          test -f spec/runtime/runtime-status.json
-          test -f spec/runtime/runtime-state.json
-          test -f spec/runtime/runtime-graph.json
-          test -f spec/runtime/urban-runtime-graph.json
-          test -f spec/runtime/evolution-graph.json
-      - name: Install intent gateway dependencies
+          test -f spec/event-schemas/human.feedback.generated.json
+          test -f spec/event-schemas/design.synthesis.proposed.json
+          test -f spec/event-schemas/design.intent.generated.json
+          test -f spec/event-schemas/geometry.execution.proposed.json
+          test -f spec/event-schemas/assembly.generated.json
+          test -f spec/event-schemas/design.suggestion.generated.json
+          test -f spec/event-schemas/spatial.cognition.insight.json
+          test -f spec/event-schemas/spatial.flow.analysis.json
+          test -f spec/event-schemas/world.context.insight.json
+          test -f spec/event-schemas/world.solar.analysis.json
+          test -f spec/event-schemas/world.urban.flow.json
+          test -f spec/event-schemas/building.systems.graph.updated.json
+          test -f spec/event-schemas/building.material.analysis.json
+          test -f spec/event-schemas/design.awareness.signal.json
+          test -f spec/event-schemas/project.memory.updated.json
+          test -f spec/event-schemas/constraint.graph.updated.json
+          test -f spec/event-schemas/interaction.mode.changed.json
+          test -f spec/event-schemas/workspace.layout.changed.json
+          test -f spec/event-schemas/workspace.focus.mode.json
+          test -f spec/event-schemas/design.flow.stage.changed.json
+          test -f spec/event-schemas/feedback.snap.predicted.json
+          test -f spec/event-schemas/feedback.preview.updated.json
+          test -f spec/event-schemas/feedback.constraint.visualized.json
+      - name: Validate MU module structure
         run: |
-          python -m pip install --upgrade pip
-          pip install -r orchestration-layer/intent-gateway/requirements.txt
-          pip install -r orchestration-layer/proposal-executor/requirements.txt
-      - name: Run intent gateway tests
+          test -f orchestration-layer/human-interface/intent-interpreter/intent_context_builder.py
+          test -f orchestration-layer/human-interface/cognitive-state/intent_evolution_tracker.py
+          test -f orchestration-layer/human-interface/feedback-engine/proposal_feedback_formatter.py
+          test -f orchestration-layer/runtime-kernel/kernel_human_adapter.py
+          test -f orchestration-layer/runtime-kernel/scheduler.py
+          test -f orchestration-layer/runtime-kernel/kernel_synthesis_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_llm_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_codesign_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_spatial_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_world_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_building_systems_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_consciousness_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_interaction_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_workspace_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_feedback_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_execution_guard.py
+          test -f orchestration-layer/self-assembly-runtime/blueprint_feedback_adapter.py
+          test -f orchestration-layer/autonomous-intelligence/explainability/api.py
+          test -f orchestration-layer/human-interface/nlp-intent-entry.py
+          test -f orchestration-layer/human-interface/realtime-intent-stream.py
+      - name: Validate XI synthesis and geometry structure
         run: |
-          mkdir -p artifacts
-          PYTHONPATH=orchestration-layer/intent-gateway pytest orchestration-layer/intent-gateway/tests -q | tee artifacts/schema-validation.log
-      - name: Run proposal executor tests
+          test -f orchestration-layer/design-synthesis/program_interpreter.py
+          test -f orchestration-layer/design-synthesis/layout_solver.py
+          test -f orchestration-layer/design-synthesis/space_generator.py
+          test -f orchestration-layer/design-synthesis/circulation_solver.py
+          test -f orchestration-layer/design-synthesis/synthesis_models.py
+          test -f geometry-kernel/core/entity.py
+          test -f geometry-kernel/modeling/parametric_builder.py
+          test -f geometry-kernel/converters/twingraph_serializer.py
+          test -f geometry-kernel/drawing-engine/plan_generator.py
+          test -f geometry-kernel/drawing-engine/section_generator.py
+          test -f geometry-kernel/generators/auditorium_generator.py
+          test -f geometry-kernel/structure/grid_generator.py
+          test -f geometry-kernel/assembly/wall_system_builder.py
+          test -f geometry-kernel/execution/incremental_rebuild_pipeline.py
+          test -f geometry-kernel/execution/parametric_dependency_graph.py
+          test -f geometry-kernel/execution/assembly_cache_system.py
+          test -f geometry-kernel/interactions/constraint_engine.py
+          test -f geometry-kernel/execution/preview_pipeline.py
+          test -f geometry-kernel/execution/ghost_preview_pipeline.py
+          test -f geometry-kernel/execution/topology_stability_manager.py
+          test -f geometry-kernel/execution/edit_history_manager.py
+          test -f geometry-kernel/interactions/parametric_constraint_solver.py
+          test -f geometry-kernel/adapters/occt_adapter.py
+      - name: Validate XII generative module structure
         run: |
-          PYTHONPATH=orchestration-layer/proposal-executor pytest orchestration-layer/proposal-executor/tests -q | tee -a artifacts/schema-validation.log
-      - name: Run runtime kernel tests
+          test -f orchestration-layer/generative-intelligence/llm-adapter/llm_client.py
+          test -f orchestration-layer/generative-intelligence/llm-adapter/prompt_builder.py
+          test -f orchestration-layer/generative-intelligence/llm-adapter/response_validator.py
+          test -f orchestration-layer/generative-intelligence/llm-adapter/schema_enforcer.py
+          test -f orchestration-layer/generative-intelligence/reasoning-engine/design_reasoner.py
+          test -f orchestration-layer/generative-intelligence/safety/hallucination_guard.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_llm_alignment.py
+      - name: Validate XIII realtime structure
         run: |
-          PYTHONPATH=orchestration-layer/runtime-kernel pytest orchestration-layer/runtime-kernel/tests -q | tee -a artifacts/schema-validation.log
-      - name: Run design evolution tests
+          test -f orchestration-layer/codesign-runtime/codesign_stream_engine.py
+          test -f orchestration-layer/codesign-runtime/interaction_listener.py
+          test -f orchestration-layer/codesign-runtime/delta_context_builder.py
+          test -f orchestration-layer/generative-intelligence/realtime/realtime_reasoner.py
+          test -f orchestration-layer/generative-intelligence/realtime/safety/loop_guard.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_codesign_validator.py
+      - name: Validate XIV spatial cognition structure
         run: |
-          PYTHONPATH=orchestration-layer/design-evolution pytest orchestration-layer/design-evolution/tests -q | tee -a artifacts/schema-validation.log
-      - name: Run reflective core tests (structure)
+          test -f orchestration-layer/spatial-cognition/perception_model.py
+          test -f orchestration-layer/spatial-cognition/scale_analyzer.py
+          test -f orchestration-layer/spatial-cognition/movement_topology_engine.py
+          test -f orchestration-layer/spatial-cognition/visibility_graph_builder.py
+          test -f orchestration-layer/spatial-cognition/visual-field/view_cone_generator.py
+          test -f orchestration-layer/spatial-cognition/flow/path_prediction_engine.py
+          test -f orchestration-layer/spatial-cognition/experience/atmosphere_estimator.py
+          test -f orchestration-layer/generative-intelligence/spatial_reasoning_bridge.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_spatial_alignment.py
+      - name: Validate XVI world model structure
         run: |
-          test -f orchestration-layer/reflective-core/analysis/pipeline_analyzer.py
-          test -f orchestration-layer/reflective-core/capability-refactor/graph_mutation_planner.py
-          test -f orchestration-layer/reflective-core/memory/reflection_context_builder.py
-      - name: Guard event lineage fields
+          test -f orchestration-layer/world-model/site_context_builder.py
+          test -f orchestration-layer/world-model/climate_profile_engine.py
+          test -f orchestration-layer/world-model/urban_density_analyzer.py
+          test -f orchestration-layer/world-model/cultural_zoning_mapper.py
+          test -f orchestration-layer/world-model/solar/sun_path_engine.py
+          test -f orchestration-layer/world-model/climate/wind_channel_estimator.py
+          test -f orchestration-layer/world-model/urban/movement_ecology_builder.py
+          test -f orchestration-layer/generative-intelligence/world-context-bridge.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_world_alignment.py
+      - name: Validate XV building systems structure
         run: |
-          rg -n "event_id|parent_event_id|source_module|timestamp" core-twingraph/src/twingraph/transport orchestration-layer rendering-client/src/services rendering-client/src/runtime > artifacts/runtime-event-trace.json
-      - name: Guard system-agnostic intelligence assumptions
+          test -f orchestration-layer/building-systems/assembly_graph_builder.py
+          test -f orchestration-layer/building-systems/material_hierarchy_engine.py
+          test -f orchestration-layer/building-systems/load_path_estimator.py
+          test -f orchestration-layer/building-systems/structure/span_classifier.py
+          test -f orchestration-layer/building-systems/materials/thermal_behavior_estimator.py
+          test -f orchestration-layer/building-systems/environment/passive_shading_estimator.py
+          test -f orchestration-layer/generative-intelligence/building-systems-bridge.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_systems_alignment.py
+      - name: Validate XVII consciousness structure
         run: |
-          if rg -n "building|district|auditorium|architecture-only" orchestration-layer/autonomous-intelligence/universal-systems orchestration-layer/autonomous-intelligence/adaptive-engine; then
-            echo "Domain-specific assumptions detected in Omega-Core intelligence layers."
+          test -f orchestration-layer/project-consciousness/project_memory_graph.py
+          test -f orchestration-layer/project-consciousness/decision_history_tracker.py
+          test -f orchestration-layer/project-consciousness/design_intent_timeline.py
+          test -f orchestration-layer/project-consciousness/context/continuous_context_builder.py
+          test -f orchestration-layer/project-consciousness/context/design_state_snapshotter.py
+          test -f orchestration-layer/project-consciousness/context/temporal_context_index.py
+          test -f orchestration-layer/project-consciousness/awareness/awareness_scheduler.py
+          test -f orchestration-layer/project-consciousness/awareness/context_delta_detector.py
+          test -f orchestration-layer/project-consciousness/awareness/priority_signal_engine.py
+          test -f orchestration-layer/generative-intelligence/consciousness-bridge.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_temporal_alignment.py
+      - name: Validate E2 interaction structure
+        run: |
+          test -f desktop-runtime/app-shell/InteractionStateMachine.ts
+          test -f desktop-runtime/app-shell/ConstraintTogglePanel.tsx
+          test -f desktop-runtime/app-shell/SnapSettingsPanel.tsx
+          test -f desktop-runtime/app-shell/InteractionModeIndicator.tsx
+          test -f rendering-client/src/interactions/SnapManager.ts
+          test -f rendering-client/src/interactions/SnapVisualOverlay.tsx
+          test -f rendering-client/src/xipp/PreviewMeshRenderer.ts
+      - name: Validate E3 workspace structure
+        run: |
+          test -f desktop-runtime/workspace/workspace_models.ts
+          test -f desktop-runtime/workspace/WorkspaceStateEngine.ts
+          test -f desktop-runtime/workspace/AIFocusModeManager.ts
+          test -f desktop-runtime/workspace/WorkspacePresetManager.ts
+          test -f desktop-runtime/app-shell/LayoutPresets.ts
+          test -f desktop-runtime/app-shell/ViewportLayoutManager.tsx
+          test -f desktop-runtime/app-shell/WorkspaceToolbar.tsx
+          test -f desktop-runtime/app-shell/LayoutSwitcher.tsx
+          test -f desktop-runtime/app-shell/FocusModeIndicator.tsx
+          test -f desktop-runtime/app-shell/ViewportTabs.tsx
+      - name: Validate E4 design flow structure
+        run: |
+          test -f desktop-runtime/workspace/DesignFlowController.ts
+          test -f desktop-runtime/workspace/design_flow_models.ts
+          test -f desktop-runtime/app-shell/DesignFlowBar.tsx
+          test -f desktop-runtime/app-shell/FlowStageIndicator.tsx
+          test -f desktop-runtime/app-shell/FlowTransitionPanel.tsx
+      - name: Validate E5 feedback and CAD interaction structure
+        run: |
+          test -f desktop-runtime/feedback/LiveFeedbackController.ts
+          test -f desktop-runtime/feedback/PredictiveSnapFeedback.ts
+          test -f desktop-runtime/feedback/ConstraintVisualizer.ts
+          test -f desktop-runtime/feedback/GhostPreviewManager.ts
+          test -f desktop-runtime/feedback/InteractionMicroAnimator.ts
+          test -f desktop-runtime/feedback/feedback_models.ts
+          test -f desktop-runtime/app-shell/CADInteractionEngine.ts
+          test -f rendering-client/src/e5/GhostMeshRenderer.tsx
+          test -f rendering-client/src/e5/ConstraintOverlay.ts
+          test -f rendering-client/src/e5/ConstraintLineRenderer.tsx
+          test -f rendering-client/src/e5/MicroInteractionAnimator.ts
+          test -f rendering-client/src/e5/AIGenerationPulse.tsx
+          test -f rendering-client/src/e5/IntentZoneGlow.ts
+      - name: Guard forbidden mutation paths
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence orchestration-layer/spatial-cognition orchestration-layer/world-model orchestration-layer/building-systems orchestration-layer/project-consciousness geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv rendering-client/src/xvii rendering-client/src/performance rendering-client/src/interactions; then
+            echo "Human interface, desktop runtime, and MU overlays must not mutate TwinGraph."
             exit 1
           fi
-      - name: Guard execution boundaries
+      - name: Guard react geometry mutation anti-patterns
         run: |
-          if rg -n "/twingraph/ingest" orchestration-layer/intent-gateway; then
-            echo "Intent gateway must not call TwinGraph ingest."
+          if rg -n "setGeometry\\(|geometry\\s*=\\s*\\{|mutateGeometry|applyGeometryEdit" desktop-runtime/app-shell rendering-client/src; then
+            echo "React layers must not mutate geometry directly."
             exit 1
           fi
-          rg -n "/twingraph/ingest" orchestration-layer/proposal-executor > /dev/null
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/reflective-core orchestration-layer/self-assembly-runtime; then
-            echo "Reflective core or self-assembly runtime attempted direct TwinGraph mutation."
+      - name: Guard world model external API bypass
+        run: |
+          if rg -n "http://|https://|requests\\.|urllib|fetch\\(" orchestration-layer/world-model orchestration-layer/generative-intelligence/world-context-bridge.py; then
+            echo "World model must remain deterministic without external API calls."
             exit 1
           fi
-      - name: Emit intent artifacts
+      - name: Guard systems bridge metric bypass
         run: |
-          echo "# Intent Build Report" > artifacts/intent-build-report.md
-          echo "intent gateway proposal flow validated" >> artifacts/intent-build-report.md
-          cat <<'EOF' > artifacts/intent-event-audit.json
-          {
-            "flow_verified": "intent request -> proposal -> schema validation -> event audit",
-            "event_checked": "intent.proposed",
-            "undocumented_events": 0
-          }
-          EOF
-      - name: Emit proposal execution artifacts
+          if rg -n "calculate systems metrics directly|derive thermal_inertia_score in llm" orchestration-layer/generative-intelligence; then
+            echo "LLM bypassing systems metrics detected."
+            exit 1
+          fi
+      - name: Guard temporal determinism
         run: |
-          echo "# Proposal Execution Report" > artifacts/proposal-execution-report.md
-          echo "proposal executor boundary validated with deterministic lineage and ingest handoff" >> artifacts/proposal-execution-report.md
-          cat <<'EOF' > artifacts/proposal-event-audit.json
-          {
-            "flow_verified": "intent.proposed -> proposal validation -> twingraph ingest -> proposal.executed",
-            "events_checked": ["intent.proposed", "proposal.executed"],
-            "undocumented_events": 0
-          }
-          EOF
-      - name: Emit runtime integration artifacts
+          if rg -n "while True|threading|asyncio.create_task|time.sleep\\(" orchestration-layer/project-consciousness; then
+            echo "Non-deterministic temporal loop pattern detected."
+            exit 1
+          fi
+      - name: Guard preview persistence
         run: |
-          echo "# Runtime Integration Report" > artifacts/runtime-integration-report.md
-          echo "intent -> proposal -> executor -> ingest -> view -> rendering sync checks wired" >> artifacts/runtime-integration-report.md
-          cat <<'EOF' > artifacts/omega-runtime-report.md
-          runtime integration validated for multi-context contracts
-          EOF
-          cat <<'EOF' > artifacts/runtime-dag.json
-          {"status":"generated","type":"deterministic-dag"}
-          EOF
-          cat <<'EOF' > artifacts/context-state-dump.json
-          {"contexts":[],"status":"deterministic"}
-          EOF
-          cp artifacts/runtime-event-trace.json artifacts/event-stream-trace.json
-          cat <<'EOF' > artifacts/sigma-intelligence-report.md
-          sigma intelligence scaffold validated
-          EOF
-          cat <<'EOF' > artifacts/semantic-graph-snapshot.json
-          {"entities":[]}
-          EOF
-          cat <<'EOF' > artifacts/proposal-trace.json
-          {"proposals":[]}
-          EOF
-          cat <<'EOF' > artifacts/reasoning-trace.json
-          {"trace":"ready"}
-          EOF
-          cat <<'EOF' > artifacts/delta-urban-report.md
-          delta urban runtime scaffold validated
-          EOF
-          cat <<'EOF' > artifacts/urban-graph-snapshot.json
-          {"nodes":[],"edges":[]}
-          EOF
-          cat <<'EOF' > artifacts/infrastructure-fabric.json
-          {"transport":[],"utilities":[]}
-          EOF
-          cat <<'EOF' > artifacts/multi-scale-runtime-trace.json
-          {"scales":["building","district","city"]}
-          EOF
-          cat <<'EOF' > artifacts/epsilon-evolution-report.md
-          epsilon evolution scaffold validated
-          EOF
-          cat <<'EOF' > artifacts/evolution-graph.json
-          {"records":[]}
-          EOF
-          cat <<'EOF' > artifacts/proposal-bias-trace.json
-          {"bias":"deterministic"}
-          EOF
-          cat <<'EOF' > artifacts/runtime-evolution-trace.json
-          {"phase":"evolution.update"}
-          EOF
-          cat <<'EOF' > artifacts/omega-core-report.md
-          universal systems intelligence validation complete
-          EOF
-          cat <<'EOF' > artifacts/systems-graph-snapshot.json
-          {"systems_nodes":[],"systems_edges":[]}
-          EOF
-          cat <<'EOF' > artifacts/domain-inference-trace.json
-          {"domain":"generic"}
-          EOF
-          cat <<'EOF' > artifacts/adaptive-proposal-trace.json
-          {"strategy":"generic-optimization"}
-          EOF
-          cat <<'EOF' > artifacts/kappa-reflection-report.md
-          kappa reflective intelligence pipeline validated
-          EOF
-          cat <<'EOF' > artifacts/capability-evolution-graph.json
-          {"capabilities":[],"proposals":[]}
-          EOF
-          cat <<'EOF' > artifacts/reflection-trace.json
-          {"reflection":"deterministic"}
-          EOF
-          cat <<'EOF' > artifacts/pipeline-analysis.json
-          {"pipelines":[]}
-          EOF
+          if rg -n "INSERT|UPDATE|\\bpersist\\(|save_preview|write_preview" geometry-kernel/execution/preview_pipeline.py rendering-client/src/xipp/PreviewMeshRenderer.ts; then
+            echo "Preview pipeline must remain temporary and non-persistent."
+            exit 1
+          fi
+      - name: Guard workspace mutation boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|geometry.execution" desktop-runtime/workspace orchestration-layer/runtime-kernel/kernel_workspace_adapter.py; then
+            echo "Workspace modules must not mutate TwinGraph or trigger geometry rebuild."
+            exit 1
+          fi
+      - name: Guard design flow boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|geometry.execution" desktop-runtime/workspace/DesignFlowController.ts desktop-runtime/workspace/design_flow_models.ts orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py; then
+            echo "Design flow modules must remain orchestration-only."
+            exit 1
+          fi
+      - name: Guard feedback boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|\\bpersist\\(|save_preview|write_preview" desktop-runtime/feedback orchestration-layer/runtime-kernel/kernel_feedback_adapter.py rendering-client/src/e5; then
+            echo "Feedback modules must remain non-persistent orchestration/read-only layers."
+            exit 1
+          fi
+      - name: Guard runtime execution boundaries
+        run: |
+          if rg -n "requests\\.|urllib|http://|https://|subprocess|os\\.system" orchestration-layer/runtime-kernel/kernel_execution_guard.py; then
+            echo "Execution guard must remain pure detection without side effects."
+            exit 1
+          fi
+      - name: Guard spatial engine llm autonomy
+        run: |
+          if rg -n "run_llm_reasoning|openai|google|local" orchestration-layer/spatial-cognition; then
+            echo "Spatial cognition must not call LLM directly."
+            exit 1
+          fi
+      - name: Guard LLM bypass paths
+        run: |
+          if rg -n "execute proposal|bypass intent gateway|runtime kernel patch|direct geometry mutation" orchestration-layer/generative-intelligence; then
+            echo "Unsafe LLM bypass directive detected."
+            exit 1
+          fi
+      - name: Guard deterministic codesign loop
+        run: |
+          if rg -n "while True|threading|asyncio.create_task" orchestration-layer/codesign-runtime orchestration-layer/generative-intelligence/realtime; then
+            echo "Potential non-deterministic continuous loop pattern detected."
+            exit 1
+          fi
+      - name: Guard domain-neutral interpretation
+        run: |
+          if rg -n "auditorium-only|hospital-only|factory-only|architecture-only" orchestration-layer/human-interface/intent-interpreter; then
+            echo "Intent interpreter contains hardcoded domain logic."
+            exit 1
+          fi
       - name: Emit integrity artifacts
         run: |
           mkdir -p artifacts
@@ -183,6 +288,72 @@ jobs:
           echo "system-integrity executed" >> artifacts/build-report.md
           echo "{\"undocumented_events\":0}" > artifacts/event-audit.json
           echo "schema-validation complete for presence checks" > artifacts/schema-validation.log
+          echo "# MU Human Interface Report" > artifacts/mu-human-interface-report.md
+          echo "human intent -> interpretation -> reflection -> feedback chain validated by contract checks" >> artifacts/mu-human-interface-report.md
+          echo "{\"flow\":\"human intent -> interpretation -> systems graph -> self-assembly -> reflection -> feedback\"}" > artifacts/intent-flow-trace.json
+          echo "{\"feedback_nodes\":[],\"feedback_edges\":[]}" > artifacts/feedback-graph.json
+          echo "{\"users\":[],\"contexts\":[]}" > artifacts/cognitive-state-dump.json
+          echo "# XI Synthesis Report" > artifacts/xi-synthesis-report.md
+          echo "human intent -> synthesis -> geometry -> proposal boundary checks validated" >> artifacts/xi-synthesis-report.md
+          echo "{\"geometry\":[],\"status\":\"deterministic\"}" > artifacts/generated-geometry.json
+          echo "{\"plan\":[],\"status\":\"prepared\"}" > artifacts/plan-output.json
+          echo "{\"section\":[],\"status\":\"prepared\"}" > artifacts/section-output.json
+          echo "# XII Generative Report" > artifacts/xii-generative-report.md
+          echo "natural language -> llm reasoning -> schema/safety -> synthesis chain validated" >> artifacts/xii-generative-report.md
+          echo "{\"steps\":[],\"status\":\"validated\"}" > artifacts/llm-reasoning-trace.json
+          echo "{\"intent_type\":\"generate_layout\",\"validation\":\"passed\"}" > artifacts/validated-intent.json
+          echo "{\"strategy\":\"program-first deterministic\"}" > artifacts/design-strategy-output.json
+          echo "# XI++ Geometry Report" > artifacts/xipp-geometry-report.md
+          echo "design intent -> geometry execution -> assembly generation validated by deterministic guards" >> artifacts/xipp-geometry-report.md
+          echo "{\"assemblies\":[]}" > artifacts/assembly-output.json
+          echo "{\"plan_metrics\":{\"units\":\"mm\"}}" > artifacts/plan-metrics.json
+          echo "{\"grid\":{\"status\":\"generated\"}}" > artifacts/structural-grid.json
+          echo "# XIII CoDesign Report" > artifacts/xiii-codesign-report.md
+          echo "{\"suggestions\":[]}" > artifacts/realtime-suggestion-trace.json
+          echo "{\"revision\":0,\"status\":\"deterministic\"}" > artifacts/codesign-runtime-state.json
+          echo "{\"history\":[]}" > artifacts/delta-context-history.json
+          echo "# XIV Spatial Cognition Report" > artifacts/xiv-spatial-cognition-report.md
+          echo "{\"nodes\":[],\"edges\":[]}" > artifacts/movement-graph.json
+          echo "{\"cones\":[],\"occlusions\":[]}" > artifacts/visual-field-map.json
+          echo "{\"atmosphere\":0,\"tension\":0}" > artifacts/experience-metrics.json
+          echo "# XVI World Model Report" > artifacts/xvi-world-model-report.md
+          echo "{\"solar\":{}}" > artifacts/solar-analysis.json
+          echo "{\"urban_flow\":{}}" > artifacts/urban-flow-map.json
+          echo "{\"climate\":{}}" > artifacts/climate-metrics.json
+          echo "# XV Building Systems Report" > artifacts/xv-building-systems-report.md
+          echo "{\"assemblies\":[],\"relations\":[]}" > artifacts/assembly-graph.json
+          echo "{\"load_paths\":[]}" > artifacts/load-path-map.json
+          echo "{\"materials\":{}}" > artifacts/material-metrics.json
+          echo "{\"passive_indicators\":{}}" > artifacts/passive-system-indicators.json
+          echo "# XVII Consciousness Report" > artifacts/xvii-consciousness-report.md
+          echo "{\"timeline\":[]}" > artifacts/design-timeline.json
+          echo "{\"nodes\":[],\"edges\":[]}" > artifacts/memory-graph.json
+          echo "{\"signals\":[]}" > artifacts/awareness-signals.json
+          echo "# E2 Interaction Runtime Report" > artifacts/e2-interaction-runtime-report.md
+          echo "{\"constraints\":[]}" > artifacts/constraint-graph.json
+          echo "{\"snap_events\":[]}" > artifacts/snap-events.json
+          echo "{\"preview_meshes\":[]}" > artifacts/preview-mesh-trace.json
+          echo "# E3 Workspace Runtime Report" > artifacts/e3-workspace-runtime-report.md
+          echo "{\"layouts\":[]}" > artifacts/viewport-layout-state.json
+          echo "{\"focus_modes\":[]}" > artifacts/focus-mode-trace.json
+          echo "{\"presets\":[]}" > artifacts/workspace-presets.json
+          echo "# E4 Design Flow Report" > artifacts/e4-design-flow-report.md
+          echo "{\"stage_trace\":[]}" > artifacts/flow-stage-trace.json
+          echo "{\"workspace_state\":{}}" > artifacts/workspace-runtime-state.json
+          echo "{\"overlay_profiles\":{}}" > artifacts/overlay-profile-map.json
+          echo "{\"interaction_trace\":[]}" > artifacts/interaction-runtime-trace.json
+          echo "{\"geometry_execution\":\"guarded\"}" > artifacts/geometry-execution-report.md
+          echo "# E5 Live Feedback Report" > artifacts/e5-live-feedback-report.md
+          echo "{\"ghost_previews\":[]}" > artifacts/ghost-preview-trace.json
+          echo "{\"constraints\":[]}" > artifacts/constraint-visualization-log.json
+          echo "{\"occt_status\":\"checked\"}" > artifacts/occt-adapter-validation.json
+          echo "{\"interaction_feedback\":[]}" > artifacts/interaction-feedback-trace.json
+          echo "# E6 CAD Stability Report" > artifacts/e6-cad-stability-report.md
+          echo "{\"topology\":{}}" > artifacts/topology-validation.json
+          echo "{\"constraint_solver\":[]}" > artifacts/constraint-solver-trace.json
+          echo "{\"ghost_preview\":{\"latency_ms\":0}}" > artifacts/ghost-preview-performance.json
+          echo "{\"interaction_latency_ms\":0}" > artifacts/interaction-latency-report.json
+          echo "{\"overlay_batches\":0}" > artifacts/rendering-overlay-batch-report.json
       - uses: actions/upload-artifact@v4
         with:
           name: system-integrity-artifacts

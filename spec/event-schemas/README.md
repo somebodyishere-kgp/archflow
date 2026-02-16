@@ -1,24 +1,32 @@
-# Event Payload Models
+# Event Schemas
 
-Typed JSON schema models for ArchFlow event payloads.
-
-## Core TwinGraph Events (Sprint 2 stabilized)
-- `twingraph.mutation.json` -> `TwinGraphMutationPayload`
-- `geometry.updated.json` -> `GeometryUpdatedPayload`
-- `view.refresh.json` -> `ViewRefreshPayload` (Sprint 3 read layer)
-
-## Additional Registered Event Payloads
-- `intent.proposed.json`
-- `proposal.executed.json`
-- `proposal.blocked.json`
-- `runtime.lineage.json`
-- `design.insight.generated.json`
-- `design.evolution.updated.json`
-- `design.evolution.insight.json`
-- `reflection.insight.generated.json`
-- `reflection.capability.proposed.json`
+- `geometry.updated.json`
+- `twingraph.mutation.json`
 - `structure.updated.json`
 - `acoustic.updated.json`
 - `mep.updated.json`
 - `documentation.refresh.json`
 - `compliance.report.json`
+- `human.feedback.generated.json`
+- `design.synthesis.proposed.json`
+- `design.intent.generated.json`
+- `geometry.execution.proposed.json`
+- `assembly.generated.json`
+- `design.suggestion.generated.json`
+- `spatial.cognition.insight.json`
+- `spatial.flow.analysis.json`
+- `world.context.insight.json`
+- `world.solar.analysis.json`
+- `world.urban.flow.json`
+- `building.systems.graph.updated.json`
+- `building.material.analysis.json`
+- `design.awareness.signal.json`
+- `project.memory.updated.json`
+- `constraint.graph.updated.json`
+- `interaction.mode.changed.json`
+- `workspace.layout.changed.json`
+- `workspace.focus.mode.json`
+- `design.flow.stage.changed.json`
+- `feedback.snap.predicted.json`
+- `feedback.preview.updated.json`
+- `feedback.constraint.visualized.json`

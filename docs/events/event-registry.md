@@ -12,87 +12,16 @@ This registry is authoritative for ArchFlow event contracts.
 ## Registered Events
 
 event_name: geometry.updated  
-publisher_module: core-twingraph, geometry-kernel  
-subscriber_modules: structure-agent, acoustic-agent, mep-agent, documentation-agent, rendering-client  
+publisher_module: geometry-kernel  
+subscriber_modules: structure-agent, acoustic-agent, mep-agent, documentation-agent  
 payload_schema: /spec/event-schemas/geometry.updated.json  
-failure_conditions: invalid geometry WKB hex, schema mismatch, missing node id, transport emit failure
+failure_conditions: invalid geometry WKB, schema mismatch, missing node id
 
 event_name: twingraph.mutation  
 publisher_module: core-twingraph  
-subscriber_modules: massing-generator, regulation-agent, documentation-agent, rendering-client  
+subscriber_modules: massing-generator, regulation-agent, documentation-agent  
 payload_schema: /spec/event-schemas/twingraph.mutation.json  
-failure_conditions: invalid node payload, schema validation failure, version conflict, missing relation target, transport emit failure
-
-event_name: view.refresh
-publisher_module: core-twingraph
-subscriber_modules: rendering-client (primary consumer), documentation-agent
-payload_schema: /spec/event-schemas/view.refresh.json
-failure_conditions: view adapter schema mismatch, invalid limit bounds, transport emit failure
-
-event_name: intent.proposed
-publisher_module: orchestration-layer/intent-gateway
-subscriber_modules: orchestration-layer/proposal-executor, human approval workflow
-payload_schema: /spec/event-schemas/intent.proposed.json
-failure_conditions: invalid intent parameters, missing TwinGraph context reference, proposal schema mismatch
-
-event_name: proposal.executed
-publisher_module: orchestration-layer/proposal-executor
-subscriber_modules: core-twingraph audit trail, orchestration-layer observability
-payload_schema: /spec/event-schemas/proposal.executed.json
-failure_conditions: re-validation failure, ingest endpoint rejection, lineage metadata missing
-
-event_name: proposal.blocked
-publisher_module: orchestration-layer/proposal-executor
-subscriber_modules: orchestration-layer observability, human review workflow
-payload_schema: /spec/event-schemas/proposal.blocked.json
-failure_conditions: invalid proposal schema, execution precondition failure, lineage metadata missing
-
-event_name: render.sync
-publisher_module: orchestration-layer/runtime-kernel
-subscriber_modules: rendering-client runtime adapter
-payload_schema: /spec/event-schemas/runtime.lineage.json
-failure_conditions: missing runtime_cycle_id, scheduler out-of-order execution
-
-event_name: design.insight.generated
-publisher_module: orchestration-layer/autonomous-intelligence/agents
-subscriber_modules: orchestration-layer/autonomous-intelligence/explainability, rendering-client intelligence overlay
-payload_schema: /spec/event-schemas/design.insight.generated.json
-failure_conditions: semantic graph missing context, invalid insight payload
-
-event_name: design.evolution.updated
-publisher_module: orchestration-layer/design-evolution
-subscriber_modules: autonomous-intelligence proposal-generator, explainability
-payload_schema: /spec/event-schemas/design.evolution.updated.json
-failure_conditions: evolution lineage missing, context mismatch
-
-event_name: design.evolution.insight
-publisher_module: orchestration-layer/design-evolution
-subscriber_modules: rendering-client evolution overlay, explainability
-payload_schema: /spec/event-schemas/design.evolution.insight.json
-failure_conditions: evolution insight payload invalid
-
-event_name: design.proposal.generated
-publisher_module: orchestration-layer/autonomous-intelligence/proposal-generator
-subscriber_modules: intent-gateway intake bridge (future), explainability
-payload_schema: /spec/event-schemas/intent.proposed.json
-failure_conditions: adaptive strategy invalid, schema mismatch with intent contract
-
-event_name: reflection.insight.generated
-publisher_module: orchestration-layer/reflective-core/analysis
-subscriber_modules: reflective-core/memory, explainability, runtime-kernel reflection adapter
-payload_schema: /spec/event-schemas/reflection.insight.generated.json
-failure_conditions: pipeline analysis payload incomplete, deterministic ordering violation
-
-event_name: reflection.capability.proposed
-publisher_module: orchestration-layer/reflective-core/capability-refactor
-subscriber_modules: self-assembly-runtime blueprint feedback adapter
-payload_schema: /spec/event-schemas/reflection.capability.proposed.json
-failure_conditions: proposal missing capability list, direct mutation attempt bypassing blueprint adapter
-
-## Transport Stabilization (Sprint 2)
-- Active transport adapter: `LocalEventTransport` (`core-twingraph/src/twingraph/transport/local.py`)
-- Planned transport adapter: `NatsEventTransport` (`core-twingraph/src/twingraph/transport/nats.py`)
-- NATS status: BLOCKED (`ISSUE-0008`) until deterministic transport wiring and contract tests are implemented
+failure_conditions: invalid node payload, version conflict, missing relation target
 
 event_name: structure.updated  
 publisher_module: structure-agent  
@@ -123,3 +52,141 @@ publisher_module: regulation-agent
 subscriber_modules: documentation-agent, rendering-client, orchestration-layer  
 payload_schema: /spec/event-schemas/compliance.report.json  
 failure_conditions: rule pack missing, clause reference unresolved, schema mismatch
+
+event_name: human.feedback.generated
+publisher_module: orchestration-layer/human-interface/feedback-engine
+subscriber_modules: desktop-runtime, rendering-client, explainability
+payload_schema: /spec/event-schemas/human.feedback.generated.json
+failure_conditions: missing reflection translation input, feedback block schema mismatch, forbidden TwinGraph write in human-interface
+
+event_name: design.synthesis.proposed
+publisher_module: orchestration-layer/design-synthesis
+subscriber_modules: proposal-executor boundary, geometry-kernel converters, rendering-client/src/xi
+payload_schema: /spec/event-schemas/design.synthesis.proposed.json
+failure_conditions: invalid synthesis payload, missing context id, direct TwinGraph mutation attempt in synthesis modules
+
+event_name: design.intent.generated
+publisher_module: orchestration-layer/generative-intelligence/reasoning-engine
+subscriber_modules: orchestration-layer/design-synthesis, intent-gateway validation path, reflective-core alignment checks
+payload_schema: /spec/event-schemas/design.intent.generated.json
+failure_conditions: schema enforcement failure, hallucination safety rejection, TwinGraph mutation directive found in LLM output
+
+event_name: geometry.execution.proposed
+publisher_module: geometry-kernel
+subscriber_modules: orchestration-layer/proposal-executor, rendering-client/src/xipp
+payload_schema: /spec/event-schemas/geometry.execution.proposed.json
+failure_conditions: non-deterministic geometry step ordering, direct TwinGraph write attempt
+
+event_name: assembly.generated
+publisher_module: geometry-kernel/assembly
+subscriber_modules: rendering-client/src/xipp, desktop-runtime assembly inspector
+payload_schema: /spec/event-schemas/assembly.generated.json
+failure_conditions: missing material_layers/thickness/metadata_version fields
+
+event_name: design.suggestion.generated
+publisher_module: orchestration-layer/generative-intelligence/realtime
+subscriber_modules: orchestration-layer/codesign-runtime, rendering-client/src/xiii, desktop-runtime codesign panel
+payload_schema: /spec/event-schemas/design.suggestion.generated.json
+failure_conditions: realtime loop non-deterministic ordering, schema validation bypass, unsafe proposal detected by reflection
+
+event_name: spatial.cognition.insight
+publisher_module: orchestration-layer/spatial-cognition
+subscriber_modules: reflective-core spatial alignment, rendering-client/src/xiv, desktop spatial cognition panel
+payload_schema: /spec/event-schemas/spatial.cognition.insight.json
+failure_conditions: missing perception metrics, direct mutation attempt, invalid cognition payload
+
+event_name: spatial.flow.analysis
+publisher_module: orchestration-layer/spatial-cognition/flow
+subscriber_modules: codesign-runtime, rendering-client/src/xiv
+payload_schema: /spec/event-schemas/spatial.flow.analysis.json
+failure_conditions: invalid topology graph, missing flow metrics
+
+event_name: world.context.insight
+publisher_module: orchestration-layer/world-model
+subscriber_modules: generative-intelligence world-context bridge, design-synthesis world-aware layout solver
+payload_schema: /spec/event-schemas/world.context.insight.json
+failure_conditions: missing world metrics, deterministic analysis contract violation
+
+event_name: world.solar.analysis
+publisher_module: orchestration-layer/world-model/solar
+subscriber_modules: desktop world context panel, rendering-client/src/xvi
+payload_schema: /spec/event-schemas/world.solar.analysis.json
+failure_conditions: invalid orientation output, missing solar metrics
+
+event_name: world.urban.flow
+publisher_module: orchestration-layer/world-model/urban
+subscriber_modules: rendering-client/src/xvi, design-synthesis entry strategy
+payload_schema: /spec/event-schemas/world.urban.flow.json
+failure_conditions: invalid flow graph, missing accessibility topology
+
+event_name: building.systems.graph.updated
+publisher_module: orchestration-layer/building-systems
+subscriber_modules: reflective systems alignment, rendering-client/src/xv, desktop building systems panel
+payload_schema: /spec/event-schemas/building.systems.graph.updated.json
+failure_conditions: missing assembly relationships, invalid systems graph payload
+
+event_name: building.material.analysis
+publisher_module: orchestration-layer/building-systems/materials
+subscriber_modules: generative building-systems bridge, rendering-client/src/xv
+payload_schema: /spec/event-schemas/building.material.analysis.json
+failure_conditions: incomplete material layer metadata, invalid analysis payload
+
+event_name: project.memory.updated
+publisher_module: orchestration-layer/project-consciousness
+subscriber_modules: desktop project memory panel, rendering-client/src/xvii, reflective temporal alignment
+payload_schema: /spec/event-schemas/project.memory.updated.json
+failure_conditions: invalid memory graph linkage, revision continuity break
+
+event_name: design.awareness.signal
+publisher_module: orchestration-layer/project-consciousness/awareness
+subscriber_modules: human feedback formatter, desktop timeline, rendering-client/src/xvii
+payload_schema: /spec/event-schemas/design.awareness.signal.json
+failure_conditions: non-deterministic awareness schedule, invalid priority signal payload
+
+event_name: constraint.graph.updated
+publisher_module: geometry-kernel/interactions
+subscriber_modules: geometry execution runtime, preview mesh renderer, desktop constraint panel
+payload_schema: /spec/event-schemas/constraint.graph.updated.json
+failure_conditions: invalid constraint inheritance graph, dependency mismatch, direct TwinGraph write attempt
+
+event_name: interaction.mode.changed
+publisher_module: desktop-runtime interaction state machine
+subscriber_modules: rendering-client interactions overlay, runtime interaction adapter
+payload_schema: /spec/event-schemas/interaction.mode.changed.json
+failure_conditions: illegal state transition, conflicting active tool modes
+
+event_name: workspace.layout.changed
+publisher_module: desktop-runtime/workspace
+subscriber_modules: desktop-runtime viewport layout manager, rendering-client viewport isolator
+payload_schema: /spec/event-schemas/workspace.layout.changed.json
+failure_conditions: invalid preset mapping, missing viewport id set, workspace state routed into geometry execution
+
+event_name: workspace.focus.mode
+publisher_module: desktop-runtime/workspace
+subscriber_modules: desktop runtime focus indicator, rendering-client overlay selection
+payload_schema: /spec/event-schemas/workspace.focus.mode.json
+failure_conditions: unsupported focus mode, workspace attempting TwinGraph mutation
+
+event_name: design.flow.stage.changed
+publisher_module: desktop-runtime/workspace/design-flow
+subscriber_modules: workspace toolbar, viewport overlay isolator, runtime design flow adapter
+payload_schema: /spec/event-schemas/design.flow.stage.changed.json
+failure_conditions: invalid stage transition, flow update triggering geometry rebuild, workspace mutation boundary violation
+
+event_name: feedback.snap.predicted
+publisher_module: desktop-runtime/feedback
+subscriber_modules: rendering-client/src/e5, CAD interaction engine, workspace toolbar
+payload_schema: /spec/event-schemas/feedback.snap.predicted.json
+failure_conditions: invalid anchor prediction payload, preview pipeline bypass, feedback write boundary violation
+
+event_name: feedback.preview.updated
+publisher_module: geometry-kernel/execution/ghost_preview_pipeline
+subscriber_modules: rendering-client/src/e5/GhostMeshRenderer, desktop-runtime feedback panel
+payload_schema: /spec/event-schemas/feedback.preview.updated.json
+failure_conditions: preview flagged persistent, direct TwinGraph mutation attempt, invalid ghost mesh payload
+
+event_name: feedback.constraint.visualized
+publisher_module: desktop-runtime/feedback/ConstraintVisualizer
+subscriber_modules: rendering-client/src/e5/ConstraintOverlay, ConstraintLineRenderer
+payload_schema: /spec/event-schemas/feedback.constraint.visualized.json
+failure_conditions: malformed constraint visual data, geometry mutation path in feedback layer
