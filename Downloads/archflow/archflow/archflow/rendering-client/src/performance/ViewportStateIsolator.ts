@@ -5,7 +5,9 @@ export type ViewportState = {
   previewNodeIds?: string[];
   snapOverlayBatchCount?: number;
   interactionFrameThrottleMs?: number;
+  frameBudgetMs?: number;
   lodState?: "high" | "medium" | "low";
+  overlayDensity?: number;
   overlayConfig?: Record<string, boolean>;
   flowStageOverlayProfile?: "minimal" | "assembly-guides" | "systems-insight" | "spatial-cognition" | "clean-render";
 };
@@ -92,4 +94,12 @@ export function isolatePreviewState(
 
 export function throttleInteractionFrames(state: ViewportState, throttleMs: number): ViewportState {
   return { ...state, interactionFrameThrottleMs: throttleMs };
+}
+
+export function applyFrameBudget(state: ViewportState, frameBudgetMs: number): ViewportState {
+  return { ...state, frameBudgetMs };
+}
+
+export function applyOverlayDensity(state: ViewportState, overlayDensity: number): ViewportState {
+  return { ...state, overlayDensity };
 }

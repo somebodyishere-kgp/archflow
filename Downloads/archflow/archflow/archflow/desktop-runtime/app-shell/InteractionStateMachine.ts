@@ -12,6 +12,7 @@ export type InteractionContext = {
   hoverId?: string;
   snapPrediction?: { axis: string; score: number };
   constraintDragPreview?: string[];
+  transformInertiaMs?: number;
 };
 
 const ALLOWED_TRANSITIONS: Record<InteractionState, InteractionState[]> = {
@@ -45,4 +46,8 @@ export function setSnapPrediction(
 
 export function setConstraintDragPreview(context: InteractionContext, preview: string[]): InteractionContext {
   return { ...context, constraintDragPreview: [...preview] };
+}
+
+export function setTransformInertia(context: InteractionContext, transformInertiaMs: number): InteractionContext {
+  return { ...context, transformInertiaMs };
 }

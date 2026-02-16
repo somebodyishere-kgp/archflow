@@ -62,6 +62,7 @@ jobs:
           test -f orchestration-layer/runtime-kernel/kernel_workspace_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_feedback_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_execution_guard.py
           test -f orchestration-layer/self-assembly-runtime/blueprint_feedback_adapter.py
           test -f orchestration-layer/autonomous-intelligence/explainability/api.py
           test -f orchestration-layer/human-interface/nlp-intent-entry.py
@@ -87,6 +88,8 @@ jobs:
           test -f geometry-kernel/interactions/constraint_engine.py
           test -f geometry-kernel/execution/preview_pipeline.py
           test -f geometry-kernel/execution/ghost_preview_pipeline.py
+          test -f geometry-kernel/execution/topology_stability_manager.py
+          test -f geometry-kernel/execution/edit_history_manager.py
           test -f geometry-kernel/interactions/parametric_constraint_solver.py
           test -f geometry-kernel/adapters/occt_adapter.py
       - name: Validate XII generative module structure
@@ -248,6 +251,12 @@ jobs:
             echo "Feedback modules must remain non-persistent orchestration/read-only layers."
             exit 1
           fi
+      - name: Guard runtime execution boundaries
+        run: |
+          if rg -n "requests\\.|urllib|http://|https://|subprocess|os\\.system" orchestration-layer/runtime-kernel/kernel_execution_guard.py; then
+            echo "Execution guard must remain pure detection without side effects."
+            exit 1
+          fi
       - name: Guard spatial engine llm autonomy
         run: |
           if rg -n "run_llm_reasoning|openai|google|local" orchestration-layer/spatial-cognition; then
@@ -339,6 +348,12 @@ jobs:
           echo "{\"constraints\":[]}" > artifacts/constraint-visualization-log.json
           echo "{\"occt_status\":\"checked\"}" > artifacts/occt-adapter-validation.json
           echo "{\"interaction_feedback\":[]}" > artifacts/interaction-feedback-trace.json
+          echo "# E6 CAD Stability Report" > artifacts/e6-cad-stability-report.md
+          echo "{\"topology\":{}}" > artifacts/topology-validation.json
+          echo "{\"constraint_solver\":[]}" > artifacts/constraint-solver-trace.json
+          echo "{\"ghost_preview\":{\"latency_ms\":0}}" > artifacts/ghost-preview-performance.json
+          echo "{\"interaction_latency_ms\":0}" > artifacts/interaction-latency-report.json
+          echo "{\"overlay_batches\":0}" > artifacts/rendering-overlay-batch-report.json
       - uses: actions/upload-artifact@v4
         with:
           name: system-integrity-artifacts

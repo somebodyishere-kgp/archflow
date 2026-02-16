@@ -146,3 +146,13 @@ tradeoffs: increased runtime orchestration and adapter complexity in exchange fo
 impact_scope: desktop feedback modules, CAD interaction engine, ghost preview pipeline, OCCT adapter, parametric constraint solver, runtime feedback.update phase, E5 overlays and event contracts
 rollback_strategy: disable feedback.update and revert to E4 flow/runtime behavior with basic interaction previews only
 arch_critical: true
+
+decision_id: ADR-E6-001
+title: CAD Completion & Stability Layer Introduced
+date: 2026-02-16
+reason: Consolidate CAD editing reliability with topology stability, history-aware execution, feedback hardening, and runtime write-guard enforcement.
+alternatives_considered: defer stability to future phase; rely on ad-hoc per-module guards only
+tradeoffs: deeper kernel/runtime orchestration complexity in exchange for safer edit continuity and predictable interaction behavior at scale
+impact_scope: geometry stability managers, occt adapter hardening, interaction/feedback runtime refinements, performance batching controls, kernel execution guard and E6 CI artifacts
+rollback_strategy: disable E6 stability adapters and fallback to E5 interaction/feedback runtime while preserving guardrails
+arch_critical: true

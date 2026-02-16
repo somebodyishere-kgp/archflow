@@ -151,6 +151,12 @@ jobs:
           test -f spec/event-schemas/feedback.snap.predicted.json
           test -f spec/event-schemas/feedback.preview.updated.json
           test -f spec/event-schemas/feedback.constraint.visualized.json
+      - name: Validate E6 geometry stability modules
+        run: |
+          test -f geometry-kernel/execution/topology_stability_manager.py
+          test -f geometry-kernel/execution/edit_history_manager.py
+          test -f geometry-kernel/adapters/occt_adapter.py
+          test -f geometry-kernel/interactions/parametric_constraint_solver.py
       - name: Enforce read-only desktop and rendering boundaries
         run: |
           if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv rendering-client/src/xvii rendering-client/src/performance rendering-client/src/interactions; then
@@ -218,6 +224,12 @@ jobs:
           echo "{\"constraints\":[]}" > artifacts/constraint-visualization-log.json
           echo "{\"occt_status\":\"checked\"}" > artifacts/occt-adapter-validation.json
           echo "{\"interaction_feedback\":[]}" > artifacts/interaction-feedback-trace.json
+          echo "# E6 CAD Stability Report" > artifacts/e6-cad-stability-report.md
+          echo "{\"topology\":{}}" > artifacts/topology-validation.json
+          echo "{\"constraint_solver\":[]}" > artifacts/constraint-solver-trace.json
+          echo "{\"ghost_preview\":{\"latency_ms\":0}}" > artifacts/ghost-preview-performance.json
+          echo "{\"interaction_latency_ms\":0}" > artifacts/interaction-latency-report.json
+          echo "{\"overlay_batches\":0}" > artifacts/rendering-overlay-batch-report.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

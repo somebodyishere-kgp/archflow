@@ -1,7 +1,7 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Execution Era E5 (Live Design Feedback Engine)
+Phase: Execution Era E6 (CAD Completion & Stability)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -73,6 +73,9 @@ Stability Rating: Experimental
 - OCCT adapter (`geometry-kernel/adapters/occt_adapter.py`)
 - E5 rendering overlays (`rendering-client/src/e5/`)
 - Feedback runtime adapter (`orchestration-layer/runtime-kernel/kernel_feedback_adapter.py`)
+- Topology stability manager (`geometry-kernel/execution/topology_stability_manager.py`)
+- Edit history manager (`geometry-kernel/execution/edit_history_manager.py`)
+- Runtime execution guard (`orchestration-layer/runtime-kernel/kernel_execution_guard.py`)
 
 ## In-Progress Modules
 - Core TwinGraph deterministic ingestion pipeline
@@ -103,6 +106,7 @@ Stability Rating: Experimental
 - Design flow engine direct TwinGraph writes: BLOCKED by governance (orchestration-only local runtime layer)
 - Feedback layer direct TwinGraph writes: BLOCKED by governance (visual/runtime orchestration only)
 - OCCT runtime package availability on CI images: BLOCKED pending OCP/OCCT dependency provisioning for full boolean execution
+- Full workflow discovery on default branch: BLOCKED until repository default branch is switched to a branch containing `.github/workflows/` (e.g. `ci-root` or `feature/init-repo`)
 
 ## Blockers
 - issue_id: ISSUE-0002

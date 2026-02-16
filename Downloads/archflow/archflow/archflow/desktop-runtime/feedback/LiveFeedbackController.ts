@@ -35,4 +35,8 @@ export class LiveFeedbackController {
     this.ghostManager.upsertPreview(preview);
     return this.ghostManager.listPreviews();
   }
+
+  invalidateGhostPreviewViewport(viewportId: string): number {
+    return this.ghostManager.invalidateViewport(viewportId);
+  }
 }

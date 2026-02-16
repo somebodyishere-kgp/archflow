@@ -13,15 +13,18 @@ export type SnapPrediction = {
   anchorId: string;
   distance: number;
   glowIntensity: number;
+  priorityScore: number;
   axisGuides: string[];
   constraintHints: string[];
 };
 
 export type GhostPreviewState = {
   previewId: string;
+  viewportId: string;
   source: "transform" | "ai-proposal" | "constraint-adjust";
   nodeIds: string[];
   opacity: number;
+  lod: "high" | "medium" | "low";
   persistent: false;
 };
 
