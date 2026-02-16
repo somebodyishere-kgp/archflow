@@ -13,3 +13,6 @@ export * from "./xipp/ParametricHighlight";
 export * from "./xiii/RealtimeSuggestionOverlay";
 export * from "./xiii/AdaptiveIntentVisualizer";
 export * from "./xiii/DesignDeltaRenderer";
+export * from "./xiv/SpatialPerceptionOverlay";
+export * from "./xiv/FlowVisualization";
+export * from "./xiv/VisualFocusMap";

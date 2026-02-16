@@ -1,7 +1,7 @@
 # System Status
 
 Last Updated: 2026-02-16
-Phase: Program XIII (Real-Time Co-Design Intelligence)
+Phase: Program XIV (Spatial Cognition Engine)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -33,6 +33,11 @@ Stability Rating: Experimental
 - Realtime intent stream (`orchestration-layer/human-interface/realtime-intent-stream.py`)
 - XIII rendering overlays (`rendering-client/src/xiii/`)
 - Co-design desktop surfaces (`desktop-runtime/app-shell/CoDesignPanel.tsx`, `SuggestionTimeline.tsx`, `RealtimeIntentBar.tsx`)
+- Spatial cognition core (`orchestration-layer/spatial-cognition/`)
+- Spatial reasoning bridge (`orchestration-layer/generative-intelligence/spatial_reasoning_bridge.py`)
+- Spatial reflection alignment (`orchestration-layer/reflective-core/analysis/reflection_spatial_alignment.py`)
+- XIV overlays (`rendering-client/src/xiv/`)
+- Spatial desktop panels (`desktop-runtime/app-shell/SpatialCognitionPanel.tsx`, `ExperienceHeatmap.tsx`, `MovementGraphView.ts`)
 
 ## In-Progress Modules
 - Core TwinGraph deterministic ingestion pipeline
@@ -54,6 +59,7 @@ Stability Rating: Experimental
 - LLM direct TwinGraph writes or execution authority: BLOCKED by governance (reasoning-only contract)
 - Geometry kernel direct TwinGraph writes: BLOCKED by governance (executor-only write boundary)
 - Realtime co-design direct TwinGraph writes: BLOCKED by governance (observation/suggestion only)
+- Spatial cognition direct TwinGraph writes: BLOCKED by governance (analysis only)
 
 ## Blockers
 - issue_id: ISSUE-0002

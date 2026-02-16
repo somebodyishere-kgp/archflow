@@ -37,6 +37,9 @@ jobs:
           test -f desktop-runtime/app-shell/CoDesignPanel.tsx
           test -f desktop-runtime/app-shell/SuggestionTimeline.tsx
           test -f desktop-runtime/app-shell/RealtimeIntentBar.tsx
+          test -f desktop-runtime/app-shell/SpatialCognitionPanel.tsx
+          test -f desktop-runtime/app-shell/ExperienceHeatmap.tsx
+          test -f desktop-runtime/app-shell/MovementGraphView.ts
       - name: Validate MU rendering overlays
         run: |
           test -f rendering-client/src/mu/HumanIntentOverlay.tsx
@@ -62,9 +65,14 @@ jobs:
           test -f rendering-client/src/xiii/RealtimeSuggestionOverlay.tsx
           test -f rendering-client/src/xiii/AdaptiveIntentVisualizer.ts
           test -f rendering-client/src/xiii/DesignDeltaRenderer.ts
+      - name: Validate XIV rendering overlays
+        run: |
+          test -f rendering-client/src/xiv/SpatialPerceptionOverlay.tsx
+          test -f rendering-client/src/xiv/FlowVisualization.ts
+          test -f rendering-client/src/xiv/VisualFocusMap.ts
       - name: Enforce read-only desktop and rendering boundaries
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv; then
             echo "Desktop runtime and MU overlays must remain read-only."
             exit 1
           fi
@@ -93,6 +101,10 @@ jobs:
           echo "{\"suggestions\":[]}" > artifacts/realtime-suggestion-trace.json
           echo "{\"revision\":0}" > artifacts/codesign-runtime-state.json
           echo "{\"history\":[]}" > artifacts/delta-context-history.json
+          echo "# XIV Spatial Cognition Report" > artifacts/xiv-spatial-cognition-report.md
+          echo "{\"nodes\":[],\"edges\":[]}" > artifacts/movement-graph.json
+          echo "{\"cones\":[]}" > artifacts/visual-field-map.json
+          echo "{\"atmosphere\":0}" > artifacts/experience-metrics.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -88,3 +88,15 @@ publisher_module: orchestration-layer/generative-intelligence/realtime
 subscriber_modules: orchestration-layer/codesign-runtime, rendering-client/src/xiii, desktop-runtime codesign panel
 payload_schema: /spec/event-schemas/design.suggestion.generated.json
 failure_conditions: realtime loop non-deterministic ordering, schema validation bypass, unsafe proposal detected by reflection
+
+event_name: spatial.cognition.insight
+publisher_module: orchestration-layer/spatial-cognition
+subscriber_modules: reflective-core spatial alignment, rendering-client/src/xiv, desktop spatial cognition panel
+payload_schema: /spec/event-schemas/spatial.cognition.insight.json
+failure_conditions: missing perception metrics, direct mutation attempt, invalid cognition payload
+
+event_name: spatial.flow.analysis
+publisher_module: orchestration-layer/spatial-cognition/flow
+subscriber_modules: codesign-runtime, rendering-client/src/xiv
+payload_schema: /spec/event-schemas/spatial.flow.analysis.json
+failure_conditions: invalid topology graph, missing flow metrics

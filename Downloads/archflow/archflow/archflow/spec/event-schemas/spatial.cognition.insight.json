@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "spatial.cognition.insight",
+  "type": "object",
+  "required": ["event_name", "context_id", "metrics", "timestamp"],
+  "properties": {
+    "event_name": { "type": "string", "const": "spatial.cognition.insight" },
+    "context_id": { "type": "string" },
+    "metrics": { "type": "object" },
+    "timestamp": { "type": "string" }
+  },
+  "additionalProperties": true
+}

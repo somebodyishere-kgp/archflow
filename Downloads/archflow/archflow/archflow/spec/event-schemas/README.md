@@ -13,3 +13,5 @@
 - `geometry.execution.proposed.json`
 - `assembly.generated.json`
 - `design.suggestion.generated.json`
+- `spatial.cognition.insight.json`
+- `spatial.flow.analysis.json`

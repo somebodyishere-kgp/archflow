@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "spatial.flow.analysis",
+  "type": "object",
+  "required": ["event_name", "context_id", "flow_metrics", "timestamp"],
+  "properties": {
+    "event_name": { "type": "string", "const": "spatial.flow.analysis" },
+    "context_id": { "type": "string" },
+    "flow_metrics": { "type": "object" },
+    "timestamp": { "type": "string" }
+  },
+  "additionalProperties": true
+}

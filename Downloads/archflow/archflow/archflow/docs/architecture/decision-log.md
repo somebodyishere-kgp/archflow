@@ -66,3 +66,13 @@ tradeoffs: increased runtime phase complexity in exchange for adaptive collabora
 impact_scope: codesign-runtime, realtime generative modules, runtime codesign phases, realtime desktop/render overlays, reflective safety validator
 rollback_strategy: disable codesign phases and fallback to discrete XII/XI cycle execution
 arch_critical: true
+
+decision_id: ADR-XIV-001
+title: Spatial Cognition Engine Introduced
+date: 2026-02-16
+reason: Add deterministic perception and movement intelligence to evaluate experiential quality before reflection and co-design decisions.
+alternatives_considered: rely only on geometry/systems metrics; simulation-based crowd/visual engines
+tradeoffs: added analysis modules in exchange for measurable spatial-experience signals without simulation overhead
+impact_scope: spatial-cognition core and sub-engines, runtime spatial phase, generative bridge, reflection spatial alignment, xiv overlays
+rollback_strategy: disable spatial.cognition.analysis phase and fallback to geometry/system-only analysis stack
+arch_critical: true

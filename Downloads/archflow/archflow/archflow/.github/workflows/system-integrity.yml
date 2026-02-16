@@ -27,6 +27,8 @@ jobs:
           test -f spec/event-schemas/geometry.execution.proposed.json
           test -f spec/event-schemas/assembly.generated.json
           test -f spec/event-schemas/design.suggestion.generated.json
+          test -f spec/event-schemas/spatial.cognition.insight.json
+          test -f spec/event-schemas/spatial.flow.analysis.json
       - name: Validate MU module structure
         run: |
           test -f orchestration-layer/human-interface/intent-interpreter/intent_context_builder.py
@@ -37,6 +39,7 @@ jobs:
           test -f orchestration-layer/runtime-kernel/kernel_synthesis_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_llm_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_codesign_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_spatial_adapter.py
           test -f orchestration-layer/self-assembly-runtime/blueprint_feedback_adapter.py
           test -f orchestration-layer/autonomous-intelligence/explainability/api.py
           test -f orchestration-layer/human-interface/nlp-intent-entry.py
@@ -73,10 +76,27 @@ jobs:
           test -f orchestration-layer/generative-intelligence/realtime/realtime_reasoner.py
           test -f orchestration-layer/generative-intelligence/realtime/safety/loop_guard.py
           test -f orchestration-layer/reflective-core/analysis/reflection_codesign_validator.py
+      - name: Validate XIV spatial cognition structure
+        run: |
+          test -f orchestration-layer/spatial-cognition/perception_model.py
+          test -f orchestration-layer/spatial-cognition/scale_analyzer.py
+          test -f orchestration-layer/spatial-cognition/movement_topology_engine.py
+          test -f orchestration-layer/spatial-cognition/visibility_graph_builder.py
+          test -f orchestration-layer/spatial-cognition/visual-field/view_cone_generator.py
+          test -f orchestration-layer/spatial-cognition/flow/path_prediction_engine.py
+          test -f orchestration-layer/spatial-cognition/experience/atmosphere_estimator.py
+          test -f orchestration-layer/generative-intelligence/spatial_reasoning_bridge.py
+          test -f orchestration-layer/reflective-core/analysis/reflection_spatial_alignment.py
       - name: Guard forbidden mutation paths
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence orchestration-layer/spatial-cognition geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv; then
             echo "Human interface, desktop runtime, and MU overlays must not mutate TwinGraph."
+            exit 1
+          fi
+      - name: Guard spatial engine llm autonomy
+        run: |
+          if rg -n "run_llm_reasoning|openai|google|local" orchestration-layer/spatial-cognition; then
+            echo "Spatial cognition must not call LLM directly."
             exit 1
           fi
       - name: Guard LLM bypass paths
@@ -128,6 +148,10 @@ jobs:
           echo "{\"suggestions\":[]}" > artifacts/realtime-suggestion-trace.json
           echo "{\"revision\":0,\"status\":\"deterministic\"}" > artifacts/codesign-runtime-state.json
           echo "{\"history\":[]}" > artifacts/delta-context-history.json
+          echo "# XIV Spatial Cognition Report" > artifacts/xiv-spatial-cognition-report.md
+          echo "{\"nodes\":[],\"edges\":[]}" > artifacts/movement-graph.json
+          echo "{\"cones\":[],\"occlusions\":[]}" > artifacts/visual-field-map.json
+          echo "{\"atmosphere\":0,\"tension\":0}" > artifacts/experience-metrics.json
       - uses: actions/upload-artifact@v4
         with:
           name: system-integrity-artifacts
