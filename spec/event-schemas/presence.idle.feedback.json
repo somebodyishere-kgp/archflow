@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "presence.idle.feedback",
+  "type": "object",
+  "required": ["event_name", "workspace_id", "viewport_id", "overlay_fade", "pulse", "timestamp"],
+  "properties": {
+    "event_name": { "const": "presence.idle.feedback" },
+    "workspace_id": { "type": "string", "minLength": 1 },
+    "viewport_id": { "type": "string", "minLength": 1 },
+    "overlay_fade": { "type": "number", "minimum": 0, "maximum": 1 },
+    "pulse": { "type": "number", "minimum": 0, "maximum": 1 },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}
+

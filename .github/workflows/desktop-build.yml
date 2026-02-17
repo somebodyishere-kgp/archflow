@@ -38,6 +38,10 @@ jobs:
           test -f desktop-runtime/feedback/GhostPreviewManager.ts
           test -f desktop-runtime/feedback/InteractionMicroAnimator.ts
           test -f desktop-runtime/feedback/feedback_models.ts
+          test -f desktop-runtime/presence/DesignPresenceRuntime.ts
+          test -f desktop-runtime/presence/IdleFeedbackLoop.ts
+          test -f desktop-runtime/presence/MicroStatePredictor.ts
+          test -f desktop-runtime/presence/PresenceSignalRouter.ts
       - name: Validate rendering runtime overlays
         run: |
           test -f rendering-client/src/interactions/SnapManager.ts
@@ -50,6 +54,8 @@ jobs:
           test -f rendering-client/src/systems/GenericTopologyRenderer.ts
           test -f rendering-client/src/runtime/RuntimeSyncEngine.ts
           test -f rendering-client/src/kappa/CapabilityEvolutionOverlay.tsx
+          test -f rendering-client/src/e7/ViewportPulseScheduler.ts
+          test -f rendering-client/src/e7/PresenceGlowOverlay.tsx
       - name: Validate E5 feedback overlays
         run: |
           test -f rendering-client/src/e5/GhostMeshRenderer.tsx
@@ -68,16 +74,25 @@ jobs:
           test -f spec/event-schemas/feedback.snap.predicted.json
           test -f spec/event-schemas/feedback.preview.updated.json
           test -f spec/event-schemas/feedback.constraint.visualized.json
+          test -f spec/event-schemas/presence.signal.generated.json
+          test -f spec/event-schemas/presence.idle.feedback.json
       - name: Validate geometry stability modules
         run: |
           test -f geometry-kernel/execution/topology_stability_manager.py
           test -f geometry-kernel/execution/edit_history_manager.py
           test -f geometry-kernel/adapters/occt_adapter.py
           test -f geometry-kernel/interactions/parametric_constraint_solver.py
+          test -f orchestration-layer/runtime-kernel/kernel_presence_adapter.py
       - name: Enforce read-only desktop and rendering boundaries
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/e5 rendering-client/src/performance rendering-client/src/interactions rendering-client/src/systems rendering-client/src/runtime rendering-client/src/kappa; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/e5 rendering-client/src/e7 rendering-client/src/performance rendering-client/src/interactions rendering-client/src/systems rendering-client/src/runtime rendering-client/src/kappa; then
             echo "Desktop runtime and MU overlays must remain read-only."
+            exit 1
+          fi
+      - name: Guard E7 presence boundaries
+        run: |
+          if rg -n "geometry\\.execution|run_incremental_rebuild|/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" desktop-runtime/presence rendering-client/src/e7; then
+            echo "E7 presence runtime must remain read-only and non-executing."
             exit 1
           fi
       - name: Emit MU desktop artifacts
@@ -147,6 +162,10 @@ jobs:
           echo "{\"ghost_preview\":{\"latency_ms\":0}}" > artifacts/ghost-preview-performance.json
           echo "{\"interaction_latency_ms\":0}" > artifacts/interaction-latency-report.json
           echo "{\"overlay_batches\":0}" > artifacts/rendering-overlay-batch-report.json
+          echo "# E7 Presence Runtime Report" > artifacts/e7-presence-runtime-report.md
+          echo "{\"signals\":[]}" > artifacts/presence-signal-trace.json
+          echo "{\"idle\":[]}" > artifacts/idle-feedback-trace.json
+          echo "{\"viewport_pulse\":{\"hz\":60}}" > artifacts/viewport-pulse-metrics.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

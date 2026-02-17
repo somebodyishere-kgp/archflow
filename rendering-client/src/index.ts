@@ -36,3 +36,5 @@ export * from "./e5/ConstraintLineRenderer";
 export * from "./e5/MicroInteractionAnimator";
 export * from "./e5/AIGenerationPulse";
 export * from "./e5/IntentZoneGlow";
+export * from "./e7/ViewportPulseScheduler";
+export * from "./e7/PresenceGlowOverlay";

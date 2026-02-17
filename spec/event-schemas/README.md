@@ -30,3 +30,5 @@
 - `feedback.snap.predicted.json`
 - `feedback.preview.updated.json`
 - `feedback.constraint.visualized.json`
+- `presence.signal.generated.json`
+- `presence.idle.feedback.json`

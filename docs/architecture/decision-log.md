@@ -156,3 +156,13 @@ tradeoffs: deeper kernel/runtime orchestration complexity in exchange for safer 
 impact_scope: geometry stability managers, occt adapter hardening, interaction/feedback runtime refinements, performance batching controls, kernel execution guard and E6 CI artifacts
 rollback_strategy: disable E6 stability adapters and fallback to E5 interaction/feedback runtime while preserving guardrails
 arch_critical: true
+
+decision_id: ADR-E7-001
+title: Continuous Design Presence Runtime Introduced
+date: 2026-02-17
+reason: Add a lightweight runtime behavior layer for continuous micro-feedback and anticipation while preserving E4-E6 CAD execution boundaries.
+alternatives_considered: static viewport-only overlays; adding new intelligence modules for interaction prediction
+tradeoffs: additional low-latency signal routing and animation scheduling complexity in exchange for improved perceived continuity and motion without core logic changes
+impact_scope: desktop presence runtime modules, E7 rendering overlays, runtime scheduler presence.update phase, presence event contracts, CI guard/artifact expansion
+rollback_strategy: remove presence.update phase and disable desktop/rendering E7 modules while retaining E4-E6 feedback and interaction stack
+arch_critical: true

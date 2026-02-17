@@ -190,3 +190,15 @@ publisher_module: desktop-runtime/feedback/ConstraintVisualizer
 subscriber_modules: rendering-client/src/e5/ConstraintOverlay, ConstraintLineRenderer
 payload_schema: /spec/event-schemas/feedback.constraint.visualized.json
 failure_conditions: malformed constraint visual data, geometry mutation path in feedback layer
+
+event_name: presence.signal.generated
+publisher_module: desktop-runtime/presence
+subscriber_modules: rendering-client/src/e7, desktop-runtime feedback surfaces
+payload_schema: /spec/event-schemas/presence.signal.generated.json
+failure_conditions: signal payload out of range, presence layer attempting geometry execution call, TwinGraph mutation boundary violation
+
+event_name: presence.idle.feedback
+publisher_module: desktop-runtime/presence/IdleFeedbackLoop
+subscriber_modules: rendering-client/src/e7/PresenceGlowOverlay, workspace visual shell
+payload_schema: /spec/event-schemas/presence.idle.feedback.json
+failure_conditions: blocking idle loop detected, frame pacing over 60hz budget, non-read-only behavior

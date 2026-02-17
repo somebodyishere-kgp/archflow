@@ -29,11 +29,14 @@ jobs:
           test -f spec/event-schemas/feedback.snap.predicted.json
           test -f spec/event-schemas/feedback.preview.updated.json
           test -f spec/event-schemas/feedback.constraint.visualized.json
+          test -f spec/event-schemas/presence.signal.generated.json
+          test -f spec/event-schemas/presence.idle.feedback.json
       - name: Validate orchestration kernel structure
         run: |
           test -f orchestration-layer/runtime-kernel/scheduler.py
           test -f orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_feedback_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_presence_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_execution_guard.py
           test -f orchestration-layer/runtime-kernel/dynamic_phase_engine.py
           test -f orchestration-layer/runtime-kernel/domain_context_manager.py
@@ -53,6 +56,10 @@ jobs:
           test -f desktop-runtime/workspace/DesignFlowController.ts
           test -f desktop-runtime/feedback/LiveFeedbackController.ts
           test -f desktop-runtime/feedback/GhostPreviewManager.ts
+          test -f desktop-runtime/presence/DesignPresenceRuntime.ts
+          test -f desktop-runtime/presence/IdleFeedbackLoop.ts
+          test -f desktop-runtime/presence/MicroStatePredictor.ts
+          test -f desktop-runtime/presence/PresenceSignalRouter.ts
           test -f rendering-client/src/interactions/SnapManager.ts
           test -f rendering-client/src/e5/GhostMeshRenderer.tsx
           test -f rendering-client/src/e5/ConstraintOverlay.ts
@@ -60,6 +67,8 @@ jobs:
           test -f rendering-client/src/e5/MicroInteractionAnimator.ts
           test -f rendering-client/src/e5/AIGenerationPulse.tsx
           test -f rendering-client/src/e5/IntentZoneGlow.ts
+          test -f rendering-client/src/e7/ViewportPulseScheduler.ts
+          test -f rendering-client/src/e7/PresenceGlowOverlay.tsx
       - name: Guard forbidden mutation paths
         run: |
           if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" geometry-kernel desktop-runtime rendering-client/src/e5 rendering-client/src/performance rendering-client/src/interactions orchestration-layer/runtime-kernel; then
@@ -112,6 +121,12 @@ jobs:
         run: |
           if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|\\bpersist\\(|save_preview|write_preview" desktop-runtime/feedback orchestration-layer/runtime-kernel/kernel_feedback_adapter.py rendering-client/src/e5; then
             echo "Feedback modules must remain non-persistent orchestration/read-only layers."
+            exit 1
+          fi
+      - name: Guard presence boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|geometry.execution|run_incremental_rebuild|while True|setInterval\\(" desktop-runtime/presence rendering-client/src/e7 orchestration-layer/runtime-kernel/kernel_presence_adapter.py; then
+            echo "Presence modules must remain read-only, non-blocking, and non-executing."
             exit 1
           fi
       - name: Guard runtime execution boundaries
@@ -217,6 +232,10 @@ jobs:
           echo "{\"ghost_preview\":{\"latency_ms\":0}}" > artifacts/ghost-preview-performance.json
           echo "{\"interaction_latency_ms\":0}" > artifacts/interaction-latency-report.json
           echo "{\"overlay_batches\":0}" > artifacts/rendering-overlay-batch-report.json
+          echo "# E7 Presence Runtime Report" > artifacts/e7-presence-runtime-report.md
+          echo "{\"signals\":[]}" > artifacts/presence-signal-trace.json
+          echo "{\"idle\":[]}" > artifacts/idle-feedback-trace.json
+          echo "{\"viewport_pulse\":{\"hz\":60}}" > artifacts/viewport-pulse-metrics.json
       - uses: actions/upload-artifact@v4
         with:
           name: system-integrity-artifacts

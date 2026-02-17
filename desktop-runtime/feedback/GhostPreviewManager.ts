@@ -1,8 +1,14 @@
 import { type GhostPreviewState } from "./feedback_models";
+import { type PresenceSignalRouter } from "../presence/PresenceSignalRouter";
 
 export class GhostPreviewManager {
   private previews = new Map<string, GhostPreviewState>();
   private viewportBuckets = new Map<string, Set<string>>();
+  private presenceRouter?: PresenceSignalRouter;
+
+  attachPresenceRouter(router: PresenceSignalRouter): void {
+    this.presenceRouter = router;
+  }
 
   upsertPreview(preview: GhostPreviewState): GhostPreviewState {
     const normalized = { ...preview, nodeIds: [...preview.nodeIds], persistent: false as const };
@@ -10,6 +16,17 @@ export class GhostPreviewManager {
     const bucket = this.viewportBuckets.get(preview.viewportId) || new Set<string>();
     bucket.add(preview.previewId);
     this.viewportBuckets.set(preview.viewportId, bucket);
+    if (this.presenceRouter) {
+      this.presenceRouter.emit({
+        signalType: "ai.intent.idle",
+        source: "feedback",
+        workspaceId: "local-workspace",
+        viewportId: preview.viewportId,
+        intensity: 0.35,
+        timestampMs: Date.now(),
+        metadata: { previewId: preview.previewId, source: preview.source },
+      });
+    }
     return normalized;
   }
 

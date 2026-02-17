@@ -9,6 +9,7 @@ PHASE_ORDER = [
     "workspace.update",
     "design.flow.update",
     "feedback.update",
+    "presence.update",
     "geometry.execution",
     "building.systems.analysis",
     "spatial.cognition.analysis",

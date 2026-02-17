@@ -37,3 +37,12 @@ export function predictSnapFeedback(intent: SnapIntent, anchors: FeedbackAnchor[
     constraintHints: [`align-${axisGuides[0]}`, "distance-lock"],
   };
 }
+
+export function buildSnapPresenceHint(prediction: SnapPrediction | null): { intensity: number; hint: string } | null {
+  if (!prediction) return null;
+  const intensity = Math.min(1, Math.max(0.1, prediction.priorityScore));
+  return {
+    intensity,
+    hint: `pre-highlight-${prediction.axisGuides[0] || "x"}`,
+  };
+}

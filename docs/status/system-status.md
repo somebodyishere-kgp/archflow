@@ -1,7 +1,7 @@
 # System Status
 
-Last Updated: 2026-02-16
-Phase: Execution Era E6 (CAD Completion & Stability)
+Last Updated: 2026-02-17
+Phase: Execution Era E7 (Continuous Design Presence)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -76,6 +76,9 @@ Stability Rating: Experimental
 - Topology stability manager (`geometry-kernel/execution/topology_stability_manager.py`)
 - Edit history manager (`geometry-kernel/execution/edit_history_manager.py`)
 - Runtime execution guard (`orchestration-layer/runtime-kernel/kernel_execution_guard.py`)
+- Design presence runtime (`desktop-runtime/presence/`)
+- E7 presence overlays (`rendering-client/src/e7/`)
+- Presence runtime adapter (`orchestration-layer/runtime-kernel/kernel_presence_adapter.py`)
 
 ## In-Progress Modules
 - Core TwinGraph deterministic ingestion pipeline
@@ -105,6 +108,8 @@ Stability Rating: Experimental
 - Workspace engine direct TwinGraph writes: BLOCKED by governance (local runtime state only)
 - Design flow engine direct TwinGraph writes: BLOCKED by governance (orchestration-only local runtime layer)
 - Feedback layer direct TwinGraph writes: BLOCKED by governance (visual/runtime orchestration only)
+- Presence layer direct TwinGraph writes: BLOCKED by governance (micro-feedback signals only)
+- Presence layer direct geometry execution calls: BLOCKED by governance (read-only runtime enhancement)
 - OCCT runtime package availability on CI images: BLOCKED pending OCP/OCCT dependency provisioning for full boolean execution
 - Full workflow discovery on default branch: BLOCKED until repository default branch is switched to a branch containing `.github/workflows/` (e.g. `ci-root` or `feature/init-repo`)
 
