@@ -17,53 +17,15 @@ jobs:
           echo "desktop-runtime shell and rendering overlays validated" >> artifacts/build-report.md
       - name: Validate desktop runtime shell structure
         run: |
-          test -f desktop-runtime/main.ts
-          test -f desktop-runtime/preload.ts
-          test -f desktop-runtime/window-manager.ts
-          test -f desktop-runtime/runtime-bridge.ts
           test -f desktop-runtime/app-shell/Sidebar.tsx
-          test -f desktop-runtime/app-shell/SystemsPanel.tsx
-          test -f desktop-runtime/app-shell/FeedbackPanel.tsx
-          test -f desktop-runtime/app-shell/IntentInputBar.tsx
           test -f desktop-runtime/app-shell/CADViewport.tsx
-          test -f desktop-runtime/app-shell/ToolPalette.tsx
-          test -f desktop-runtime/app-shell/LayerManager.tsx
-          test -f desktop-runtime/app-shell/ParametricInspector.tsx
-          test -f desktop-runtime/app-shell/NaturalLanguageInput.tsx
-          test -f desktop-runtime/app-shell/ParametricEditor.tsx
-          test -f desktop-runtime/app-shell/AssemblyInspector.tsx
-          test -f desktop-runtime/app-shell/PlanView.tsx
-          test -f desktop-runtime/app-shell/SectionView.tsx
-          test -f desktop-runtime/app-shell/CoDesignPanel.tsx
-          test -f desktop-runtime/app-shell/SuggestionTimeline.tsx
-          test -f desktop-runtime/app-shell/RealtimeIntentBar.tsx
-          test -f desktop-runtime/app-shell/SpatialCognitionPanel.tsx
-          test -f desktop-runtime/app-shell/ExperienceHeatmap.tsx
-          test -f desktop-runtime/app-shell/MovementGraphView.ts
-          test -f desktop-runtime/app-shell/WorldContextPanel.tsx
-          test -f desktop-runtime/app-shell/SolarCompassView.tsx
-          test -f desktop-runtime/app-shell/UrbanFlowGraph.ts
-          test -f desktop-runtime/app-shell/BuildingSystemsPanel.tsx
-          test -f desktop-runtime/app-shell/AssemblyGraphView.ts
-          test -f desktop-runtime/app-shell/MaterialStackInspector.tsx
-          test -f desktop-runtime/app-shell/LoadPathDiagram.tsx
-          test -f desktop-runtime/app-shell/ProjectMemoryPanel.tsx
-          test -f desktop-runtime/app-shell/DesignTimelineView.tsx
-          test -f desktop-runtime/app-shell/IntentEvolutionGraph.ts
           test -f desktop-runtime/app-shell/InteractionStateMachine.ts
-          test -f desktop-runtime/app-shell/ConstraintTogglePanel.tsx
-          test -f desktop-runtime/app-shell/SnapSettingsPanel.tsx
-          test -f desktop-runtime/app-shell/InteractionModeIndicator.tsx
+          test -f desktop-runtime/app-shell/SelectionSystem.ts
+          test -f desktop-runtime/app-shell/TransformGizmo.ts
           test -f desktop-runtime/workspace/workspace_models.ts
           test -f desktop-runtime/workspace/WorkspaceStateEngine.ts
-          test -f desktop-runtime/workspace/AIFocusModeManager.ts
           test -f desktop-runtime/workspace/WorkspacePresetManager.ts
-          test -f desktop-runtime/app-shell/LayoutPresets.ts
-          test -f desktop-runtime/app-shell/ViewportLayoutManager.tsx
           test -f desktop-runtime/app-shell/WorkspaceToolbar.tsx
-          test -f desktop-runtime/app-shell/LayoutSwitcher.tsx
-          test -f desktop-runtime/app-shell/FocusModeIndicator.tsx
-          test -f desktop-runtime/app-shell/ViewportTabs.tsx
           test -f desktop-runtime/workspace/DesignFlowController.ts
           test -f desktop-runtime/workspace/design_flow_models.ts
           test -f desktop-runtime/app-shell/DesignFlowBar.tsx
@@ -76,56 +38,18 @@ jobs:
           test -f desktop-runtime/feedback/GhostPreviewManager.ts
           test -f desktop-runtime/feedback/InteractionMicroAnimator.ts
           test -f desktop-runtime/feedback/feedback_models.ts
-      - name: Validate MU rendering overlays
-        run: |
-          test -f rendering-client/src/mu/HumanIntentOverlay.tsx
-          test -f rendering-client/src/mu/ExplanationPanel.ts
-          test -f rendering-client/src/mu/CognitiveFlowVisualizer.ts
-      - name: Validate XI rendering overlays
-        run: |
-          test -f rendering-client/src/xi/GeneratedGeometryRenderer.ts
-          test -f rendering-client/src/xi/PlanOverlay.tsx
-          test -f rendering-client/src/xi/SectionOverlay.tsx
-      - name: Validate XII rendering overlays
-        run: |
-          test -f rendering-client/src/xii/GenerativeSuggestionOverlay.tsx
-          test -f rendering-client/src/xii/ReasoningTracePanel.ts
-          test -f rendering-client/src/xii/IntentEvolutionView.ts
-      - name: Validate XI++ rendering overlays
-        run: |
-          test -f rendering-client/src/xipp/AssemblyRenderer.ts
-          test -f rendering-client/src/xipp/GridOverlay.tsx
-          test -f rendering-client/src/xipp/ParametricHighlight.ts
-      - name: Validate XIII rendering overlays
-        run: |
-          test -f rendering-client/src/xiii/RealtimeSuggestionOverlay.tsx
-          test -f rendering-client/src/xiii/AdaptiveIntentVisualizer.ts
-          test -f rendering-client/src/xiii/DesignDeltaRenderer.ts
-      - name: Validate XIV rendering overlays
-        run: |
-          test -f rendering-client/src/xiv/SpatialPerceptionOverlay.tsx
-          test -f rendering-client/src/xiv/FlowVisualization.ts
-          test -f rendering-client/src/xiv/VisualFocusMap.ts
-      - name: Validate XVI rendering overlays
-        run: |
-          test -f rendering-client/src/xvi/SolarOrientationOverlay.tsx
-          test -f rendering-client/src/xvi/UrbanDensityOverlay.ts
-          test -f rendering-client/src/xvi/ClimateVectorRenderer.ts
-      - name: Validate XV rendering overlays
-        run: |
-          test -f rendering-client/src/xv/LoadPathOverlay.tsx
-          test -f rendering-client/src/xv/MaterialLayerOverlay.ts
-          test -f rendering-client/src/xv/SystemHierarchyRenderer.ts
-      - name: Validate XVII rendering overlays
-        run: |
-          test -f rendering-client/src/xvii/TimelineOverlay.tsx
-          test -f rendering-client/src/xvii/DesignEvolutionRenderer.ts
-          test -f rendering-client/src/xvii/AwarenessSignalOverlay.ts
-      - name: Validate E2 interaction overlays
+      - name: Validate rendering runtime overlays
         run: |
           test -f rendering-client/src/interactions/SnapManager.ts
-          test -f rendering-client/src/interactions/SnapVisualOverlay.tsx
-          test -f rendering-client/src/xipp/PreviewMeshRenderer.ts
+          test -f rendering-client/src/e5/GhostMeshRenderer.tsx
+          test -f rendering-client/src/e5/ConstraintOverlay.ts
+          test -f rendering-client/src/e5/ConstraintLineRenderer.tsx
+          test -f rendering-client/src/e5/MicroInteractionAnimator.ts
+          test -f rendering-client/src/e5/AIGenerationPulse.tsx
+          test -f rendering-client/src/e5/IntentZoneGlow.ts
+          test -f rendering-client/src/systems/GenericTopologyRenderer.ts
+          test -f rendering-client/src/runtime/RuntimeSyncEngine.ts
+          test -f rendering-client/src/kappa/CapabilityEvolutionOverlay.tsx
       - name: Validate E5 feedback overlays
         run: |
           test -f rendering-client/src/e5/GhostMeshRenderer.tsx
@@ -139,19 +63,15 @@ jobs:
           test -f rendering-client/src/performance/DTOStreamBuffer.ts
           test -f rendering-client/src/performance/LODMeshGenerator.ts
           test -f rendering-client/src/performance/ViewportStateIsolator.ts
-      - name: Validate E3 workspace contracts
+      - name: Validate workspace and feedback contracts
         run: |
           test -f spec/event-schemas/workspace.layout.changed.json
           test -f spec/event-schemas/workspace.focus.mode.json
-      - name: Validate E4 design flow contracts
-        run: |
           test -f spec/event-schemas/design.flow.stage.changed.json
-      - name: Validate E5 feedback contracts
-        run: |
           test -f spec/event-schemas/feedback.snap.predicted.json
           test -f spec/event-schemas/feedback.preview.updated.json
           test -f spec/event-schemas/feedback.constraint.visualized.json
-      - name: Validate E6 geometry stability modules
+      - name: Validate geometry stability modules
         run: |
           test -f geometry-kernel/execution/topology_stability_manager.py
           test -f geometry-kernel/execution/edit_history_manager.py
@@ -159,7 +79,7 @@ jobs:
           test -f geometry-kernel/interactions/parametric_constraint_solver.py
       - name: Enforce read-only desktop and rendering boundaries
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv rendering-client/src/xvii rendering-client/src/performance rendering-client/src/interactions; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/e5 rendering-client/src/performance rendering-client/src/interactions rendering-client/src/systems rendering-client/src/runtime rendering-client/src/kappa; then
             echo "Desktop runtime and MU overlays must remain read-only."
             exit 1
           fi

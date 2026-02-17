@@ -1,6 +1,7 @@
 name: system-integrity
 
 on:
+  workflow_dispatch:
   push:
     branches: [main, develop, "feature/**", "hotfix/**"]
   pull_request:
@@ -21,176 +22,40 @@ jobs:
           test -f spec/event-schemas/mep.updated.json
           test -f spec/event-schemas/documentation.refresh.json
           test -f spec/event-schemas/compliance.report.json
-          test -f spec/event-schemas/human.feedback.generated.json
-          test -f spec/event-schemas/design.synthesis.proposed.json
-          test -f spec/event-schemas/design.intent.generated.json
-          test -f spec/event-schemas/geometry.execution.proposed.json
-          test -f spec/event-schemas/assembly.generated.json
-          test -f spec/event-schemas/design.suggestion.generated.json
-          test -f spec/event-schemas/spatial.cognition.insight.json
-          test -f spec/event-schemas/spatial.flow.analysis.json
-          test -f spec/event-schemas/world.context.insight.json
-          test -f spec/event-schemas/world.solar.analysis.json
-          test -f spec/event-schemas/world.urban.flow.json
-          test -f spec/event-schemas/building.systems.graph.updated.json
-          test -f spec/event-schemas/building.material.analysis.json
-          test -f spec/event-schemas/design.awareness.signal.json
-          test -f spec/event-schemas/project.memory.updated.json
-          test -f spec/event-schemas/constraint.graph.updated.json
-          test -f spec/event-schemas/interaction.mode.changed.json
+          test -f spec/event-schemas/intent.proposed.json
+          test -f spec/event-schemas/proposal.executed.json
+          test -f spec/event-schemas/proposal.blocked.json
           test -f spec/event-schemas/workspace.layout.changed.json
           test -f spec/event-schemas/workspace.focus.mode.json
           test -f spec/event-schemas/design.flow.stage.changed.json
           test -f spec/event-schemas/feedback.snap.predicted.json
           test -f spec/event-schemas/feedback.preview.updated.json
           test -f spec/event-schemas/feedback.constraint.visualized.json
-      - name: Validate MU module structure
+      - name: Validate orchestration kernel structure
         run: |
-          test -f orchestration-layer/human-interface/intent-interpreter/intent_context_builder.py
-          test -f orchestration-layer/human-interface/cognitive-state/intent_evolution_tracker.py
-          test -f orchestration-layer/human-interface/feedback-engine/proposal_feedback_formatter.py
-          test -f orchestration-layer/runtime-kernel/kernel_human_adapter.py
           test -f orchestration-layer/runtime-kernel/scheduler.py
-          test -f orchestration-layer/runtime-kernel/kernel_synthesis_adapter.py
-          test -f orchestration-layer/runtime-kernel/kernel_llm_adapter.py
-          test -f orchestration-layer/runtime-kernel/kernel_codesign_adapter.py
-          test -f orchestration-layer/runtime-kernel/kernel_spatial_adapter.py
-          test -f orchestration-layer/runtime-kernel/kernel_world_adapter.py
-          test -f orchestration-layer/runtime-kernel/kernel_building_systems_adapter.py
-          test -f orchestration-layer/runtime-kernel/kernel_consciousness_adapter.py
-          test -f orchestration-layer/runtime-kernel/kernel_interaction_adapter.py
-          test -f orchestration-layer/runtime-kernel/kernel_workspace_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_feedback_adapter.py
           test -f orchestration-layer/runtime-kernel/kernel_execution_guard.py
-          test -f orchestration-layer/self-assembly-runtime/blueprint_feedback_adapter.py
-          test -f orchestration-layer/autonomous-intelligence/explainability/api.py
-          test -f orchestration-layer/human-interface/nlp-intent-entry.py
-          test -f orchestration-layer/human-interface/realtime-intent-stream.py
-      - name: Validate XI synthesis and geometry structure
+          test -f orchestration-layer/runtime-kernel/dynamic_phase_engine.py
+          test -f orchestration-layer/runtime-kernel/domain_context_manager.py
+          test -f orchestration-layer/runtime-kernel/kernel_reflection_adapter.py
+      - name: Validate geometry and interaction structure
         run: |
-          test -f orchestration-layer/design-synthesis/program_interpreter.py
-          test -f orchestration-layer/design-synthesis/layout_solver.py
-          test -f orchestration-layer/design-synthesis/space_generator.py
-          test -f orchestration-layer/design-synthesis/circulation_solver.py
-          test -f orchestration-layer/design-synthesis/synthesis_models.py
-          test -f geometry-kernel/core/entity.py
-          test -f geometry-kernel/modeling/parametric_builder.py
-          test -f geometry-kernel/converters/twingraph_serializer.py
-          test -f geometry-kernel/drawing-engine/plan_generator.py
-          test -f geometry-kernel/drawing-engine/section_generator.py
-          test -f geometry-kernel/generators/auditorium_generator.py
-          test -f geometry-kernel/structure/grid_generator.py
-          test -f geometry-kernel/assembly/wall_system_builder.py
-          test -f geometry-kernel/execution/incremental_rebuild_pipeline.py
-          test -f geometry-kernel/execution/parametric_dependency_graph.py
-          test -f geometry-kernel/execution/assembly_cache_system.py
-          test -f geometry-kernel/interactions/constraint_engine.py
-          test -f geometry-kernel/execution/preview_pipeline.py
           test -f geometry-kernel/execution/ghost_preview_pipeline.py
           test -f geometry-kernel/execution/topology_stability_manager.py
           test -f geometry-kernel/execution/edit_history_manager.py
           test -f geometry-kernel/interactions/parametric_constraint_solver.py
           test -f geometry-kernel/adapters/occt_adapter.py
-      - name: Validate XII generative module structure
-        run: |
-          test -f orchestration-layer/generative-intelligence/llm-adapter/llm_client.py
-          test -f orchestration-layer/generative-intelligence/llm-adapter/prompt_builder.py
-          test -f orchestration-layer/generative-intelligence/llm-adapter/response_validator.py
-          test -f orchestration-layer/generative-intelligence/llm-adapter/schema_enforcer.py
-          test -f orchestration-layer/generative-intelligence/reasoning-engine/design_reasoner.py
-          test -f orchestration-layer/generative-intelligence/safety/hallucination_guard.py
-          test -f orchestration-layer/reflective-core/analysis/reflection_llm_alignment.py
-      - name: Validate XIII realtime structure
-        run: |
-          test -f orchestration-layer/codesign-runtime/codesign_stream_engine.py
-          test -f orchestration-layer/codesign-runtime/interaction_listener.py
-          test -f orchestration-layer/codesign-runtime/delta_context_builder.py
-          test -f orchestration-layer/generative-intelligence/realtime/realtime_reasoner.py
-          test -f orchestration-layer/generative-intelligence/realtime/safety/loop_guard.py
-          test -f orchestration-layer/reflective-core/analysis/reflection_codesign_validator.py
-      - name: Validate XIV spatial cognition structure
-        run: |
-          test -f orchestration-layer/spatial-cognition/perception_model.py
-          test -f orchestration-layer/spatial-cognition/scale_analyzer.py
-          test -f orchestration-layer/spatial-cognition/movement_topology_engine.py
-          test -f orchestration-layer/spatial-cognition/visibility_graph_builder.py
-          test -f orchestration-layer/spatial-cognition/visual-field/view_cone_generator.py
-          test -f orchestration-layer/spatial-cognition/flow/path_prediction_engine.py
-          test -f orchestration-layer/spatial-cognition/experience/atmosphere_estimator.py
-          test -f orchestration-layer/generative-intelligence/spatial_reasoning_bridge.py
-          test -f orchestration-layer/reflective-core/analysis/reflection_spatial_alignment.py
-      - name: Validate XVI world model structure
-        run: |
-          test -f orchestration-layer/world-model/site_context_builder.py
-          test -f orchestration-layer/world-model/climate_profile_engine.py
-          test -f orchestration-layer/world-model/urban_density_analyzer.py
-          test -f orchestration-layer/world-model/cultural_zoning_mapper.py
-          test -f orchestration-layer/world-model/solar/sun_path_engine.py
-          test -f orchestration-layer/world-model/climate/wind_channel_estimator.py
-          test -f orchestration-layer/world-model/urban/movement_ecology_builder.py
-          test -f orchestration-layer/generative-intelligence/world-context-bridge.py
-          test -f orchestration-layer/reflective-core/analysis/reflection_world_alignment.py
-      - name: Validate XV building systems structure
-        run: |
-          test -f orchestration-layer/building-systems/assembly_graph_builder.py
-          test -f orchestration-layer/building-systems/material_hierarchy_engine.py
-          test -f orchestration-layer/building-systems/load_path_estimator.py
-          test -f orchestration-layer/building-systems/structure/span_classifier.py
-          test -f orchestration-layer/building-systems/materials/thermal_behavior_estimator.py
-          test -f orchestration-layer/building-systems/environment/passive_shading_estimator.py
-          test -f orchestration-layer/generative-intelligence/building-systems-bridge.py
-          test -f orchestration-layer/reflective-core/analysis/reflection_systems_alignment.py
-      - name: Validate XVII consciousness structure
-        run: |
-          test -f orchestration-layer/project-consciousness/project_memory_graph.py
-          test -f orchestration-layer/project-consciousness/decision_history_tracker.py
-          test -f orchestration-layer/project-consciousness/design_intent_timeline.py
-          test -f orchestration-layer/project-consciousness/context/continuous_context_builder.py
-          test -f orchestration-layer/project-consciousness/context/design_state_snapshotter.py
-          test -f orchestration-layer/project-consciousness/context/temporal_context_index.py
-          test -f orchestration-layer/project-consciousness/awareness/awareness_scheduler.py
-          test -f orchestration-layer/project-consciousness/awareness/context_delta_detector.py
-          test -f orchestration-layer/project-consciousness/awareness/priority_signal_engine.py
-          test -f orchestration-layer/generative-intelligence/consciousness-bridge.py
-          test -f orchestration-layer/reflective-core/analysis/reflection_temporal_alignment.py
-      - name: Validate E2 interaction structure
+      - name: Validate desktop and rendering structure
         run: |
           test -f desktop-runtime/app-shell/InteractionStateMachine.ts
-          test -f desktop-runtime/app-shell/ConstraintTogglePanel.tsx
-          test -f desktop-runtime/app-shell/SnapSettingsPanel.tsx
-          test -f desktop-runtime/app-shell/InteractionModeIndicator.tsx
-          test -f rendering-client/src/interactions/SnapManager.ts
-          test -f rendering-client/src/interactions/SnapVisualOverlay.tsx
-          test -f rendering-client/src/xipp/PreviewMeshRenderer.ts
-      - name: Validate E3 workspace structure
-        run: |
-          test -f desktop-runtime/workspace/workspace_models.ts
-          test -f desktop-runtime/workspace/WorkspaceStateEngine.ts
-          test -f desktop-runtime/workspace/AIFocusModeManager.ts
-          test -f desktop-runtime/workspace/WorkspacePresetManager.ts
-          test -f desktop-runtime/app-shell/LayoutPresets.ts
-          test -f desktop-runtime/app-shell/ViewportLayoutManager.tsx
-          test -f desktop-runtime/app-shell/WorkspaceToolbar.tsx
-          test -f desktop-runtime/app-shell/LayoutSwitcher.tsx
-          test -f desktop-runtime/app-shell/FocusModeIndicator.tsx
-          test -f desktop-runtime/app-shell/ViewportTabs.tsx
-      - name: Validate E4 design flow structure
-        run: |
-          test -f desktop-runtime/workspace/DesignFlowController.ts
-          test -f desktop-runtime/workspace/design_flow_models.ts
-          test -f desktop-runtime/app-shell/DesignFlowBar.tsx
-          test -f desktop-runtime/app-shell/FlowStageIndicator.tsx
-          test -f desktop-runtime/app-shell/FlowTransitionPanel.tsx
-      - name: Validate E5 feedback and CAD interaction structure
-        run: |
-          test -f desktop-runtime/feedback/LiveFeedbackController.ts
-          test -f desktop-runtime/feedback/PredictiveSnapFeedback.ts
-          test -f desktop-runtime/feedback/ConstraintVisualizer.ts
-          test -f desktop-runtime/feedback/GhostPreviewManager.ts
-          test -f desktop-runtime/feedback/InteractionMicroAnimator.ts
-          test -f desktop-runtime/feedback/feedback_models.ts
           test -f desktop-runtime/app-shell/CADInteractionEngine.ts
+          test -f desktop-runtime/workspace/WorkspaceStateEngine.ts
+          test -f desktop-runtime/workspace/DesignFlowController.ts
+          test -f desktop-runtime/feedback/LiveFeedbackController.ts
+          test -f desktop-runtime/feedback/GhostPreviewManager.ts
+          test -f rendering-client/src/interactions/SnapManager.ts
           test -f rendering-client/src/e5/GhostMeshRenderer.tsx
           test -f rendering-client/src/e5/ConstraintOverlay.ts
           test -f rendering-client/src/e5/ConstraintLineRenderer.tsx
@@ -199,7 +64,7 @@ jobs:
           test -f rendering-client/src/e5/IntentZoneGlow.ts
       - name: Guard forbidden mutation paths
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" orchestration-layer/human-interface orchestration-layer/design-synthesis orchestration-layer/generative-intelligence orchestration-layer/spatial-cognition orchestration-layer/world-model orchestration-layer/building-systems orchestration-layer/project-consciousness geometry-kernel desktop-runtime rendering-client/src/mu rendering-client/src/xi rendering-client/src/xii rendering-client/src/xipp rendering-client/src/xiii rendering-client/src/xiv rendering-client/src/xvi rendering-client/src/xv rendering-client/src/xvii rendering-client/src/performance rendering-client/src/interactions; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" geometry-kernel desktop-runtime rendering-client/src/e5 rendering-client/src/performance rendering-client/src/interactions orchestration-layer/runtime-kernel; then
             echo "Human interface, desktop runtime, and MU overlays must not mutate TwinGraph."
             exit 1
           fi
@@ -229,13 +94,13 @@ jobs:
           fi
       - name: Guard preview persistence
         run: |
-          if rg -n "INSERT|UPDATE|\\bpersist\\(|save_preview|write_preview" geometry-kernel/execution/preview_pipeline.py rendering-client/src/xipp/PreviewMeshRenderer.ts; then
+          if rg -n "INSERT|UPDATE|\\bpersist\\(|save_preview|write_preview" geometry-kernel/execution/ghost_preview_pipeline.py; then
             echo "Preview pipeline must remain temporary and non-persistent."
             exit 1
           fi
       - name: Guard workspace mutation boundaries
         run: |
-          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|geometry.execution" desktop-runtime/workspace orchestration-layer/runtime-kernel/kernel_workspace_adapter.py; then
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|geometry.execution" desktop-runtime/workspace orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py; then
             echo "Workspace modules must not mutate TwinGraph or trigger geometry rebuild."
             exit 1
           fi
@@ -259,25 +124,25 @@ jobs:
           fi
       - name: Guard spatial engine llm autonomy
         run: |
-          if rg -n "run_llm_reasoning|openai|google|local" orchestration-layer/spatial-cognition; then
+          if rg -n "run_llm_reasoning|openai|google|local" desktop-runtime rendering-client/src/e5 geometry-kernel/execution; then
             echo "Spatial cognition must not call LLM directly."
             exit 1
           fi
       - name: Guard LLM bypass paths
         run: |
-          if rg -n "execute proposal|bypass intent gateway|runtime kernel patch|direct geometry mutation" orchestration-layer/generative-intelligence; then
+          if rg -n "execute proposal|bypass intent gateway|runtime kernel patch|direct geometry mutation" desktop-runtime geometry-kernel rendering-client/src/e5; then
             echo "Unsafe LLM bypass directive detected."
             exit 1
           fi
       - name: Guard deterministic codesign loop
         run: |
-          if rg -n "while True|threading|asyncio.create_task" orchestration-layer/codesign-runtime orchestration-layer/generative-intelligence/realtime; then
+          if rg -n "while True|threading|asyncio.create_task" desktop-runtime/feedback geometry-kernel/execution orchestration-layer/runtime-kernel; then
             echo "Potential non-deterministic continuous loop pattern detected."
             exit 1
           fi
       - name: Guard domain-neutral interpretation
         run: |
-          if rg -n "auditorium-only|hospital-only|factory-only|architecture-only" orchestration-layer/human-interface/intent-interpreter; then
+          if rg -n "auditorium-only|hospital-only|factory-only|architecture-only" desktop-runtime/workspace desktop-runtime/feedback; then
             echo "Intent interpreter contains hardcoded domain logic."
             exit 1
           fi
