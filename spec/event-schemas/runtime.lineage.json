@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "archflow.event.runtime.lineage",
+  "title": "RuntimeLineageEnvelope",
+  "type": "object",
+  "properties": {
+    "event_id": { "type": "string" },
+    "parent_event_id": { "type": ["string", "null"] },
+    "execution_id": { "type": ["string", "null"] },
+    "runtime_cycle_id": { "type": ["string", "null"] },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "required": ["event_id", "parent_event_id", "execution_id", "runtime_cycle_id", "timestamp"],
+  "additionalProperties": false
+}

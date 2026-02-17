@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "node_id": {"type": "string"},
+    "rt60_seconds": {"type": "number"},
+    "solver_id": {"type": "string"},
+    "timestamp": {"type": "string", "format": "date-time"}
+  },
+  "required": ["node_id", "rt60_seconds", "solver_id", "timestamp"],
+  "additionalProperties": false
+}

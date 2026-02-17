@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "archflow.event.reflection.capability.proposed",
+  "title": "ReflectionCapabilityProposedPayload",
+  "type": "object",
+  "properties": {
+    "proposal_id": { "type": "string" },
+    "action": { "type": "string" },
+    "capabilities": { "type": "array", "items": { "type": "string" } },
+    "rationale": { "type": "string" }
+  },
+  "required": ["proposal_id", "action", "capabilities", "rationale"],
+  "additionalProperties": false
+}

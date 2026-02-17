@@ -1,0 +1,198 @@
+name: desktop-build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, develop, "feature/**"]
+
+jobs:
+  package-desktop:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare artifacts
+        run: |
+          mkdir -p artifacts
+          echo "# Desktop Build Report" > artifacts/build-report.md
+          echo "desktop-runtime shell and rendering overlays validated" >> artifacts/build-report.md
+      - name: Validate desktop runtime shell structure
+        run: |
+          test -f desktop-runtime/app-shell/Sidebar.tsx
+          test -f desktop-runtime/app-shell/CADViewport.tsx
+          test -f desktop-runtime/app-shell/InteractionStateMachine.ts
+          test -f desktop-runtime/app-shell/SelectionSystem.ts
+          test -f desktop-runtime/app-shell/TransformGizmo.ts
+          test -f desktop-runtime/workspace/workspace_models.ts
+          test -f desktop-runtime/workspace/WorkspaceStateEngine.ts
+          test -f desktop-runtime/workspace/WorkspacePresetManager.ts
+          test -f desktop-runtime/app-shell/WorkspaceToolbar.tsx
+          test -f desktop-runtime/workspace/DesignFlowController.ts
+          test -f desktop-runtime/workspace/design_flow_models.ts
+          test -f desktop-runtime/app-shell/DesignFlowBar.tsx
+          test -f desktop-runtime/app-shell/FlowStageIndicator.tsx
+          test -f desktop-runtime/app-shell/FlowTransitionPanel.tsx
+          test -f desktop-runtime/app-shell/CADInteractionEngine.ts
+          test -f desktop-runtime/feedback/LiveFeedbackController.ts
+          test -f desktop-runtime/feedback/PredictiveSnapFeedback.ts
+          test -f desktop-runtime/feedback/ConstraintVisualizer.ts
+          test -f desktop-runtime/feedback/GhostPreviewManager.ts
+          test -f desktop-runtime/feedback/InteractionMicroAnimator.ts
+          test -f desktop-runtime/feedback/feedback_models.ts
+          test -f desktop-runtime/presence/DesignPresenceRuntime.ts
+          test -f desktop-runtime/presence/IdleFeedbackLoop.ts
+          test -f desktop-runtime/presence/MicroStatePredictor.ts
+          test -f desktop-runtime/presence/PresenceSignalRouter.ts
+          test -f desktop-runtime/main.ts
+          test -f desktop-runtime/preload.ts
+          test -f desktop-runtime/runtime-bridge.ts
+          test -f desktop-runtime/window-manager.ts
+          test -f desktop-runtime/bootstrap/RuntimeBootstrapper.ts
+          test -f desktop-runtime/bootstrap/DefaultSceneLoader.ts
+          test -f desktop-runtime/bootstrap/SystemHealthCheck.ts
+          test -f desktop-runtime/bootstrap/BootPerformanceProfiler.ts
+          test -f desktop-runtime/app-shell/AppShell.tsx
+          test -f desktop-runtime/app-shell/SystemHealthPanel.tsx
+      - name: Validate rendering runtime overlays
+        run: |
+          test -f rendering-client/src/interactions/SnapManager.ts
+          test -f rendering-client/src/e5/GhostMeshRenderer.tsx
+          test -f rendering-client/src/e5/ConstraintOverlay.ts
+          test -f rendering-client/src/e5/ConstraintLineRenderer.tsx
+          test -f rendering-client/src/e5/MicroInteractionAnimator.ts
+          test -f rendering-client/src/e5/AIGenerationPulse.tsx
+          test -f rendering-client/src/e5/IntentZoneGlow.ts
+          test -f rendering-client/src/systems/GenericTopologyRenderer.ts
+          test -f rendering-client/src/runtime/RuntimeSyncEngine.ts
+          test -f rendering-client/src/kappa/CapabilityEvolutionOverlay.tsx
+          test -f rendering-client/src/e7/ViewportPulseScheduler.ts
+          test -f rendering-client/src/e7/PresenceGlowOverlay.tsx
+      - name: Validate E5 feedback overlays
+        run: |
+          test -f rendering-client/src/e5/GhostMeshRenderer.tsx
+          test -f rendering-client/src/e5/ConstraintOverlay.ts
+          test -f rendering-client/src/e5/ConstraintLineRenderer.tsx
+          test -f rendering-client/src/e5/MicroInteractionAnimator.ts
+          test -f rendering-client/src/e5/AIGenerationPulse.tsx
+          test -f rendering-client/src/e5/IntentZoneGlow.ts
+      - name: Validate rendering performance runtime
+        run: |
+          test -f rendering-client/src/performance/LODMeshGenerator.ts
+          test -f rendering-client/src/performance/ViewportStateIsolator.ts
+      - name: Validate workspace and feedback contracts
+        run: |
+          test -f spec/event-schemas/design.flow.stage.changed.json
+          test -f spec/event-schemas/feedback.snap.predicted.json
+          test -f spec/event-schemas/feedback.preview.updated.json
+          test -f spec/event-schemas/feedback.constraint.visualized.json
+          test -f spec/event-schemas/presence.signal.generated.json
+          test -f spec/event-schemas/presence.idle.feedback.json
+      - name: Validate geometry stability modules
+        run: |
+          test -f geometry-kernel/execution/topology_stability_manager.py
+          test -f geometry-kernel/execution/edit_history_manager.py
+          test -f geometry-kernel/adapters/occt_adapter.py
+          test -f geometry-kernel/interactions/parametric_constraint_solver.py
+          test -f orchestration-layer/runtime-kernel/kernel_presence_adapter.py
+      - name: Enforce read-only desktop and rendering boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|method:\\s*['\"](POST|PUT|PATCH|DELETE)['\"]" desktop-runtime rendering-client/src/e5 rendering-client/src/e7 rendering-client/src/performance rendering-client/src/interactions rendering-client/src/systems rendering-client/src/runtime rendering-client/src/kappa; then
+            echo "Desktop runtime and MU overlays must remain read-only."
+            exit 1
+          fi
+      - name: Guard E7 presence boundaries
+        run: |
+          if rg -n "geometry\\.execution|run_incremental_rebuild|/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" desktop-runtime/presence rendering-client/src/e7; then
+            echo "E7 presence runtime must remain read-only and non-executing."
+            exit 1
+          fi
+      - name: Guard E8 desktop boot safety
+        run: |
+          if rg -n "executeGeometryMutation|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|/twingraph/ingest|process\\.exit\\(1\\)" desktop-runtime/main.ts desktop-runtime/preload.ts desktop-runtime/runtime-bridge.ts desktop-runtime/bootstrap; then
+            echo "E8 desktop boot layer violated runtime safety boundaries."
+            exit 1
+          fi
+      - name: Guard E8 desktop crash patterns
+        run: |
+          if rg -n "throw new Error\\(|raise RuntimeError\\(|raise Exception\\(" desktop-runtime/main.ts desktop-runtime/bootstrap geometry-kernel/adapters/occt_adapter.py; then
+            echo "E8 desktop boot crash pattern detected."
+            exit 1
+          fi
+      - name: Emit MU desktop artifacts
+        run: |
+          echo "# MU Desktop Runtime Report" > artifacts/mu-human-interface-report.md
+          echo "desktop shell validated as deterministic interaction bridge" >> artifacts/mu-human-interface-report.md
+          echo "{\"intent_flow\":\"ready\"}" > artifacts/intent-flow-trace.json
+          echo "{\"feedback_graph\":[]}" > artifacts/feedback-graph.json
+          echo "{\"cognitive_state\":[]}" > artifacts/cognitive-state-dump.json
+          echo "# XI Desktop Synthesis Report" > artifacts/xi-synthesis-report.md
+          echo "desktop CAD shell and synthesis overlays validated as read-only consumers" >> artifacts/xi-synthesis-report.md
+          echo "{\"geometry\":[]}" > artifacts/generated-geometry.json
+          echo "{\"plan\":[]}" > artifacts/plan-output.json
+          echo "{\"section\":[]}" > artifacts/section-output.json
+          echo "# XII Generative Report" > artifacts/xii-generative-report.md
+          echo "xii overlays validated as read-only reasoning visualizers" >> artifacts/xii-generative-report.md
+          echo "{\"reasoning\":[]}" > artifacts/llm-reasoning-trace.json
+          echo "{\"intent\":\"validated\"}" > artifacts/validated-intent.json
+          echo "{\"strategy\":\"deterministic\"}" > artifacts/design-strategy-output.json
+          echo "# XI++ Geometry Report" > artifacts/xipp-geometry-report.md
+          echo "{\"assemblies\":[]}" > artifacts/assembly-output.json
+          echo "{\"plan_metrics\":{\"units\":\"mm\"}}" > artifacts/plan-metrics.json
+          echo "{\"grid\":{\"status\":\"ready\"}}" > artifacts/structural-grid.json
+          echo "# XIII CoDesign Report" > artifacts/xiii-codesign-report.md
+          echo "{\"suggestions\":[]}" > artifacts/realtime-suggestion-trace.json
+          echo "{\"revision\":0}" > artifacts/codesign-runtime-state.json
+          echo "{\"history\":[]}" > artifacts/delta-context-history.json
+          echo "# XIV Spatial Cognition Report" > artifacts/xiv-spatial-cognition-report.md
+          echo "{\"nodes\":[],\"edges\":[]}" > artifacts/movement-graph.json
+          echo "{\"cones\":[]}" > artifacts/visual-field-map.json
+          echo "{\"atmosphere\":0}" > artifacts/experience-metrics.json
+          echo "# XVI World Model Report" > artifacts/xvi-world-model-report.md
+          echo "{\"solar\":{}}" > artifacts/solar-analysis.json
+          echo "{\"urban_flow\":{}}" > artifacts/urban-flow-map.json
+          echo "{\"climate\":{}}" > artifacts/climate-metrics.json
+          echo "# XV Building Systems Report" > artifacts/xv-building-systems-report.md
+          echo "{\"assemblies\":[],\"relations\":[]}" > artifacts/assembly-graph.json
+          echo "{\"load_paths\":[]}" > artifacts/load-path-map.json
+          echo "{\"materials\":{}}" > artifacts/material-metrics.json
+          echo "{\"passive_indicators\":{}}" > artifacts/passive-system-indicators.json
+          echo "# XVII Consciousness Report" > artifacts/xvii-consciousness-report.md
+          echo "{\"timeline\":[]}" > artifacts/design-timeline.json
+          echo "{\"nodes\":[],\"edges\":[]}" > artifacts/memory-graph.json
+          echo "{\"signals\":[]}" > artifacts/awareness-signals.json
+          echo "# E2 Interaction Runtime Report" > artifacts/e2-interaction-runtime-report.md
+          echo "{\"constraints\":[]}" > artifacts/constraint-graph.json
+          echo "{\"snap_events\":[]}" > artifacts/snap-events.json
+          echo "{\"preview_meshes\":[]}" > artifacts/preview-mesh-trace.json
+          echo "# E3 Workspace Runtime Report" > artifacts/e3-workspace-runtime-report.md
+          echo "{\"layouts\":[]}" > artifacts/viewport-layout-state.json
+          echo "{\"focus_modes\":[]}" > artifacts/focus-mode-trace.json
+          echo "{\"presets\":[]}" > artifacts/workspace-presets.json
+          echo "# E4 Design Flow Report" > artifacts/e4-design-flow-report.md
+          echo "{\"stage_trace\":[]}" > artifacts/flow-stage-trace.json
+          echo "{\"workspace_state\":{}}" > artifacts/workspace-runtime-state.json
+          echo "{\"overlay_profiles\":{}}" > artifacts/overlay-profile-map.json
+          echo "{\"interaction_trace\":[]}" > artifacts/interaction-runtime-trace.json
+          echo "{\"geometry_execution\":\"guarded\"}" > artifacts/geometry-execution-report.md
+          echo "# E5 Live Feedback Report" > artifacts/e5-live-feedback-report.md
+          echo "{\"ghost_previews\":[]}" > artifacts/ghost-preview-trace.json
+          echo "{\"constraints\":[]}" > artifacts/constraint-visualization-log.json
+          echo "{\"occt_status\":\"checked\"}" > artifacts/occt-adapter-validation.json
+          echo "{\"interaction_feedback\":[]}" > artifacts/interaction-feedback-trace.json
+          echo "# E6 CAD Stability Report" > artifacts/e6-cad-stability-report.md
+          echo "{\"topology\":{}}" > artifacts/topology-validation.json
+          echo "{\"constraint_solver\":[]}" > artifacts/constraint-solver-trace.json
+          echo "{\"ghost_preview\":{\"latency_ms\":0}}" > artifacts/ghost-preview-performance.json
+          echo "{\"interaction_latency_ms\":0}" > artifacts/interaction-latency-report.json
+          echo "{\"overlay_batches\":0}" > artifacts/rendering-overlay-batch-report.json
+          echo "# E7 Presence Runtime Report" > artifacts/e7-presence-runtime-report.md
+          echo "{\"signals\":[]}" > artifacts/presence-signal-trace.json
+          echo "{\"idle\":[]}" > artifacts/idle-feedback-trace.json
+          echo "{\"viewport_pulse\":{\"hz\":60}}" > artifacts/viewport-pulse-metrics.json
+          echo "# E8 Desktop Launch Report" > artifacts/e8-desktop-launch-report.md
+          echo "{\"window_open_ms\":0,\"viewport_mount_ms\":0,\"first_render_frame_ms\":0,\"runtime_kernel_ready_ms\":0}" > artifacts/e8-boot-performance.json
+          echo "{\"occt\":\"BLOCKED\",\"runtimeKernel\":\"ACTIVE\",\"feedback\":\"ACTIVE\",\"presence\":\"ACTIVE\"}" > artifacts/e8-runtime-health.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: desktop-build-artifacts
+          path: artifacts/

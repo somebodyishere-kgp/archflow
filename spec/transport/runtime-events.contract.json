@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "archflow.transport.runtime-events.contract",
+  "title": "RuntimeEventContract",
+  "type": "object",
+  "properties": {
+    "event_id": { "type": "string" },
+    "parent_event_id": { "type": ["string", "null"] },
+    "source_module": { "type": "string" },
+    "event_name": { "type": "string" },
+    "payload": { "type": "object" },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "event_id",
+    "parent_event_id",
+    "source_module",
+    "event_name",
+    "payload",
+    "timestamp"
+  ],
+  "additionalProperties": false
+}

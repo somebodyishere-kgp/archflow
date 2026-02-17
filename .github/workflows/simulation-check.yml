@@ -1,0 +1,30 @@
+name: simulation-check
+
+on:
+  push:
+    branches: [main, develop, "feature/**", "hotfix/**"]
+  pull_request:
+
+jobs:
+  simulation-smoke:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify simulation directories exist
+        run: |
+          test -d simulation-services/energyplus
+          test -d simulation-services/radiance
+          test -d simulation-services/acoustic-sim
+      - name: Fail until deterministic smoke scenarios are added
+        run: |
+          mkdir -p artifacts
+          echo "# Build Report" > artifacts/build-report.md
+          echo "simulation-check blocked in Sprint 0" >> artifacts/build-report.md
+          echo "{\"status\":\"blocked\"}" > artifacts/event-audit.json
+          echo "simulation scenarios missing under simulation-services/tests/" > artifacts/schema-validation.log
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: simulation-check-artifacts
+          path: artifacts/

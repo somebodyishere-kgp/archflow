@@ -1,0 +1,13 @@
+{
+  "name": "archflow-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "main": "desktop-runtime/main.ts",
+  "scripts": {
+    "archflow": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^37.2.0"
+  }
+}
+

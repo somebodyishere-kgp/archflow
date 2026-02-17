@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "design.flow.stage.changed",
+  "type": "object",
+  "required": ["event_name", "workspace_id", "from_stage", "to_stage", "timestamp"],
+  "properties": {
+    "event_name": { "const": "design.flow.stage.changed" },
+    "workspace_id": { "type": "string", "minLength": 1 },
+    "from_stage": { "type": "string", "enum": ["concept", "layout", "systems", "spatial", "presentation"] },
+    "to_stage": { "type": "string", "enum": ["concept", "layout", "systems", "spatial", "presentation"] },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

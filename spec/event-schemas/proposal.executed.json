@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "archflow.event.proposal.executed",
+  "title": "ProposalExecutedPayload",
+  "type": "object",
+  "properties": {
+    "proposal_id": { "type": "string" },
+    "execution_id": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "executed_mutation_requests": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "execution_status": {
+      "type": "string",
+      "enum": ["EXECUTED", "SKIPPED"]
+    }
+  },
+  "required": [
+    "proposal_id",
+    "execution_id",
+    "timestamp",
+    "executed_mutation_requests",
+    "execution_status"
+  ],
+  "additionalProperties": false
+}

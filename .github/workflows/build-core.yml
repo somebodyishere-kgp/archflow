@@ -1,0 +1,30 @@
+name: build-core
+
+on:
+  push:
+    branches: [main, develop, "feature/**", "hotfix/**"]
+  pull_request:
+
+jobs:
+  build-core:
+    runs-on: ubuntu-22.04
+    container: python:3.12.8-slim
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare artifact files
+        run: |
+          mkdir -p artifacts
+          echo "# Build Report" > artifacts/build-report.md
+          echo "build-core executed" >> artifacts/build-report.md
+          echo "{}" > artifacts/event-audit.json
+          echo "schema validation placeholder" > artifacts/schema-validation.log
+      - name: Validate TwinGraph schema file presence
+        run: test -f spec/twingraph-schema.json
+      - name: Build core docker images
+        run: |
+          docker build -t archflow-core-twingraph:0.1.0 ./core-twingraph
+          docker build -t archflow-geometry-kernel:0.1.0 ./geometry-kernel
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-core-artifacts
+          path: artifacts/

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "presence.signal.generated",
+  "type": "object",
+  "required": ["event_name", "workspace_id", "viewport_id", "signal_type", "intensity", "timestamp"],
+  "properties": {
+    "event_name": { "const": "presence.signal.generated" },
+    "workspace_id": { "type": "string", "minLength": 1 },
+    "viewport_id": { "type": "string", "minLength": 1 },
+    "signal_type": {
+      "type": "string",
+      "enum": ["hover.idle", "snap.proximity", "constraint.tension", "ai.intent.idle", "viewport.focus.shift"]
+    },
+    "intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}
+

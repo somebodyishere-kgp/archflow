@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "report_id": {"type": "string"},
+    "model_id": {"type": "string"},
+    "result": {"type": "string", "enum": ["pass", "fail"]},
+    "violations": {"type": "array", "items": {"type": "object"}},
+    "timestamp": {"type": "string", "format": "date-time"}
+  },
+  "required": ["report_id", "model_id", "result", "violations", "timestamp"],
+  "additionalProperties": false
+}

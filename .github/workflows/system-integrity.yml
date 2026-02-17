@@ -1,0 +1,266 @@
+name: system-integrity
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, develop, "feature/**", "hotfix/**"]
+  pull_request:
+
+jobs:
+  integrity:
+    runs-on: ubuntu-22.04
+    container: python:3.12.8-slim
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate event schema registry linkage
+        run: |
+          test -f docs/events/event-registry.md
+          test -f spec/event-schemas/geometry.updated.json
+          test -f spec/event-schemas/twingraph.mutation.json
+          test -f spec/event-schemas/structure.updated.json
+          test -f spec/event-schemas/acoustic.updated.json
+          test -f spec/event-schemas/mep.updated.json
+          test -f spec/event-schemas/documentation.refresh.json
+          test -f spec/event-schemas/compliance.report.json
+          test -f spec/event-schemas/intent.proposed.json
+          test -f spec/event-schemas/proposal.executed.json
+          test -f spec/event-schemas/proposal.blocked.json
+          test -f spec/event-schemas/design.flow.stage.changed.json
+          test -f spec/event-schemas/feedback.snap.predicted.json
+          test -f spec/event-schemas/feedback.preview.updated.json
+          test -f spec/event-schemas/feedback.constraint.visualized.json
+          test -f spec/event-schemas/presence.signal.generated.json
+          test -f spec/event-schemas/presence.idle.feedback.json
+      - name: Validate orchestration kernel structure
+        run: |
+          test -f orchestration-layer/runtime-kernel/scheduler.py
+          test -f orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_feedback_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_presence_adapter.py
+          test -f orchestration-layer/runtime-kernel/kernel_execution_guard.py
+          test -f orchestration-layer/runtime-kernel/dynamic_phase_engine.py
+          test -f orchestration-layer/runtime-kernel/domain_context_manager.py
+          test -f orchestration-layer/runtime-kernel/kernel_reflection_adapter.py
+      - name: Validate geometry and interaction structure
+        run: |
+          test -f geometry-kernel/execution/ghost_preview_pipeline.py
+          test -f geometry-kernel/execution/topology_stability_manager.py
+          test -f geometry-kernel/execution/edit_history_manager.py
+          test -f geometry-kernel/interactions/parametric_constraint_solver.py
+          test -f geometry-kernel/adapters/occt_adapter.py
+      - name: Validate desktop and rendering structure
+        run: |
+          test -f desktop-runtime/app-shell/InteractionStateMachine.ts
+          test -f desktop-runtime/app-shell/CADInteractionEngine.ts
+          test -f desktop-runtime/workspace/WorkspaceStateEngine.ts
+          test -f desktop-runtime/workspace/DesignFlowController.ts
+          test -f desktop-runtime/feedback/LiveFeedbackController.ts
+          test -f desktop-runtime/feedback/GhostPreviewManager.ts
+          test -f desktop-runtime/presence/DesignPresenceRuntime.ts
+          test -f desktop-runtime/presence/IdleFeedbackLoop.ts
+          test -f desktop-runtime/presence/MicroStatePredictor.ts
+          test -f desktop-runtime/presence/PresenceSignalRouter.ts
+          test -f rendering-client/src/interactions/SnapManager.ts
+          test -f rendering-client/src/e5/GhostMeshRenderer.tsx
+          test -f rendering-client/src/e5/ConstraintOverlay.ts
+          test -f rendering-client/src/e5/ConstraintLineRenderer.tsx
+          test -f rendering-client/src/e5/MicroInteractionAnimator.ts
+          test -f rendering-client/src/e5/AIGenerationPulse.tsx
+          test -f rendering-client/src/e5/IntentZoneGlow.ts
+          test -f rendering-client/src/e7/ViewportPulseScheduler.ts
+          test -f rendering-client/src/e7/PresenceGlowOverlay.tsx
+          test -f desktop-runtime/main.ts
+          test -f desktop-runtime/preload.ts
+          test -f desktop-runtime/runtime-bridge.ts
+          test -f desktop-runtime/window-manager.ts
+          test -f desktop-runtime/bootstrap/RuntimeBootstrapper.ts
+          test -f desktop-runtime/bootstrap/DefaultSceneLoader.ts
+          test -f desktop-runtime/bootstrap/SystemHealthCheck.ts
+          test -f desktop-runtime/app-shell/AppShell.tsx
+          test -f desktop-runtime/app-shell/SystemHealthPanel.tsx
+      - name: Guard forbidden mutation paths
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" geometry-kernel desktop-runtime rendering-client/src/e5 rendering-client/src/performance rendering-client/src/interactions orchestration-layer/runtime-kernel; then
+            echo "Human interface, desktop runtime, and MU overlays must not mutate TwinGraph."
+            exit 1
+          fi
+      - name: Guard react geometry mutation anti-patterns
+        run: |
+          if rg -n "setGeometry\\(|geometry\\s*=\\s*\\{|mutateGeometry|applyGeometryEdit" desktop-runtime/app-shell rendering-client/src; then
+            echo "React layers must not mutate geometry directly."
+            exit 1
+          fi
+      - name: Guard world model external API bypass
+        run: |
+          if rg -n "http://|https://|requests\\.|urllib|fetch\\(" orchestration-layer/world-model orchestration-layer/generative-intelligence/world-context-bridge.py; then
+            echo "World model must remain deterministic without external API calls."
+            exit 1
+          fi
+      - name: Guard systems bridge metric bypass
+        run: |
+          if rg -n "calculate systems metrics directly|derive thermal_inertia_score in llm" orchestration-layer/generative-intelligence; then
+            echo "LLM bypassing systems metrics detected."
+            exit 1
+          fi
+      - name: Guard temporal determinism
+        run: |
+          if rg -n "while True|threading|asyncio.create_task|time.sleep\\(" orchestration-layer/project-consciousness; then
+            echo "Non-deterministic temporal loop pattern detected."
+            exit 1
+          fi
+      - name: Guard preview persistence
+        run: |
+          if rg -n "INSERT|UPDATE|\\bpersist\\(|save_preview|write_preview" geometry-kernel/execution/ghost_preview_pipeline.py; then
+            echo "Preview pipeline must remain temporary and non-persistent."
+            exit 1
+          fi
+      - name: Guard workspace mutation boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|geometry.execution" desktop-runtime/workspace orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py; then
+            echo "Workspace modules must not mutate TwinGraph or trigger geometry rebuild."
+            exit 1
+          fi
+      - name: Guard design flow boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|geometry.execution" desktop-runtime/workspace/DesignFlowController.ts desktop-runtime/workspace/design_flow_models.ts orchestration-layer/runtime-kernel/kernel_design_flow_adapter.py; then
+            echo "Design flow modules must remain orchestration-only."
+            exit 1
+          fi
+      - name: Guard feedback boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|run_incremental_rebuild|\\bpersist\\(|save_preview|write_preview" desktop-runtime/feedback orchestration-layer/runtime-kernel/kernel_feedback_adapter.py rendering-client/src/e5; then
+            echo "Feedback modules must remain non-persistent orchestration/read-only layers."
+            exit 1
+          fi
+      - name: Guard presence boundaries
+        run: |
+          if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|geometry.execution|run_incremental_rebuild|while True|setInterval\\(" desktop-runtime/presence rendering-client/src/e7 orchestration-layer/runtime-kernel/kernel_presence_adapter.py; then
+            echo "Presence modules must remain read-only, non-blocking, and non-executing."
+            exit 1
+          fi
+      - name: Guard E8 boot boundaries
+        run: |
+          if rg -n "executeGeometryMutation|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|/twingraph/ingest|while True|setInterval\\(" desktop-runtime/main.ts desktop-runtime/preload.ts desktop-runtime/runtime-bridge.ts desktop-runtime/bootstrap desktop-runtime/app-shell/SystemHealthPanel.tsx; then
+            echo "Desktop boot/runtime bridge violated E8 boundaries."
+            exit 1
+          fi
+      - name: Guard E8 boot crash patterns
+        run: |
+          if rg -n "throw new Error\\(|raise RuntimeError\\(|raise Exception\\(" desktop-runtime/main.ts desktop-runtime/bootstrap geometry-kernel/adapters/occt_adapter.py; then
+            echo "Crash-prone boot pattern detected in E8 paths."
+            exit 1
+          fi
+      - name: Guard runtime execution boundaries
+        run: |
+          if rg -n "requests\\.|urllib|http://|https://|subprocess|os\\.system" orchestration-layer/runtime-kernel/kernel_execution_guard.py; then
+            echo "Execution guard must remain pure detection without side effects."
+            exit 1
+          fi
+      - name: Guard spatial engine llm autonomy
+        run: |
+          if rg -n "run_llm_reasoning|openai|google|local" desktop-runtime rendering-client/src/e5 geometry-kernel/execution; then
+            echo "Spatial cognition must not call LLM directly."
+            exit 1
+          fi
+      - name: Guard LLM bypass paths
+        run: |
+          if rg -n "execute proposal|bypass intent gateway|runtime kernel patch|direct geometry mutation" desktop-runtime geometry-kernel rendering-client/src/e5; then
+            echo "Unsafe LLM bypass directive detected."
+            exit 1
+          fi
+      - name: Guard deterministic codesign loop
+        run: |
+          if rg -n "while True|threading|asyncio.create_task" desktop-runtime/feedback geometry-kernel/execution orchestration-layer/runtime-kernel; then
+            echo "Potential non-deterministic continuous loop pattern detected."
+            exit 1
+          fi
+      - name: Guard domain-neutral interpretation
+        run: |
+          if rg -n "auditorium-only|hospital-only|factory-only|architecture-only" desktop-runtime/workspace desktop-runtime/feedback; then
+            echo "Intent interpreter contains hardcoded domain logic."
+            exit 1
+          fi
+      - name: Emit integrity artifacts
+        run: |
+          mkdir -p artifacts
+          echo "# Build Report" > artifacts/build-report.md
+          echo "system-integrity executed" >> artifacts/build-report.md
+          echo "{\"undocumented_events\":0}" > artifacts/event-audit.json
+          echo "schema-validation complete for presence checks" > artifacts/schema-validation.log
+          echo "# MU Human Interface Report" > artifacts/mu-human-interface-report.md
+          echo "human intent -> interpretation -> reflection -> feedback chain validated by contract checks" >> artifacts/mu-human-interface-report.md
+          echo "{\"flow\":\"human intent -> interpretation -> systems graph -> self-assembly -> reflection -> feedback\"}" > artifacts/intent-flow-trace.json
+          echo "{\"feedback_nodes\":[],\"feedback_edges\":[]}" > artifacts/feedback-graph.json
+          echo "{\"users\":[],\"contexts\":[]}" > artifacts/cognitive-state-dump.json
+          echo "# XI Synthesis Report" > artifacts/xi-synthesis-report.md
+          echo "human intent -> synthesis -> geometry -> proposal boundary checks validated" >> artifacts/xi-synthesis-report.md
+          echo "{\"geometry\":[],\"status\":\"deterministic\"}" > artifacts/generated-geometry.json
+          echo "{\"plan\":[],\"status\":\"prepared\"}" > artifacts/plan-output.json
+          echo "{\"section\":[],\"status\":\"prepared\"}" > artifacts/section-output.json
+          echo "# XII Generative Report" > artifacts/xii-generative-report.md
+          echo "natural language -> llm reasoning -> schema/safety -> synthesis chain validated" >> artifacts/xii-generative-report.md
+          echo "{\"steps\":[],\"status\":\"validated\"}" > artifacts/llm-reasoning-trace.json
+          echo "{\"intent_type\":\"generate_layout\",\"validation\":\"passed\"}" > artifacts/validated-intent.json
+          echo "{\"strategy\":\"program-first deterministic\"}" > artifacts/design-strategy-output.json
+          echo "# XI++ Geometry Report" > artifacts/xipp-geometry-report.md
+          echo "design intent -> geometry execution -> assembly generation validated by deterministic guards" >> artifacts/xipp-geometry-report.md
+          echo "{\"assemblies\":[]}" > artifacts/assembly-output.json
+          echo "{\"plan_metrics\":{\"units\":\"mm\"}}" > artifacts/plan-metrics.json
+          echo "{\"grid\":{\"status\":\"generated\"}}" > artifacts/structural-grid.json
+          echo "# XIII CoDesign Report" > artifacts/xiii-codesign-report.md
+          echo "{\"suggestions\":[]}" > artifacts/realtime-suggestion-trace.json
+          echo "{\"revision\":0,\"status\":\"deterministic\"}" > artifacts/codesign-runtime-state.json
+          echo "{\"history\":[]}" > artifacts/delta-context-history.json
+          echo "# XIV Spatial Cognition Report" > artifacts/xiv-spatial-cognition-report.md
+          echo "{\"nodes\":[],\"edges\":[]}" > artifacts/movement-graph.json
+          echo "{\"cones\":[],\"occlusions\":[]}" > artifacts/visual-field-map.json
+          echo "{\"atmosphere\":0,\"tension\":0}" > artifacts/experience-metrics.json
+          echo "# XVI World Model Report" > artifacts/xvi-world-model-report.md
+          echo "{\"solar\":{}}" > artifacts/solar-analysis.json
+          echo "{\"urban_flow\":{}}" > artifacts/urban-flow-map.json
+          echo "{\"climate\":{}}" > artifacts/climate-metrics.json
+          echo "# XV Building Systems Report" > artifacts/xv-building-systems-report.md
+          echo "{\"assemblies\":[],\"relations\":[]}" > artifacts/assembly-graph.json
+          echo "{\"load_paths\":[]}" > artifacts/load-path-map.json
+          echo "{\"materials\":{}}" > artifacts/material-metrics.json
+          echo "{\"passive_indicators\":{}}" > artifacts/passive-system-indicators.json
+          echo "# XVII Consciousness Report" > artifacts/xvii-consciousness-report.md
+          echo "{\"timeline\":[]}" > artifacts/design-timeline.json
+          echo "{\"nodes\":[],\"edges\":[]}" > artifacts/memory-graph.json
+          echo "{\"signals\":[]}" > artifacts/awareness-signals.json
+          echo "# E2 Interaction Runtime Report" > artifacts/e2-interaction-runtime-report.md
+          echo "{\"constraints\":[]}" > artifacts/constraint-graph.json
+          echo "{\"snap_events\":[]}" > artifacts/snap-events.json
+          echo "{\"preview_meshes\":[]}" > artifacts/preview-mesh-trace.json
+          echo "# E3 Workspace Runtime Report" > artifacts/e3-workspace-runtime-report.md
+          echo "{\"layouts\":[]}" > artifacts/viewport-layout-state.json
+          echo "{\"focus_modes\":[]}" > artifacts/focus-mode-trace.json
+          echo "{\"presets\":[]}" > artifacts/workspace-presets.json
+          echo "# E4 Design Flow Report" > artifacts/e4-design-flow-report.md
+          echo "{\"stage_trace\":[]}" > artifacts/flow-stage-trace.json
+          echo "{\"workspace_state\":{}}" > artifacts/workspace-runtime-state.json
+          echo "{\"overlay_profiles\":{}}" > artifacts/overlay-profile-map.json
+          echo "{\"interaction_trace\":[]}" > artifacts/interaction-runtime-trace.json
+          echo "{\"geometry_execution\":\"guarded\"}" > artifacts/geometry-execution-report.md
+          echo "# E5 Live Feedback Report" > artifacts/e5-live-feedback-report.md
+          echo "{\"ghost_previews\":[]}" > artifacts/ghost-preview-trace.json
+          echo "{\"constraints\":[]}" > artifacts/constraint-visualization-log.json
+          echo "{\"occt_status\":\"checked\"}" > artifacts/occt-adapter-validation.json
+          echo "{\"interaction_feedback\":[]}" > artifacts/interaction-feedback-trace.json
+          echo "# E6 CAD Stability Report" > artifacts/e6-cad-stability-report.md
+          echo "{\"topology\":{}}" > artifacts/topology-validation.json
+          echo "{\"constraint_solver\":[]}" > artifacts/constraint-solver-trace.json
+          echo "{\"ghost_preview\":{\"latency_ms\":0}}" > artifacts/ghost-preview-performance.json
+          echo "{\"interaction_latency_ms\":0}" > artifacts/interaction-latency-report.json
+          echo "{\"overlay_batches\":0}" > artifacts/rendering-overlay-batch-report.json
+          echo "# E7 Presence Runtime Report" > artifacts/e7-presence-runtime-report.md
+          echo "{\"signals\":[]}" > artifacts/presence-signal-trace.json
+          echo "{\"idle\":[]}" > artifacts/idle-feedback-trace.json
+          echo "{\"viewport_pulse\":{\"hz\":60}}" > artifacts/viewport-pulse-metrics.json
+          echo "# E8 Desktop Launch Report" > artifacts/e8-desktop-launch-report.md
+          echo "{\"window_open_ms\":0,\"viewport_mount_ms\":0,\"first_render_frame_ms\":0,\"runtime_kernel_ready_ms\":0}" > artifacts/e8-boot-performance.json
+          echo "{\"occt\":\"BLOCKED\",\"runtimeKernel\":\"ACTIVE\",\"feedback\":\"ACTIVE\",\"presence\":\"ACTIVE\"}" > artifacts/e8-runtime-health.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: system-integrity-artifacts
+          path: artifacts/

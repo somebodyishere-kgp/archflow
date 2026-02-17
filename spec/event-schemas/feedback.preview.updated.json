@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "feedback.preview.updated",
+  "type": "object",
+  "required": ["event_name", "workspace_id", "preview_id", "source", "persistent", "timestamp"],
+  "properties": {
+    "event_name": { "const": "feedback.preview.updated" },
+    "workspace_id": { "type": "string", "minLength": 1 },
+    "preview_id": { "type": "string", "minLength": 1 },
+    "source": { "type": "string", "enum": ["transform", "ai-proposal", "constraint-adjust"] },
+    "persistent": { "const": false },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}
