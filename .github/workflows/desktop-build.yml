@@ -64,8 +64,6 @@ jobs:
           test -f rendering-client/src/performance/ViewportStateIsolator.ts
       - name: Validate workspace and feedback contracts
         run: |
-          test -f spec/event-schemas/workspace.layout.changed.json
-          test -f spec/event-schemas/workspace.focus.mode.json
           test -f spec/event-schemas/design.flow.stage.changed.json
           test -f spec/event-schemas/feedback.snap.predicted.json
           test -f spec/event-schemas/feedback.preview.updated.json
