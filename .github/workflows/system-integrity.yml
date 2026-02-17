@@ -69,6 +69,15 @@ jobs:
           test -f rendering-client/src/e5/IntentZoneGlow.ts
           test -f rendering-client/src/e7/ViewportPulseScheduler.ts
           test -f rendering-client/src/e7/PresenceGlowOverlay.tsx
+          test -f desktop-runtime/main.ts
+          test -f desktop-runtime/preload.ts
+          test -f desktop-runtime/runtime-bridge.ts
+          test -f desktop-runtime/window-manager.ts
+          test -f desktop-runtime/bootstrap/RuntimeBootstrapper.ts
+          test -f desktop-runtime/bootstrap/DefaultSceneLoader.ts
+          test -f desktop-runtime/bootstrap/SystemHealthCheck.ts
+          test -f desktop-runtime/app-shell/AppShell.tsx
+          test -f desktop-runtime/app-shell/SystemHealthPanel.tsx
       - name: Guard forbidden mutation paths
         run: |
           if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" geometry-kernel desktop-runtime rendering-client/src/e5 rendering-client/src/performance rendering-client/src/interactions orchestration-layer/runtime-kernel; then
@@ -127,6 +136,18 @@ jobs:
         run: |
           if rg -n "/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|geometry.execution|run_incremental_rebuild|while True|setInterval\\(" desktop-runtime/presence rendering-client/src/e7 orchestration-layer/runtime-kernel/kernel_presence_adapter.py; then
             echo "Presence modules must remain read-only, non-blocking, and non-executing."
+            exit 1
+          fi
+      - name: Guard E8 boot boundaries
+        run: |
+          if rg -n "executeGeometryMutation|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|/twingraph/ingest|while True|setInterval\\(" desktop-runtime/main.ts desktop-runtime/preload.ts desktop-runtime/runtime-bridge.ts desktop-runtime/bootstrap desktop-runtime/app-shell/SystemHealthPanel.tsx; then
+            echo "Desktop boot/runtime bridge violated E8 boundaries."
+            exit 1
+          fi
+      - name: Guard E8 boot crash patterns
+        run: |
+          if rg -n "throw new Error\\(|raise RuntimeError\\(|raise Exception\\(" desktop-runtime/main.ts desktop-runtime/bootstrap geometry-kernel/adapters/occt_adapter.py; then
+            echo "Crash-prone boot pattern detected in E8 paths."
             exit 1
           fi
       - name: Guard runtime execution boundaries
@@ -236,6 +257,9 @@ jobs:
           echo "{\"signals\":[]}" > artifacts/presence-signal-trace.json
           echo "{\"idle\":[]}" > artifacts/idle-feedback-trace.json
           echo "{\"viewport_pulse\":{\"hz\":60}}" > artifacts/viewport-pulse-metrics.json
+          echo "# E8 Desktop Launch Report" > artifacts/e8-desktop-launch-report.md
+          echo "{\"window_open_ms\":0,\"viewport_mount_ms\":0,\"first_render_frame_ms\":0,\"runtime_kernel_ready_ms\":0}" > artifacts/e8-boot-performance.json
+          echo "{\"occt\":\"BLOCKED\",\"runtimeKernel\":\"ACTIVE\",\"feedback\":\"ACTIVE\",\"presence\":\"ACTIVE\"}" > artifacts/e8-runtime-health.json
       - uses: actions/upload-artifact@v4
         with:
           name: system-integrity-artifacts

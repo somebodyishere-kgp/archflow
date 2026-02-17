@@ -166,3 +166,13 @@ tradeoffs: additional low-latency signal routing and animation scheduling comple
 impact_scope: desktop presence runtime modules, E7 rendering overlays, runtime scheduler presence.update phase, presence event contracts, CI guard/artifact expansion
 rollback_strategy: remove presence.update phase and disable desktop/rendering E7 modules while retaining E4-E6 feedback and interaction stack
 arch_critical: true
+
+decision_id: ADR-E8-001
+title: Unified Desktop Runtime Boot Introduced
+date: 2026-02-17
+reason: Consolidate existing E3-E7 systems into a deterministic, launchable desktop lifecycle with safe runtime bridging and boot-time health signaling.
+alternatives_considered: keep desktop runtime as disconnected modules; defer launch wiring until post-E8
+tradeoffs: added boot orchestration and Electron lifecycle glue in exchange for executable launch readiness and runtime observability
+impact_scope: desktop main/preload/window/bridge files, runtime bootstrap modules, default scene load path, system health panel, CI launch validations and E8 artifacts
+rollback_strategy: disable E8 bootstrap entrypoint and fallback to module-level testing surfaces without desktop launch
+arch_critical: true

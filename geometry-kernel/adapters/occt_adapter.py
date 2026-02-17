@@ -75,3 +75,12 @@ def run_boolean(operation: str, left: dict[str, Any], right: dict[str, Any]) -> 
         },
         diagnostics=diagnostics,
     )
+
+
+def check_occt_runtime() -> dict[str, Any]:
+    available, diagnostics = _occt_diagnostics()
+    return {
+        "status": "READY" if available else "BLOCKED",
+        "runtime": diagnostics.get("runtime", "OCP"),
+        "diagnostics": diagnostics,
+    }

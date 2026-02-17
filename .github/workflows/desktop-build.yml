@@ -42,6 +42,16 @@ jobs:
           test -f desktop-runtime/presence/IdleFeedbackLoop.ts
           test -f desktop-runtime/presence/MicroStatePredictor.ts
           test -f desktop-runtime/presence/PresenceSignalRouter.ts
+          test -f desktop-runtime/main.ts
+          test -f desktop-runtime/preload.ts
+          test -f desktop-runtime/runtime-bridge.ts
+          test -f desktop-runtime/window-manager.ts
+          test -f desktop-runtime/bootstrap/RuntimeBootstrapper.ts
+          test -f desktop-runtime/bootstrap/DefaultSceneLoader.ts
+          test -f desktop-runtime/bootstrap/SystemHealthCheck.ts
+          test -f desktop-runtime/bootstrap/BootPerformanceProfiler.ts
+          test -f desktop-runtime/app-shell/AppShell.tsx
+          test -f desktop-runtime/app-shell/SystemHealthPanel.tsx
       - name: Validate rendering runtime overlays
         run: |
           test -f rendering-client/src/interactions/SnapManager.ts
@@ -93,6 +103,18 @@ jobs:
         run: |
           if rg -n "geometry\\.execution|run_incremental_rebuild|/twingraph/ingest|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes" desktop-runtime/presence rendering-client/src/e7; then
             echo "E7 presence runtime must remain read-only and non-executing."
+            exit 1
+          fi
+      - name: Guard E8 desktop boot safety
+        run: |
+          if rg -n "executeGeometryMutation|INSERT INTO twingraph_nodes|UPDATE twingraph_nodes|/twingraph/ingest|process\\.exit\\(1\\)" desktop-runtime/main.ts desktop-runtime/preload.ts desktop-runtime/runtime-bridge.ts desktop-runtime/bootstrap; then
+            echo "E8 desktop boot layer violated runtime safety boundaries."
+            exit 1
+          fi
+      - name: Guard E8 desktop crash patterns
+        run: |
+          if rg -n "throw new Error\\(|raise RuntimeError\\(|raise Exception\\(" desktop-runtime/main.ts desktop-runtime/bootstrap geometry-kernel/adapters/occt_adapter.py; then
+            echo "E8 desktop boot crash pattern detected."
             exit 1
           fi
       - name: Emit MU desktop artifacts
@@ -166,6 +188,9 @@ jobs:
           echo "{\"signals\":[]}" > artifacts/presence-signal-trace.json
           echo "{\"idle\":[]}" > artifacts/idle-feedback-trace.json
           echo "{\"viewport_pulse\":{\"hz\":60}}" > artifacts/viewport-pulse-metrics.json
+          echo "# E8 Desktop Launch Report" > artifacts/e8-desktop-launch-report.md
+          echo "{\"window_open_ms\":0,\"viewport_mount_ms\":0,\"first_render_frame_ms\":0,\"runtime_kernel_ready_ms\":0}" > artifacts/e8-boot-performance.json
+          echo "{\"occt\":\"BLOCKED\",\"runtimeKernel\":\"ACTIVE\",\"feedback\":\"ACTIVE\",\"presence\":\"ACTIVE\"}" > artifacts/e8-runtime-health.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

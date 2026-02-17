@@ -1,7 +1,7 @@
 # System Status
 
 Last Updated: 2026-02-17
-Phase: Execution Era E7 (Continuous Design Presence)
+Phase: Execution Era E8 (Desktop Launch & Unified Runtime Boot)
 Stability Rating: Experimental
 
 ## Active Modules
@@ -79,6 +79,9 @@ Stability Rating: Experimental
 - Design presence runtime (`desktop-runtime/presence/`)
 - E7 presence overlays (`rendering-client/src/e7/`)
 - Presence runtime adapter (`orchestration-layer/runtime-kernel/kernel_presence_adapter.py`)
+- Desktop launch runtime (`desktop-runtime/main.ts`, `desktop-runtime/preload.ts`, `desktop-runtime/window-manager.ts`, `desktop-runtime/runtime-bridge.ts`)
+- Runtime bootstrap modules (`desktop-runtime/bootstrap/`)
+- Desktop health/status panel (`desktop-runtime/app-shell/SystemHealthPanel.tsx`)
 
 ## In-Progress Modules
 - Core TwinGraph deterministic ingestion pipeline
@@ -110,6 +113,7 @@ Stability Rating: Experimental
 - Feedback layer direct TwinGraph writes: BLOCKED by governance (visual/runtime orchestration only)
 - Presence layer direct TwinGraph writes: BLOCKED by governance (micro-feedback signals only)
 - Presence layer direct geometry execution calls: BLOCKED by governance (read-only runtime enhancement)
+- Desktop runtime bridge direct TwinGraph/database access: BLOCKED by governance (read-only IPC surface only)
 - OCCT runtime package availability on CI images: BLOCKED pending OCP/OCCT dependency provisioning for full boolean execution
 - Full workflow discovery on default branch: BLOCKED until repository default branch is switched to a branch containing `.github/workflows/` (e.g. `ci-root` or `feature/init-repo`)
 
