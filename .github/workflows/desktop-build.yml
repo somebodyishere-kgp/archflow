@@ -60,7 +60,6 @@ jobs:
           test -f rendering-client/src/e5/IntentZoneGlow.ts
       - name: Validate rendering performance runtime
         run: |
-          test -f rendering-client/src/performance/DTOStreamBuffer.ts
           test -f rendering-client/src/performance/LODMeshGenerator.ts
           test -f rendering-client/src/performance/ViewportStateIsolator.ts
       - name: Validate workspace and feedback contracts

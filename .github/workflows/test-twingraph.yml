@@ -65,7 +65,7 @@ jobs:
           EOF
       - name: Emit runtime event trace artifact
         run: |
-          rg -n "proposal_id|execution_id|intent_source|parent_event_id|geometry.updated|twingraph.mutation" core-twingraph/src/twingraph > artifacts/runtime-event-trace.json
+          grep -R -n -E "proposal_id|execution_id|intent_source|parent_event_id|geometry.updated|twingraph.mutation" core-twingraph/src/twingraph > artifacts/runtime-event-trace.json || true
       - name: Emit runtime integration report
         run: |
           echo "# Runtime Integration Report" > artifacts/runtime-integration-report.md

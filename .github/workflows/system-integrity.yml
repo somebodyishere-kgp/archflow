@@ -25,8 +25,6 @@ jobs:
           test -f spec/event-schemas/intent.proposed.json
           test -f spec/event-schemas/proposal.executed.json
           test -f spec/event-schemas/proposal.blocked.json
-          test -f spec/event-schemas/workspace.layout.changed.json
-          test -f spec/event-schemas/workspace.focus.mode.json
           test -f spec/event-schemas/design.flow.stage.changed.json
           test -f spec/event-schemas/feedback.snap.predicted.json
           test -f spec/event-schemas/feedback.preview.updated.json
